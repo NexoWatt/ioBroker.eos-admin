@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/modules/storage-control.ts
- * Quell-Hash: sha256:0e05be0f979975a11f1064b0a4eca4959906ecdd5ead8eab6afccd67d1a6965e
+ * Quell-Hash: sha256:b9fac4a7bc07981e3690b175bab60290201fa8c6d4c8bdcdd016577f455c22ea
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -1662,7 +1662,7 @@ class SpeicherRegelungModule extends BaseModule {
             await this._setIfChanged('speicher.regelung.requestW', null);
             await this._setIfChanged('speicher.regelung.requestQuelle', 'aus');
             await this._setIfChanged('speicher.regelung.requestGrund', 'Deaktiviert');
-            await this._setIfChanged('speicher.regelung.dispatcherJson', JSON.stringify({ ts: Date.now(), disabled: true, reason: 'Deaktiviert' }));
+            await this._setIfChanged('speicher.regelung.dispatcherJson', JSON.stringify({ ts: Date.now(), active: enabled, disabled: true, src: 'aus', reason: 'Deaktiviert' }));
             await this._setStorageNvpBalanceDiag(null);
             await this._setIfChanged('speicher.regelung.batteryPowerBalanceTrusted', false);
             await this._setIfChanged('speicher.regelung.batteryPowerFeedbackMode', 'inactive');
@@ -1883,6 +1883,7 @@ class SpeicherRegelungModule extends BaseModule {
             await this._setIfChanged('speicher.regelung.schreibStatus', 'fenecon-config-invalid');
             await this._setIfChanged('speicher.regelung.dispatcherJson', JSON.stringify({
                 ts: Date.now(),
+                active: enabled,
                 reqW: null,
                 reason: invalidReason,
                 src: 'fenecon-invalid',
@@ -1896,7 +1897,7 @@ class SpeicherRegelungModule extends BaseModule {
             await this._setIfChanged('speicher.regelung.requestW', 0);
             await this._setIfChanged('speicher.regelung.requestQuelle', 'aus');
             await this._setIfChanged('speicher.regelung.requestGrund', unsupportedReason);
-            await this._setIfChanged('speicher.regelung.dispatcherJson', JSON.stringify({ ts: Date.now(), reqW: 0, reason: unsupportedReason, src: 'aus' }));
+            await this._setIfChanged('speicher.regelung.dispatcherJson', JSON.stringify({ ts: Date.now(), active: enabled, reqW: 0, reason: unsupportedReason, src: 'aus' }));
             await this._applyTargetW(0, unsupportedReason, 'aus');
             return;
         }
@@ -1910,7 +1911,7 @@ class SpeicherRegelungModule extends BaseModule {
             await this._setIfChanged('speicher.regelung.requestW', 0);
             await this._setIfChanged('speicher.regelung.requestQuelle', 'aus');
             await this._setIfChanged('speicher.regelung.requestGrund', missingTargetReason);
-            await this._setIfChanged('speicher.regelung.dispatcherJson', JSON.stringify({ ts: Date.now(), reqW: 0, reason: missingTargetReason, src: 'aus' }));
+            await this._setIfChanged('speicher.regelung.dispatcherJson', JSON.stringify({ ts: Date.now(), active: enabled, reqW: 0, reason: missingTargetReason, src: 'aus' }));
             await this._applyTargetW(0, missingTargetReason, 'aus');
             return;
         }
@@ -2274,6 +2275,7 @@ class SpeicherRegelungModule extends BaseModule {
                     await this._setIfChanged('speicher.regelung.requestGrund', heldReason);
                     await this._setIfChanged('speicher.regelung.dispatcherJson', JSON.stringify({
                         ts: now,
+                        active: enabled,
                         reqW: Math.round(heldW),
                         reason: heldReason,
                         src: heldSource,
@@ -2330,7 +2332,7 @@ class SpeicherRegelungModule extends BaseModule {
             await this._setIfChanged('speicher.regelung.requestW', 0);
             await this._setIfChanged('speicher.regelung.requestQuelle', 'aus');
             await this._setIfChanged('speicher.regelung.requestGrund', 'Netzleistung fehlt oder zu alt');
-            await this._setIfChanged('speicher.regelung.dispatcherJson', JSON.stringify({ ts: now, reqW: 0, reason: 'Netzleistung fehlt oder zu alt', src: 'aus' }));
+            await this._setIfChanged('speicher.regelung.dispatcherJson', JSON.stringify({ ts: now, active: enabled, reqW: 0, reason: 'Netzleistung fehlt oder zu alt', src: 'aus' }));
 
             // Ein fehlender/veralteter NVP ist ein echter Sicherheitsfall. Auch beim
             // FENECON-/OpenEMS-Profil muss deshalb ein sicherer 0-W-Sollwert ueber den
@@ -6627,6 +6629,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
 
         const _diag = {
             ts: now,
+            active: enabled,
             reqW: Number.isFinite(Number(_reqW)) ? Math.round(Number(_reqW)) : 0,
             clampW: Number.isFinite(Number(_clampW)) ? Math.round(Number(_clampW)) : 0,
             stepW: Number.isFinite(Number(_stepW)) ? Math.round(Number(_stepW)) : 0,
@@ -8905,6 +8908,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
      * ausdruecklich kein Schreibzugriff auf signed-, Split-, Run- oder Farm-DPs.
      */
     async _setHoldNoWriteTargetDiag(targetW, reason, source, status) {
+        this.adapter?._sfInvalidatePowerTracking?.();
         const requestedW = Number.isFinite(Number(targetW)) ? Math.round(Number(targetW)) : 0;
         const lastSuccessfulW = Number.isFinite(Number(this._lastTargetW)) ? Math.round(Number(this._lastTargetW)) : 0;
         const visibleW = requestedW !== 0 ? requestedW : lastSuccessfulW;
@@ -8948,6 +8952,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
      * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
      */
     async _setNoWriteTargetDiag(targetW, reason, source, status) {
+        this.adapter?._sfInvalidatePowerTracking?.();
         const w = Number.isFinite(Number(targetW)) ? Math.round(Number(targetW)) : 0;
         try {
             const e = (this.dp && this.dp.getEntry) ? this.dp.getEntry('st.targetPowerW') : null;

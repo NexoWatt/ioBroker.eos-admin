@@ -1,0 +1,135 @@
+{
+  "eos-admin": {
+    "name": "eos-admin",
+    "version": "9.0.38",
+    "title": "NexoWatt EOS Admin",
+    "titleLang": {
+      "en": "NexoWatt EOS",
+      "de": "NexoWatt EOS",
+      "ru": "NexoWatt EOS",
+      "pt": "NexoWatt EOS",
+      "pl": "NexoWatt EOS",
+      "fr": "NexoWatt EOS",
+      "nl": "NexoWatt EOS",
+      "it": "NexoWatt EOS",
+      "es": "NexoWatt EOS",
+      "uk": "NexoWatt EOS",
+      "zh-cn": "NexoWatt EOS"
+    },
+    "desc": {
+      "en": "NexoWatt EOS: licensed local energy management, dashboard and ioBroker system administration in one adapter.",
+      "de": "NexoWatt EOS: lizenzierte lokale Energieverwaltung, Dashboard und ioBroker-Systemverwaltung in einem Adapter."
+    },
+    "news": {
+      "9.0.38": {
+        "de": "Die Bestandsübernahme lässt sich im Admin starten oder erneut prüfen. Auch bei bereits beendeten Altadaptern prüft EOS Konfiguration und Historienanbindung.",
+        "en": "Administrators can start or recheck migration. EOS checks the configuration and history connection even when the legacy adapters have already stopped."
+      },
+      "9.0.37": {
+        "de": "Das Dashboard benennt offene Betriebszustände. Die Speicherfarm zeigt die aktuelle Reglerentscheidung und meldet Leistungsabweichungen über 200 W je beauftragtem Speicher.",
+        "en": "The dashboard identifies pending operating states. The storage farm shows the current control decision and reports power deviations above 200 W per dispatched storage unit."
+      },
+      "9.0.36": {
+        "de": "EOS übernimmt eine bestätigte, bereits deaktivierte Alt-UI automatisch. Die Startdiagnose und der Wiederanlauf der Module wurden überarbeitet.",
+        "en": "EOS automatically migrates a verified legacy UI that was already disabled. Module startup diagnostics and recovery have been revised."
+      },
+      "9.0.35": {
+        "de": "Der Live-Systemstatus berücksichtigt Messwerte, Verbindung, aktive EOS-Prozesse und Geräte. Er nennt bestätigte Störungen und respektiert bewusst pausierte Module. Konfigurierbare Benachrichtigungen melden Prozess- und Geräteausfälle. Der MIRA-Treiber unterscheidet einen Modbus-Verbindungsabbruch von einem nicht unterstützten Register.",
+        "en": "Live system status covers telemetry, connection, active EOS processes and devices. It identifies confirmed faults and respects intentionally paused modules. Configurable notifications report process and device outages. The MIRA driver distinguishes a Modbus connection reset from an unsupported register."
+      },
+      "9.0.34": {
+        "de": "OVUM MIRA ab Firmware 1.1.3 über Modbus einrichten, elektrische Wärmepumpenleistung im Energiefluss anzeigen und die PV-Anforderung an den Hydraulikregler übergeben.",
+        "en": "Connect OVUM MIRA from firmware 1.1.3 via Modbus, display electrical heat-pump power in the energy flow and send PV requests to the hydraulic controller."
+      },
+      "9.0.33": {
+        "de": "EMS prüft Bestätigung, Qualität und Alter der Netzanschlussmessung vor der Leistungsfreigabe. Verbesserungen an Energiefluss und Regelung bei Mess- und Kommunikationsstörungen.",
+        "en": "The EMS checks acknowledgement, quality and age of grid measurements before granting power. Improves energy flow and control when measurements or communications fail."
+      },
+      "9.0.32": {
+        "de": "Gebäudeverbrauch im LIVE-Energiefluss wird aus gültigen Messwerten ermittelt. Die Anzeige unterscheidet unvollständige Messdaten und unplausible Bilanzen.",
+        "en": "Calculate live building consumption from valid power measurements. Distinguish incomplete measurements from inconsistent power balances."
+      },
+      "9.0.31": {
+        "de": "Safari erhält das NexoWatt-Symbol für die iPhone-Web-App über einen eigenen PNG-Pfad. Die üblichen Apple-Icon-Adressen liefern dieselbe 180×180-Datei.",
+        "en": "Safari receives the NexoWatt Home Screen icon from a dedicated PNG path. Standard Apple icon URLs serve the same 180×180 file."
+      },
+      "9.0.30": {
+        "de": "Eigener EMS-Prozess mit bestätigter Schreibfreigabe und separater, lesender Oberfläche. Speicherbedarf der Datenpunktauswahl und der Gerätetreiber reduziert.",
+        "en": "Run the EMS and read-only presentation in separate processes. Improve memory use in the datapoint picker and device driver loading."
+      },
+      "9.0.29": {
+        "de": "HTTPS-Gerätezertifikat und öffentliches Stammzertifikat in der EOS-Administration lokal erstellen. Beide PEM-Dateien und der SHA-256-Fingerabdruck stehen direkt bereit. Das erzeugte Zertifikat wird erst durch eine bestätigte Übernahme verwendet.",
+        "en": "Generate an HTTPS device certificate and public root certificate in EOS Administration. Both PEM downloads and the SHA-256 fingerprint are available immediately, with a separate activation step."
+      },
+      "9.0.28": {
+        "de": "SmartHome-Geräteerkennung mit Funktionsordnern, deutschen und englischen Suchbegriffen sowie passender Datenpunktauswahl für Befehle und Rückmeldungen.",
+        "en": "SmartHome discovery with function folders, German and English search terms, and targeted datapoint selection for commands and feedback."
+      },
+      "9.0.27": {
+        "de": "OCPP-/Devices-Zuordnung ohne doppelte Ladepunkte; manuelle Stationsgruppen und dauerhafte Löschung. Tibber bleibt bei anderen EMS-Änderungen und Neustarts erhalten; Konfigurationszugriffe warten auf das Laden gespeicherter Werte. Begrenzte Modulstart-Wiederholung und konsistente Update-Metadaten.",
+        "en": "Idempotent OCPP/Devices mappings, manual station groups and persistent removal. Preserve Tibber across unrelated EMS edits and restarts; configuration access waits for stored data. Bounded module startup retry and consistent update metadata."
+      },
+      "9.0.26": {
+        "en": "Preserve module runtimes in Git exports; fix activation and startup recovery, charging-point deletion and tariff loading after restart; organize backup settings; provide HTTPS setup and independent app icons.",
+        "de": "Modullaufzeiten im Git-Export erhalten; Aktivierung und Wiederanlauf, Ladepunkt-Löschung und Tarifladen nach Neustart korrigiert; Sicherungseinstellungen geordnet; HTTPS-Einrichtung und unabhängige App-Symbole ergänzt."
+      },
+      "9.0.25": {
+        "en": "Fix startup blocked by optional external OCPP migration; add persistent runtime process controls.",
+        "de": "Startsperre durch optionale externe OCPP-Übernahme behoben; dauerhafte Prozesssteuerung ergänzt."
+      },
+      "9.0.24": {
+        "en": "Integrated OCPP, EEBUS and Devices in independent processes within one EOS adapter; dashboard kiosk with protected Admin login; verified cleanup of obsolete npm publish assets.",
+        "de": "OCPP, EEBUS und Devices in eigenen Prozessen innerhalb eines EOS-Adapters; Dashboard-Kioskmodus mit geschütztem Admin-Zugang; geprüfte Bereinigung alter Dateien vor npm-Publish."
+      },
+      "9.0.23": {
+        "en": "Separate supervised module and UI/EMS processes; automatic native OCPP station assignment, connection-bound profile feedback and process diagnostics.",
+        "de": "Getrennte überwachte Modul- und UI/EMS-Prozesse; automatische native OCPP-Stationszuordnung, verbindungsgebundene Sollwertrückmeldung und Prozessdiagnose."
+      },
+      "9.0.22": {
+        "de": "Energiefluss-Bilanz und Messwertalter korrigiert, Tarifstatus wiederhergestellt und Tarif-Namespace für gemeinsamen EOS-Adapter korrigiert. PostgreSQL für ausdrücklich eingerichtete Neuanlagen, geprüfte Sicherungsabdeckung und normale EMS-Bediendatenpunkte. InfluxDB-Bestand bleibt erhalten. Kontrollierter Teststand.",
+        "en": "Correct energy-flow balance and measurement freshness; restore tariff status and fix tariff namespace in unified EOS. PostgreSQL for explicitly commissioned new sites, checked backup coverage and normal EMS operating datapoints. Existing InfluxDB retained. Controlled test release."
+      },
+      "9.0.21": {
+        "de": "Stabilität bei Wiederverbindungen, verspäteten Schreibaufträgen, Speicherfarm und Tarifausfällen verbessert; konkurrierende Geräteänderungen abgesichert. EOS-Updates in den Kundeneinstellungen ergänzt.",
+        "en": "Improve reconnect, delayed-write, storage-farm and tariff-outage stability; protect concurrent device edits. Add EOS updates to customer settings."
+      },
+      "9.0.20": {
+        "en": "Fix browser-independent device commands, storage-farm feedback and dynamic limits; add direct InfluxDB 2 history with protected credentials and improve login/home-screen icons. Preserve customer configuration.",
+        "de": "Gerätebefehle unabhängig vom Browser, Farm-Rückmeldungen und dynamische Grenzen korrigiert; direkte InfluxDB-2-Historie sowie Login- und Home-Bildschirm-Symbole ergänzt. Kundeneinstellungen bleiben erhalten."
+      },
+      "9.0.19": {
+        "en": "Fix device-to-EMS commissioning, fresh unchanged measurements and energy flow; preserve existing customer settings.",
+        "de": "Geräteübergabe ins EMS, Aktualität unveränderter Messwerte und Energiefluss korrigiert; bestehende Kundeneinstellungen erhalten."
+      }
+    },
+    "meta": "https://unpkg.com/iobroker.eos-admin@9.0.38/io-package.json",
+    "icon": "https://unpkg.com/iobroker.eos-admin@9.0.38/admin/admin.png",
+    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.38/admin/admin.svg",
+    "type": "general",
+    "mode": "daemon",
+    "platform": "Javascript/Node.js",
+    "connectionType": "local",
+    "dataSource": "push",
+    "adminUI": {
+      "config": "json"
+    },
+    "license": "SEE LICENSE IN LICENSE",
+    "licenseInformation": {
+      "type": "paid",
+      "link": "https://unpkg.com/iobroker.eos-admin@9.0.38/LICENSE"
+    },
+    "dependencies": [
+      {
+        "js-controller": ">=7.2.5"
+      }
+    ],
+    "stopBeforeUpdate": true,
+    "dontDelete": false,
+    "nondeletable": false,
+    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.38/README.md",
+    "packetName": "iobroker.eos-admin",
+    "npmPackage": "iobroker.eos-admin",
+    "allowAdapterUpdate": true,
+    "allowAdapterDelete": false
+  }
+}

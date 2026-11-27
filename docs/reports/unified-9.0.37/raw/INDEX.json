@@ -1,0 +1,232 @@
+{
+  "schema": 1,
+  "version": "9.0.37",
+  "results": {
+    "node22-tests-final": {
+      "tests": 2953,
+      "pass": 2951,
+      "fail": 0,
+      "skipped": 2,
+      "cancelled": 0
+    },
+    "node24-tests-final": {
+      "tests": 2953,
+      "pass": 2951,
+      "fail": 0,
+      "skipped": 2,
+      "cancelled": 0
+    }
+  },
+  "files": [
+    {
+      "file": "backend.log",
+      "deliveredSha256": "661b969cdfd843015074ed60a43321df451322f382ed2f6a621f42248a274477",
+      "bytes": 277
+    },
+    {
+      "file": "core-final-node22.log",
+      "deliveredSha256": "9514bca0d0049a60c6e33a199bc1be781fe1ff2221391ffd22e4a273aa747041",
+      "bytes": 63325
+    },
+    {
+      "file": "core-final-node24.log",
+      "deliveredSha256": "7f51beb40f468130724602e151b3912947b4c019a5fb763383527f4af01cf83e",
+      "bytes": 58040
+    },
+    {
+      "file": "dashboard-935-screenshot.json",
+      "deliveredSha256": "00dd658c8592b7fac5973b9c659fb1121a5727646b25cdbb6a8e1025ac613203",
+      "bytes": 465
+    },
+    {
+      "file": "dashboard-de-en-nl.json",
+      "deliveredSha256": "16081bb04ce6a5ccf1e9c71ef83ee2e6214d8b65b146f8e7dbb56c86e1b43551",
+      "bytes": 32431
+    },
+    {
+      "file": "ems-ui-nvp-integration.json",
+      "deliveredSha256": "22dfef1e70df7c9c78668050febcc6436f1070119c3ab5c74b903d05c75ca541",
+      "bytes": 6476
+    },
+    {
+      "file": "farm-and-dashboard-935.json",
+      "deliveredSha256": "6ab6abe2188f8f7ea118f75cc393acbdc2c9fab9d749f169c87e58bbea74574b",
+      "bytes": 633
+    },
+    {
+      "file": "farm-tracking-source-tests.log",
+      "deliveredSha256": "30c428346b2c2a8ce28b4d987fbd38d9d0896fcf6cf7eebc5e45c1fe901c84ef",
+      "bytes": 7028
+    },
+    {
+      "file": "fixtures-verification.log",
+      "deliveredSha256": "2d3543a293e00d1bc805c8ebc1d89ed3560bbcac07d5eb6c22bb6b5a6cd9a24e",
+      "bytes": 3230
+    },
+    {
+      "file": "frontend.log",
+      "deliveredSha256": "57cc84907a619be0b2f035d3d7047abc24b71f4cb60639288558303a58dde280",
+      "bytes": 18432
+    },
+    {
+      "file": "installer.log",
+      "deliveredSha256": "478b31588861eee1f1a6c00e897676f723e711ad6455c56da56bfec33c9bd466",
+      "bytes": 1275
+    },
+    {
+      "file": "lint.log",
+      "deliveredSha256": "66f4f8c319a11b788a1470e3a527d25b98cf7cb24e9966a6870c8a169e38ccf7",
+      "bytes": 9926
+    },
+    {
+      "file": "measure-storage-display.cjs",
+      "deliveredSha256": "5e0e09dc886b52168b1ead02aa7b06eba1ca8d280ed527ce96b7d08769a9be9b",
+      "bytes": 2528
+    },
+    {
+      "file": "modules.log",
+      "deliveredSha256": "286c3d5895c00f263777015f9db6acd6963fb03f7ad08c6064114e8324c17572",
+      "bytes": 307
+    },
+    {
+      "file": "node22-isolated-start-deadlines.log",
+      "deliveredSha256": "7a88b9f9fa2b5e0d1d299be26aaf5709000eb3df41d635d90c0c14461da3a079",
+      "bytes": 1189
+    },
+    {
+      "file": "node22-migration.log",
+      "deliveredSha256": "6abf65014f9c4bddb04c19aa016d55554a1c6d8d47dc34fb4e269da50dbdfde7",
+      "bytes": 53771
+    },
+    {
+      "file": "node22-mira.log",
+      "deliveredSha256": "f9793c9ab4862d9c0a264ae121fecf700cb3f08e6118b925a4a2384ae1fd51d9",
+      "bytes": 10035
+    },
+    {
+      "file": "node22-parallel-initial.log",
+      "deliveredSha256": "91b40b5adc63b652781b72a850af285d343873ead9541a58cefb2a5ced6d6468",
+      "bytes": 581772
+    },
+    {
+      "file": "node22-startzeiten.json",
+      "deliveredSha256": "ac3451e73dfa51389484239e6fbee95208436d54129c43970bdbb407b4185c40",
+      "bytes": 669
+    },
+    {
+      "file": "node22-system-status.log",
+      "deliveredSha256": "e42ab437847657ca8c3f3b17389dd121e10512de193082a3a0d771995623304e",
+      "bytes": 29652
+    },
+    {
+      "file": "node22-tests-final.log",
+      "deliveredSha256": "12e1ab2e91695091560882010444b5681952cb6ede6388f2ba8f28c9f42be1c8",
+      "bytes": 798102
+    },
+    {
+      "file": "node22-version.log",
+      "deliveredSha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906",
+      "bytes": 9
+    },
+    {
+      "file": "node24-migration.log",
+      "deliveredSha256": "222c147f67de23c88a6dbb76f10009cce02e515742b2b949aa14dc842c4d8582",
+      "bytes": 51226
+    },
+    {
+      "file": "node24-mira.log",
+      "deliveredSha256": "ebc15a9377de3c093df328650d036f811040c77826e1397033dd28bda0fca85d",
+      "bytes": 3858
+    },
+    {
+      "file": "node24-system-status.log",
+      "deliveredSha256": "6c7ba1d32c54daed25037befdb0d127efec35f66bca2a516a6616d4e9670eae4",
+      "bytes": 12179
+    },
+    {
+      "file": "node24-tests-final.log",
+      "deliveredSha256": "29fcc642389bdf14dccc57f42dcc067b68e668854b83adfccd1fb1b9f7a41279",
+      "bytes": 322070
+    },
+    {
+      "file": "node24-version.log",
+      "deliveredSha256": "4409d3bfa08b82f385bd424eeda65fc63b756129f0e89e82df77f1fecafccc14",
+      "bytes": 9
+    },
+    {
+      "file": "npm-runtime-audit.json",
+      "deliveredSha256": "9a38535e223aa382d0eca300ff5e8f53897b15bf06adc1c92ea32fddcfa551b6",
+      "bytes": 1620
+    },
+    {
+      "file": "platform-acl-node22.log",
+      "deliveredSha256": "55295157de3962e32fc4d7e53761504525711879329a89f2b5fc2794da6a0f39",
+      "bytes": 3967
+    },
+    {
+      "file": "platform-acl-node24.log",
+      "deliveredSha256": "3baa738496407dcd986be4ddd66d9f753c69c2ab75b3fcfc1b8bf7b9bb50233f",
+      "bytes": 1622
+    },
+    {
+      "file": "platform-nginx-node22.json",
+      "deliveredSha256": "6ee2348f9dd6ee9afe54f0c1d1698ed180c761ace7087c72ee1bc314acb1e5ec",
+      "bytes": 762
+    },
+    {
+      "file": "platform-nginx-node24.json",
+      "deliveredSha256": "c3610d01734edeacecc146d8c08a9d1a0488a445173b58d31cedd7b093bae08f",
+      "bytes": 762
+    },
+    {
+      "file": "qa-source-check.log",
+      "deliveredSha256": "9115479f8487ca07616051ff30190f10de725238b265ae98e9fab68513114c44",
+      "bytes": 220
+    },
+    {
+      "file": "release-metadata.log",
+      "deliveredSha256": "65263d63d6aa71b6dcfe1b0a4743cd8059655255c7147424b69bac8109ec699e",
+      "bytes": 529
+    },
+    {
+      "file": "sbom.log",
+      "deliveredSha256": "03f078028d58ecbc6696873d6b1d19fbe798a9118397e3e0aa5c22c0114f7833",
+      "bytes": 830
+    },
+    {
+      "file": "speicher-warnschwelle-integration.json",
+      "deliveredSha256": "827d48126e008c105fd72274556d95028dbf1b9615e4f65d7c2ef04e0c1cbba9",
+      "bytes": 4589
+    },
+    {
+      "file": "sse-backpressure-9.0.35.log",
+      "deliveredSha256": "33cd2e8a7d597e0466d51a3bc4981bdcb79a444913f7efb01fb3a4ee5a7ec813",
+      "bytes": 119
+    },
+    {
+      "file": "sse-backpressure-9.0.37.log",
+      "deliveredSha256": "33cd2e8a7d597e0466d51a3bc4981bdcb79a444913f7efb01fb3a4ee5a7ec813",
+      "bytes": 119
+    },
+    {
+      "file": "storage-display-memory-node22.json",
+      "deliveredSha256": "48de53f8f050d6980a567074554ab179845cd799b720a422194127aaf02efbf4",
+      "bytes": 494
+    },
+    {
+      "file": "storage-display-memory-node24.json",
+      "deliveredSha256": "3674d24916f333afe72398f8c2243e64ca7769e71d0e040f9dfe5b71abc0fb90",
+      "bytes": 494
+    },
+    {
+      "file": "typecheck.log",
+      "deliveredSha256": "78f83f82b24739021f789dc63604796bdee27d0776231d608991ba38de62eb3d",
+      "bytes": 3049
+    },
+    {
+      "file": "ui-runtime.log",
+      "deliveredSha256": "58a83ab85802d387a5bec6b77d5f7dd9efde8153911d497f8965fcaba232b825",
+      "bytes": 474
+    }
+  ]
+}

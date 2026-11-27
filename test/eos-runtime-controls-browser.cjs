@@ -9,10 +9,13 @@ const os = require('node:os');
 const crypto = require('node:crypto');
 const express = require('express');
 const puppeteer = require('puppeteer');
-const { EosRuntimeControl } = require('../src/lib/eosRuntimeControl');
-const { EosModuleConfigStore } = require('../src/lib/eosModuleConfigStore');
-const { registerEosModuleRoutes } = require('../src/lib/eosModuleHttp');
-const root = path.resolve(__dirname, '..');
+const root = path.resolve(process.env.EOS_RUNTIME_PACKAGE_ROOT || path.join(__dirname, '..'));
+// A development checkout tests current sources; an installed artifact must use
+// the same build/lib modules its packaged adapter loads.
+const lib = process.env.EOS_RUNTIME_PACKAGE_ROOT ? 'build/lib' : 'src/lib';
+const { EosRuntimeControl } = require(path.join(root, lib, 'eosRuntimeControl'));
+const { EosModuleConfigStore } = require(path.join(root, lib, 'eosModuleConfigStore'));
+const { registerEosModuleRoutes } = require(path.join(root, lib, 'eosModuleHttp'));
 const card = id => `section[data-process="${id}"]`;
 const button = (id, action) => `${card(id)} button[data-action="${action}"]`;
 const until = async predicate => {
@@ -55,10 +58,11 @@ async function main() {
         status[id].lastHeartbeatAt = Date.now();
     };
     const moduleStore = new EosModuleConfigStore(owner);
-    const migrationFixture = () => onlyBlocked ? { phase: 'BLOCKED', code: 'EOS_MIGRATION_STOP_UNCONFIRMED',
+    let manualFixture = null;
+    const migrationFixture = () => manualFixture || (onlyBlocked ? { phase: 'BLOCKED', code: 'EOS_MIGRATION_STOP_UNCONFIRMED',
         sources: [{ id: 'ui', source: 'nexowatt-ui.0' }],
         issues: [{ id: 'ui', source: 'nexowatt-ui.0', code: 'EOS_MIGRATION_STOP_UNCONFIRMED', privateKey: 'redact-fixture' }] }
-        : { phase: migrationAllowed ? 'COMMITTED' : 'ROLLBACK_REQUIRED', code: migrationAllowed ? '' : 'EOS_MIGRATION_JOURNAL_INVALID', sources: [] };
+        : { phase: migrationAllowed ? 'COMMITTED' : 'ROLLBACK_REQUIRED', code: migrationAllowed ? '' : 'EOS_MIGRATION_JOURNAL_INVALID', sources: [] });
     const host = { owner, migrationStatus: migrationFixture, view: async id => ({ config: { enabled: configured[id] } }),
         enableProcessModule: async id => {
             const config = { enabled: true, retainedSetting: `fixture-${id}`, secret: 'fixture-private-setting' };
@@ -189,6 +193,41 @@ async function main() {
         assert.doesNotMatch(await page.$eval('#scope-description', node => node.textContent), /EEBus|Sicherung|OCPP/);
         assert.doesNotMatch(await page.content(), /redact-fixture/);
         assert.equal(requests.length, beforeReview, 'opening diagnostics never submits a lifecycle action');
+        // The HTTP route and DOM are production. The migration coordinator below
+        // is a fixture; the migration tests cover the real version/ownership checks.
+        const migrationCalls = [];
+        let revision = crypto.randomUUID(), operation = 'idle';
+        manualFixture = {phase:'BLOCKED', code:'EOS_DEVICES_UNKNOWN_TEMPLATE', sources:[
+            {id:'ui',source:'nexowatt-ui.0',enabled:false,sourceVersion:'1.0.35'},
+            {id:'devices',source:'nexowatt-devices.0',enabled:false,sourceVersion:'0.5.172'}],
+            issues:[{id:'devices',source:'nexowatt-devices.0',code:'EOS_DEVICES_UNKNOWN_TEMPLATE'}]};
+        owner.eosMigration.manualView = () => ({canStart:operation==='idle',canActivateDevices:operation==='idle',revision,operation:{state:operation,code:''}});
+        owner.eosMigration.requestManual = (activate, expected) => {
+            if (expected !== revision) throw Object.assign(new Error('conflict'),{code:'EOS_MIGRATION_REVISION_CONFLICT'});
+            migrationCalls.push(activate); revision = crypto.randomUUID(); operation = 'running';
+        };
+        await page.click('#refresh');
+        await page.waitForFunction(() => !document.getElementById('start').disabled);
+        const sources = await page.$eval('#sources', el=>el.textContent);
+        assert.match(sources,/nexowatt-ui\.0.*1\.0\.35/);
+        assert.match(sources,/nexowatt-devices\.0.*0\.5\.172.*Gerätevorlage/);
+        assert.equal(await page.$eval('#activate-devices',el=>el.checked),false);
+        revision = crypto.randomUUID();
+        await page.click('#start');
+        await page.waitForFunction(() => document.getElementById('request-message').textContent.includes('geändert'));
+        assert.deepEqual(migrationCalls,[]);
+        await page.click('#refresh');
+        await page.waitForFunction(() => !document.getElementById('start').disabled);
+        await page.click('#activate-devices'); await page.click('#start');
+        await page.waitForFunction(() => document.getElementById('operation-message').textContent.includes('Übernahmeauftrag läuft'));
+        assert.deepEqual(migrationCalls,[true]);
+        manualFixture = {...manualFixture,phase:'COMMITTED',code:'',issues:[],sources:manualFixture.sources.map(row=>({...row,namespacePreserved:true,targetEnabled:true}))};
+        operation = 'complete';
+        await page.waitForFunction(() => document.getElementById('status-heading').textContent === 'Übernahme abgeschlossen');
+        assert.equal(await page.$eval('#start',el=>el.disabled),true);
+        assert.deepEqual(migrationCalls,[true]);
+        checks.push({name:'migration admin shows disabled customer sources and real versions, validates a stale revision, submits one opt-in POST and polls completion', result:'passed'});
+        delete owner.eosMigration.manualView; delete owner.eosMigration.requestManual; manualFixture = null;
         onlyBlocked = null; configPending = false; standbyEebus = true;
         await page.goto(`${origin}/runtime/`); await page.waitForFunction(selector=>document.querySelector(selector)?.textContent?.includes('eebus.1'), {},card('eebus'));
         const waiting = await page.$eval(card('eebus'),node=>node.textContent);
@@ -280,7 +319,7 @@ async function main() {
         checks.push({ name: 'lost administrator role denies mutation and removes all actionable status', result: 'passed' });
         assert.deepEqual(pageErrors, []);
         const sourceHashes = {};
-        for (const file of ['src/lib/eosRuntimeControl.js', 'src/lib/eosModuleHttp.js', 'src/lib/eosRuntimeHealth.js', 'public/eos-runtime/index.js', 'public/eos-runtime/index.html', 'public/eos-runtime/style.css', 'public/eos-migration/index.js', 'public/eos-migration/index.html']) {
+        for (const file of [`${lib}/eosRuntimeControl.js`, `${lib}/eosModuleHttp.js`, `${lib}/eosRuntimeHealth.js`, 'public/eos-runtime/index.js', 'public/eos-runtime/index.html', 'public/eos-runtime/style.css', 'public/eos-migration/index.js', 'public/eos-migration/index.html']) {
             sourceHashes[file] = crypto.createHash('sha256').update(await fs.readFile(path.join(root, file))).digest('hex');
         }
         console.log(JSON.stringify({ result: 'passed', runAt: new Date().toISOString(), node: process.version, browser: await browser.version(),

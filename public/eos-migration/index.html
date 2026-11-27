@@ -18,7 +18,7 @@
   </header>
   <section class="eos-module-hero" aria-labelledby="page-title">
     <div><small>NexoWatt EOS · Bestehende Anlagen</small><h1 id="page-title">Bestandsübernahme</h1>
-    <p>Den Stand der automatischen Übernahme aus euren bisherigen EOS-Adaptern nachvollziehen.</p></div>
+    <p>Einstellungen und Datenpunktzuordnungen aus bestehenden ioBroker-Instanzen übernehmen.</p></div>
     <span class="eos-module-badge">Einstellungen und Datenpunkte erhalten</span>
   </section>
   <p id="request-message" role="status" aria-live="polite" class="eos-message">Status wird geladen …</p>
@@ -26,8 +26,15 @@
     <section class="eos-panel" aria-labelledby="status-heading">
       <small class="eos-eyebrow">Aktueller Stand</small><h2 id="status-heading">Übernahme wird geprüft</h2>
       <p id="phase-description"></p><p id="unchanged-notice" class="notice" hidden></p>
-      <dl class="eos-detail-list"><dt>Letzte Änderung</dt><dd id="updated-at">–</dd><dt>Meldung</dt><dd id="status-code">–</dd></dl>
-      <p id="reason-description"></p><p id="scope-description" hidden></p><button id="refresh" type="button">Status aktualisieren</button>
+      <dl class="eos-detail-list"><dt>Letzte Änderung</dt><dd id="updated-at">–</dd><dt id="code-label">Meldung</dt><dd id="status-code">–</dd></dl>
+      <p id="reason-description"></p><p id="scope-description" hidden></p>
+      <div id="start-controls" hidden>
+        <p id="start-description">EOS prüft die erfassten Instanzen erneut. Sind alle Voraussetzungen erfüllt, beendet EOS laufende Altinstanzen kontrolliert und übernimmt die Konfiguration. Während der Übergabe kann die Regelung kurz pausieren.</p>
+        <label id="activate-devices-field" class="eos-inline-check" hidden><input id="activate-devices" type="checkbox"> Integriertes Gerätemodul nach der Übernahme freigeben</label>
+        <button id="start" class="eos-primary" type="button" aria-describedby="start-description" disabled>Übernahme prüfen und starten</button>
+      </div>
+      <button id="refresh" type="button">Status aktualisieren</button>
+      <p id="operation-message" role="status" aria-live="polite"></p>
     </section>
     <section class="eos-panel" aria-labelledby="sources-heading">
       <small class="eos-eyebrow">Bisherige Adapter</small><h2 id="sources-heading">Erfasste Instanzen</h2>
@@ -37,6 +44,6 @@
   <section class="eos-panel"><small class="eos-eyebrow">Weiteres Vorgehen</small><h2>Was dieser Status bedeutet</h2>
     <p>EOS prüft vor der Übergabe Versionen, Einstellungen, Zugangsdaten und den bisherigen Betrieb. Kann ein Bestandteil nicht sicher übernommen werden, zeigt diese Seite den Grund. Bereits vorhandene EOS-Konfigurationen werden nicht automatisch überschrieben.</p>
     <p>Bei abgeschlossener Übernahme bleiben die bisherigen Datenpunktnamen, Zuordnungen und Historieneinstellungen erhalten. Die alten Adapter bleiben installiert. EOS beendet sie kontrolliert, bevor die integrierten Module übernehmen.</p>
-    <p>Diese Ansicht liest ausschließlich den Status. „Status aktualisieren“ startet keine Übernahme und verändert keine Anlage.</p>
+    <p>Auch deaktivierte Altinstanzen können ihre gespeicherten Einstellungen liefern. Sie bleiben installiert. Historienzuordnungen, etwa für InfluxDB, verwenden weiterhin die bisherigen Datenpunktnamen.</p>
   </section>
 </main></body></html>

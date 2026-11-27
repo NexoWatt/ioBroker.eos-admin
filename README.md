@@ -1,6 +1,6 @@
 # NexoWatt EOS
 
-**Version 9.0.36 · ioBroker-Paket `iobroker.eos-admin` · Testkanal `next`**
+**Version 9.0.38 · ioBroker-Paket `iobroker.eos-admin` · Testkanal `next`**
 
 NexoWatt EOS bündelt lokales Energiemanagement, Dashboard und Systemverwaltung in einem ioBroker-Adapter. Oberfläche, EMS, Geräteanbindung, EEBUS, OCPP und Sicherung werden in eigenen Prozessen ausgeführt.
 
@@ -10,7 +10,19 @@ NexoWatt EOS bündelt lokales Energiemanagement, Dashboard und Systemverwaltung 
 2. Den Adapter `iobroker.eos-admin` in ioBroker installieren oder die vorhandene Instanz aktualisieren. Der direkte EOS-Zugang ist standardmäßig `https://<Geräte-IP>:8188/`. Bei bestehenden Instanzen gelten die gespeicherten Adresseinstellungen.
 3. Nach dem Start prüfen, ob `eos-admin.0`, Oberfläche, EMS und die eingerichteten Module betriebsbereit sind.
 
-Voraussetzungen sind ioBroker JS-Controller ab 7.2.5 und Node.js `>=22.23.4 <23` oder `>=24.22.1 <25`. Die Schritte für Update, Wiederanlauf und Prüfung der Live-Messwerte stehen in der [Anleitung zu 9.0.36](docs/start/START_HIER_9.0.36.md).
+Voraussetzungen sind ioBroker JS-Controller ab 7.2.5 und Node.js `>=22.23.4 <23` oder `>=24.22.1 <25`. Die Schritte für das Update von einer Altinstallation stehen in der [Anleitung zu 9.0.38](docs/start/START_HIER_9.0.38.md).
+
+## Änderungen in 9.0.38
+
+Bei der Bestandsübernahme prüft EOS, ob es die vorhandene UI- und Gerätekonfiguration lesen und mit den mitgelieferten Geräteprofilen betreiben kann. Die alte Beschränkung des Geräteadapters auf 0.5.176 entfällt. Auch gestoppte Quellinstanzen können ihre Konfiguration liefern. Die bisherigen Datenpunktnamen und die Zuordnung zur InfluxDB-Instanz werden weiterverwendet. In der EOS-Administration lässt sich eine zurückgestellte Übergabe erneut prüfen und starten.
+
+[Übernahme, Geräteaktivierung und InfluxDB-Historie](docs/start/START_HIER_9.0.38.md) · [Prüfbericht](docs/reports/unified-9.0.38/PRUEFBERICHT.md)
+
+## Änderungen in 9.0.37
+
+Die Live-Ansicht erhält die Bestätigung des EMS für die Messung am Netzverknüpfungspunkt. Sie zeigt „Alle Systeme normal“, wenn auch die übrigen überwachten Bereiche gesund sind. Fehlt die Bestätigung, nennt das Dashboard das betroffene Signal. Für jeden geregelten Speicher vergleicht EOS die übergebene Leistung mit der zugehörigen Gerätemessung. Eine Leistungsabweichung löst erst oberhalb von 200 W eine Warnung aus.
+
+[Statusanzeige, Speicherfarm und Pilotprüfung](docs/start/START_HIER_9.0.37.md) · [Prüfbericht](docs/reports/unified-9.0.37/PRUEFBERICHT.md)
 
 ## Änderungen in 9.0.36
 
@@ -38,4 +50,4 @@ Mit `npm pack --dry-run` prüfst du den Paketinhalt lokal. Die [Anleitung](docs/
 
 [Dokumentation](docs/README.md) · [Architektur](docs/unified/ARCHITECTURE.md) · [Lizenz](LICENSE) · [Drittanbieterhinweise](THIRD-PARTY-NOTICES.md)
 
-**English** · NexoWatt EOS is a local energy management, dashboard and system administration adapter for ioBroker. Install or update `iobroker.eos-admin` from your configured repository. See the [release guide](docs/start/START_HIER_9.0.36.md) for requirements and post-update checks.
+**English** · NexoWatt EOS is a local energy management, dashboard and system administration adapter for ioBroker. Install or update `iobroker.eos-admin` from your configured repository. See the [release guide](docs/start/START_HIER_9.0.38.md) for requirements and post-update checks.

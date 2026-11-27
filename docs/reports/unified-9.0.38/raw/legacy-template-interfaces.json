@@ -1,0 +1,21 @@
+{
+  "ui": "1.0.35",
+  "devices": "0.5.172",
+  "product": "9.0.38",
+  "sourceTemplateIds": 195,
+  "allIdsMatched": true,
+  "unchangedDefinitions": 194,
+  "allSourceProtocolsMatched": 336,
+  "missingDataPointIds": 0,
+  "changedModbusWriteAddressesOrFunctionCodes": 0,
+  "changedTemplateIds": [
+    "ess.fenecon.FeneconHomeEssImpl"
+  ],
+  "feneconOldDataPointCount": 55,
+  "feneconNewDataPointCount": 73,
+  "previouslyReadableCommandRegistersNowWriteOnly": [
+    "ess.fenecon.FeneconHomeEssImpl.sET_ACTIVE_POWER",
+    "ess.fenecon.FeneconHomeEssImpl.sET_MAX_DISCHARGE_POWER",
+    "ess.fenecon.FeneconHomeEssImpl.sET_MAX_CHARGE_POWER"
+  ]
+}

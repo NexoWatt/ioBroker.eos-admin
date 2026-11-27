@@ -1,0 +1,21 @@
+{
+  "node": "22.23.4",
+  "concurrentFullSuites": 2,
+  "timeoutsChanged": false,
+  "cases": [
+    {
+      "scenario": "real host starts three real device profiles while their first physical responses are still pending",
+      "parallelRunMs": 2615.444174,
+      "parallelStatus": "test deadline exceeded",
+      "isolatedRunMs": 699.378783,
+      "isolatedStatus": "pass"
+    },
+    {
+      "scenario": "an EMS crash blocks manual starts until its accepted write completes, then recovers automatically",
+      "parallelRunMs": 14255.593481,
+      "parallelStatus": "test deadline exceeded",
+      "isolatedRunMs": 6290.841101,
+      "isolatedStatus": "pass"
+    }
+  ]
+}

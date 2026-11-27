@@ -1,0 +1,12 @@
+{
+  "upstreamVersion": "1.0.35",
+  "candidate": "9.0.38",
+  "upstream": "main.js",
+  "sharedHistoryDefault": "influxdb.0",
+  "canonicalMappingAndFallbackMatch": true,
+  "methodSha256": {
+    "_nwGetHistoryDpCandidates": "2d28bfb024c372b7a7d846e44d3a8ed3e32eb60960d10c36da6f47801d20328c",
+    "_nwGetCanonicalHistorieId": "769bd2daefd1d5ad0cc4631a1ac223452de1aae8ed0a4bd31fea7684e62fb3e3",
+    "_nwBuildPara14aInfluxNative": "869fe86cdfcba49e73b059a675caea235cb0072774df462c0f73e80003441ad9"
+  }
+}

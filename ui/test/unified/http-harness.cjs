@@ -3,8 +3,9 @@
  * This does not test central OAuth or real device communication. */
 const fs = require('node:fs'), path = require('node:path'), Module = require('node:module');
 const http = require('node:http'), crypto = require('node:crypto');
-const { UnifiedSessions } = require('../../../src/lib/eosUnifiedBoundary');
-const filename = path.resolve(__dirname, '../../main.js');
+const packageRoot = process.env.EOS_MIGRATION_PACKAGE_ROOT ? path.resolve(process.env.EOS_MIGRATION_PACKAGE_ROOT) : null;
+const { UnifiedSessions } = require(packageRoot ? path.join(packageRoot,'build/lib/eosUnifiedBoundary') : '../../../src/lib/eosUnifiedBoundary');
+const filename = packageRoot ? path.join(packageRoot,'ui/main.js') : path.resolve(__dirname, '../../main.js');
 const compiled = new Module(filename, module);
 compiled.filename = filename; compiled.paths = Module._nodeModulePaths(path.dirname(filename));
 compiled._compile(fs.readFileSync(filename, 'utf8') + '\nmodule.exports.TestRuntime = NexoWattVis;\n', filename);

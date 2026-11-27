@@ -7,7 +7,7 @@ const { EosModuleConfigStore } = require('./eosModuleConfigStore');
 /** @typedef {'enable'|'disable'|'restart'} Action */
 /** @typedef {Record<ProcessId, boolean>} Activation */
 /** @typedef {{enabled:boolean,canEnable:boolean,canDisable:boolean,canRestart:boolean,busy:boolean,reason:string,operationReason:string,revision:string}} ControlView */
-/** @typedef {{namespace:string,config:Record<string,unknown>,encrypt:(text:string)=>string,decrypt:(text:string)=>string,getForeignObjectAsync:(id:string)=>Promise<unknown>,setForeignObjectAsync:(id:string,value:unknown)=>Promise<unknown>,eosMigration?:{allowsStartup:(scope?:ProcessId)=>boolean,status?:()=>unknown},eosOwnership?:{canWrite:(scope?:ProcessId)=>boolean},eosLicenseService?:{statusView:()=>unknown,allowsEmbeddedModule?:(id:string)=>boolean},log:{warn:(code:string)=>void}}} Owner */
+/** @typedef {{namespace:string,config:Record<string,unknown>,encrypt:(text:string)=>string,decrypt:(text:string)=>string,getForeignObjectAsync:(id:string)=>Promise<unknown>,setForeignObjectAsync:(id:string,value:unknown)=>Promise<unknown>,eosMigration?:{manualPending?:unknown,allowsStartup:(scope?:ProcessId)=>boolean,status?:()=>unknown},eosOwnership?:{canWrite:(scope?:ProcessId)=>boolean},eosLicenseService?:{statusView:()=>unknown,allowsEmbeddedModule?:(id:string)=>boolean},log:{warn:(code:string)=>void}}} Owner */
 /** @typedef {{mutation?:boolean,configurationSavePromise?:Promise<unknown>|null,view:(id:string)=>Promise<unknown>,enableProcessModule:(id:string)=>Promise<void>,controlProcess:(id:string,action:'stop'|'start')=>Promise<void>}} Host */
 /** @typedef {{pause:()=>Promise<void>,resume:()=>Promise<void>,pauseEms:()=>Promise<void>,resumeEms:()=>Promise<void>,status:()=>Record<string,unknown>}} Runtime */
 const LEGACY_IDS = /** @type {const} */ (['ui', 'devices', 'eebus', 'backup', 'ocpp']);
@@ -155,6 +155,8 @@ class EosRuntimeControl {
      * @param {unknown} id @param {unknown} action @param {unknown} revision
      */
     request(id, action, revision) {
+        if (this.owner.eosMigration?.manualPending)
+            throw fail('EOS_RUNTIME_BUSY');
         if (typeof id !== 'string' || !IDS.some(value => value === id))
             throw fail('EOS_RUNTIME_PROCESS_INVALID');
         if (!['enable', 'disable', 'restart'].includes(String(action)) || typeof action !== 'string')

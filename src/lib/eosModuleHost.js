@@ -244,7 +244,7 @@ class EosModuleHost {
     async loadForEditing(id, retryConfiguration = false, inBackground = false) {
         const entry = this.entries.get(id);
         if (!entry) throw fail('EOS_MODULE_UNKNOWN');
-        if (entry.configLoaded && entry.configurationStartupAllowed === this.owner.eosMigration?.allowsStartup?.(id)) return;
+        if (entry.installingSnapshot || (entry.configLoaded && entry.configurationStartupAllowed === this.owner.eosMigration?.allowsStartup?.(id))) return;
         if (this.configurationLoadPromise) await this.configurationLoadPromise;
         const startupAllowed = this.owner.eosMigration?.allowsStartup?.(id);
         const authorityChanged = entry.configLoaded && entry.configurationStartupAllowed !== startupAllowed;
@@ -783,6 +783,7 @@ class EosModuleHost {
         // Only one bounded configuration read runs at a time, and retries back off per module.
         if (!this.configurationLoadPromise && !this.mutation) {
             const retry = [...this.entries.values()].find(entry => {
+                if (entry.installingSnapshot) return false;
                 const allowed = this.owner.eosMigration?.allowsStartup?.(entry.id);
                 return (entry.configLoaded && entry.configurationStartupAllowed !== allowed) ||
                     (!entry.configLoaded && entry.configurationError && performance.now() >= entry.configurationRetryAt);
@@ -1112,6 +1113,35 @@ class EosModuleHost {
             namespace: id === 'devices' ? `${this.namespace(id)}.devices` : this.namespace(id) };
     }
 
+    async holdMigrationModules(ids) {
+        const entries = ids.map(id => this.entries.get(id));
+        if (this.stopped || this.configurationSavePromise || entries.some(entry => !entry || entry.installingSnapshot || entry.stopFailed)) {
+            throw fail('EOS_MIGRATION_TARGET_BUSY');
+        }
+        for (const entry of entries) {
+            entry.installingSnapshot = true;
+            this.revoke(entry, 'EOS_MODULE_MIGRATION_BLOCKED');
+        }
+        await Promise.all([this.configurationLoadPromise, this.startPromise, this.pending].filter(Boolean));
+        await Promise.all(entries.map(entry => this.stopEntry(entry)));
+        if (this.stopped || entries.some(entry => entry.stopFailed || entry.module || entry.standbyProcess)) throw fail('EOS_MIGRATION_STOP_UNCONFIRMED');
+    }
+
+    async releaseMigrationModules(ids, transferred) {
+        for (const id of ids) {
+            const entry = this.entries.get(id);
+            if (!entry || this.stopped || entry.stopFailed) throw fail('EOS_MIGRATION_STOP_UNCONFIRMED');
+            if (transferred) {
+                await this.readEntryConfiguration(entry, true);
+                if (!entry.configLoaded || !entry.loadedEnvelope?.migration?.preserveNamespace) throw fail('EOS_MIGRATION_DESTINATION_BINDING');
+                this.resetProcessFailure(entry);
+                entry.failed = false;
+            }
+        }
+        for (const id of ids) this.entries.get(id).installingSnapshot = false;
+        this.nextOwnershipCheck = 0;
+    }
+
     /** Process controls do not replace module configuration or migration authority. */
     async controlProcess(id, action) {
         const entry = this.entries.get(id);
@@ -1208,6 +1238,7 @@ class EosModuleHost {
     }
 
     async save(id, config, migration, expectedConfigurationRevision, guard) {
+        if (this.owner.eosMigration?.manualPending) throw fail('EOS_MIGRATION_BUSY');
         const reason = this.configurationReason(id);
         if (reason) throw fail(reason);
         if (this.mutation || this.stopped) throw fail('EOS_MODULE_BUSY');
@@ -1306,6 +1337,7 @@ class EosModuleHost {
     }
 
     async importLegacy(id, instance) {
+        if (this.owner.eosMigration?.manualPending) throw fail('EOS_MIGRATION_BUSY');
         if (!this.initialized && !this.stopped) throw fail('EOS_MODULE_NOT_READY');
         if (this.mutation || this.stopped) throw fail('EOS_MODULE_BUSY');
         this.mutation = true;

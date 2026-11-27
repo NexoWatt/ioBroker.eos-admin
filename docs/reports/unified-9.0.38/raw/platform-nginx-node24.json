@@ -1,0 +1,21 @@
+{
+  "version": "9.0.38",
+  "node": "v24.22.3",
+  "nginx": "nginx version: nginx/1.26.3",
+  "uid": 1000,
+  "configuration": "Production TLS renderer; only listeners rebound to IPv4/IPv6 loopback high port and error log to private test directory",
+  "activeListenerPort": 45075,
+  "upstreamPort": 8188,
+  "nginxConfigTest": "syntax is ok, test is successful",
+  "tlsClientAuthorized": true,
+  "frontendSni": "nexowatteos",
+  "frontendTls": "TLSv1.3",
+  "verifiedUpstreamTls": true,
+  "upstreamTls": "TLSv1.3",
+  "upstreamSni": "nexowatteos",
+  "forwardedHost": "nexowatteos",
+  "forwardedProto": "https",
+  "status": 200,
+  "upstreamBodyRoundTrip": true,
+  "productionPort443": "Site-specific binding/policy. This unprivileged test used an ephemeral high port."
+}

@@ -1,4 +1,12 @@
 {
+  "9.0.18": {
+    "en": "Automatic supported-device assignment through shared Alias V1 roles; customer tariff connection; preserved mappings and data points. New control targets require commissioning.",
+    "de": "Automatische Gerätezuordnung über gemeinsame Alias-V1-Rollen und Tarifanbindung in Kundeneinstellungen. Vorhandene Zuordnungen und Datenpunkte bleiben erhalten; neue Regelziele benötigen eine Inbetriebnahme."
+  },
+  "9.0.17": {
+    "de": "EOS-Sitzungen vom ioBroker Admin getrennt; automatische Änderungen fremder Rechte und Metadaten entfernt; Parallelbetrieb mit Standard-Backitup abgesichert.",
+    "en": "Isolate EOS sessions from ioBroker Admin; remove automatic foreign permission and metadata changes; preserve standard Backitup coexistence."
+  },
   "9.0.16": {
     "de": "Geräte speichern und vorhandene Einstellungen beim Start erhalten; alte Installer-Dateien für npm-Publish sichern; Abmeldung nach zehn Minuten ohne Bedienung.",
     "en": "Fix device saving and preserve settings during startup; quarantine old Installer files for npm publishing; log out after ten idle minutes."

@@ -1,0 +1,1439 @@
+(node:7972) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:7979) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: central PV budget rejects null, bad quality, future/missing timestamps and recovers from a real measurement
+ok 1 - central PV budget rejects null, bad quality, future/missing timestamps and recovers from a real measurement
+  ---
+  duration_ms: 19.629932
+  type: 'test'
+  ...
+# Subtest: fresh canonical PV including zero cannot be overruled by a higher parallel alias
+ok 2 - fresh canonical PV including zero cannot be overruled by a higher parallel alias
+  ---
+  duration_ms: 0.681319
+  type: 'test'
+  ...
+# Subtest: trusted PV hold expires even under repeated snapshots, then real evidence can restore the budget
+ok 3 - trusted PV hold expires even under repeated snapshots, then real evidence can restore the budget
+  ---
+  duration_ms: 2.406899
+  type: 'test'
+  ...
+# (node:7980) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: an unrelated tariff save preserves unchanged ambiguous legacy points while real point changes retain identity guards
+ok 4 - an unrelated tariff save preserves unchanged ambiguous legacy points while real point changes retain identity guards
+  ---
+  duration_ms: 177.938033
+  type: 'test'
+  ...
+# Subtest: customer tariff GET is authenticated, exposes only supported choices and no current or retained secrets
+ok 5 - customer tariff GET is authenticated, exposes only supported choices and no current or retained secrets
+  ---
+  duration_ms: 39.859657
+  type: 'test'
+  ...
+# Subtest: CSRF, origin and unsupported endpoint or actuator fields cannot change customer tariff settings
+ok 6 - CSRF, origin and unsupported endpoint or actuator fields cannot change customer tariff settings
+  ---
+  duration_ms: 136.314344
+  type: 'test'
+  ...
+# Subtest: partial customer tariff edit preserves blank credentials, manual mappings, EMS apps and customer device values
+ok 7 - partial customer tariff edit preserves blank credentials, manual mappings, EMS apps and customer device values
+  ---
+  duration_ms: 32.423296
+  type: 'test'
+  ...
+# Subtest: explicit tariff mapping consent changes only four tariff inputs and never enables an app or dispatch
+ok 8 - explicit tariff mapping consent changes only four tariff inputs and never enables an app or dispatch
+  ---
+  duration_ms: 38.596856
+  type: 'test'
+  ...
+# Subtest: provider switch requires fresh source credentials and preserves old credentials without reusing them
+ok 9 - provider switch requires fresh source credentials and preserves old credentials without reusing them
+  ---
+  duration_ms: 45.985965
+  type: 'test'
+  ...
+# Subtest: stale customer editor and failed persistence leave confirmed settings unchanged
+ok 10 - stale customer editor and failed persistence leave confirmed settings unchanged
+  ---
+  duration_ms: 26.696799
+  type: 'test'
+  ...
+# Subtest: editing or reconnecting a disabled provider preserves its explicit coupling settings; a fresh provider gets no grant
+ok 11 - editing or reconnecting a disabled provider preserves its explicit coupling settings; a fresh provider gets no grant
+  ---
+  duration_ms: 58.2011
+  type: 'test'
+  ...
+# Subtest: retained source credentials remain in protected recovery data and are omitted from every installer HTTP view
+ok 12 - retained source credentials remain in protected recovery data and are omitted from every installer HTTP view
+  ---
+  duration_ms: 32.225582
+  type: 'test'
+  ...
+# Subtest: unhydrated tariff reads never confirm native defaults; loaded tariffs remain available when unrelated EMS readiness degrades
+ok 13 - unhydrated tariff reads never confirm native defaults; loaded tariffs remain available when unrelated EMS readiness degrades
+  ---
+  duration_ms: 16.26913
+  type: 'test'
+  ...
+# (node:7986) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: unrelated App-Center save must preserve a previously saved Tibber provider and secret
+ok 14 - unrelated App-Center save must preserve a previously saved Tibber provider and secret
+  ---
+  duration_ms: 216.431213
+  type: 'test'
+  ...
+# Subtest: absent tariff controls must not clear a loaded masked credential or home during an unrelated save
+ok 15 - absent tariff controls must not clear a loaded masked credential or home during an unrelated save
+  ---
+  duration_ms: 2.799648
+  type: 'test'
+  ...
+# Subtest: unconfirmed or unrendered tariff data never injects defaults into generic EMS saves
+ok 16 - unconfirmed or unrendered tariff data never injects defaults into generic EMS saves
+  ---
+  duration_ms: 8.375476
+  type: 'test'
+  ...
+# Subtest: missing numeric, flag and formula controls preserve stored values without granting tariff activation
+ok 17 - missing numeric, flag and formula controls preserve stored values without granting tariff activation
+  ---
+  duration_ms: 3.995164
+  type: 'test'
+  ...
+# Subtest: explicit rendered field clearing and source changes remain intentional tariff edits
+ok 18 - explicit rendered field clearing and source changes remain intentional tariff edits
+  ---
+  duration_ms: 8.034418
+  type: 'test'
+  ...
+# Subtest: unrendered custom request fields retain masked headers, body and deliberately empty JSON paths
+ok 19 - unrendered custom request fields retain masked headers, body and deliberately empty JSON paths
+  ---
+  duration_ms: 3.899296
+  type: 'test'
+  ...
+# Subtest: editing one tariff field does not persist rendered defaults for other untouched fields
+ok 20 - editing one tariff field does not persist rendered defaults for other untouched fields
+  ---
+  duration_ms: 4.014944
+  type: 'test'
+  ...
+# (node:8003) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: changing tariff provider invalidates old direct and curve inputs before delayed database writes finish
+ok 21 - changing tariff provider invalidates old direct and curve inputs before delayed database writes finish
+  ---
+  duration_ms: 26.859713
+  type: 'test'
+  ...
+# Subtest: late old-provider database write cannot revive tariff control while replacement clearing is pending
+ok 22 - late old-provider database write cannot revive tariff control while replacement clearing is pending
+  ---
+  duration_ms: 6.16916
+  type: 'test'
+  ...
+# (node:8011) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual provider publication → TarifVis → CoreLimits → Wallet keeps EUR/kWh including high, zero and negative prices
+ok 23 - actual provider publication → TarifVis → CoreLimits → Wallet keeps EUR/kWh including high, zero and negative prices
+  ---
+  duration_ms: 67.592898
+  type: 'test'
+  ...
+# Subtest: structured EUR curves keep their prices while untyped legacy cents and explicit units retain their conversions
+ok 24 - structured EUR curves keep their prices while untyped legacy cents and explicit units retain their conversions
+  ---
+  duration_ms: 0.310699
+  type: 'test'
+  ...
+# Subtest: actual manual mapping preserves cent conversion and supports explicit EUR unit without changing freshness
+ok 25 - actual manual mapping preserves cent conversion and supports explicit EUR unit without changing freshness
+  ---
+  duration_ms: 5.861827
+  type: 'test'
+  ...
+# (node:8019) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: strict price reader rejects missing/status data and preserves genuine zero and negative prices
+ok 26 - strict price reader rejects missing/status data and preserves genuine zero and negative prices
+  ---
+  duration_ms: 1.862057
+  type: 'test'
+  ...
+# Subtest: wallet skips null, status and stale budget candidates in favour of the real fresh canonical price
+ok 27 - wallet skips null, status and stale budget candidates in favour of the real fresh canonical price
+  ---
+  duration_ms: 2.372505
+  type: 'test'
+  ...
+# Subtest: wallet missing, invalid timestamp and stale-only tariffs use the configured fixed fallback; real zero remains dynamic
+ok 28 - wallet missing, invalid timestamp and stale-only tariffs use the configured fixed fallback; real zero remains dynamic
+  ---
+  duration_ms: 0.79923
+  type: 'test'
+  ...
+# Subtest: real CoreLimits tick keeps missing tariff prices null and respects explicit stale flag without changing physical limits
+ok 29 - real CoreLimits tick keeps missing tariff prices null and respects explicit stale flag without changing physical limits
+  ---
+  duration_ms: 132.346677
+  type: 'test'
+  ...
+# Subtest: customer /config only exposes source kinds and safe price units, with no object IDs or credentials
+ok 30 - customer /config only exposes source kinds and safe price units, with no object IDs or credentials
+  ---
+  duration_ms: 63.664
+  type: 'test'
+  ...
+# Subtest: explicit customer Tibber save replaces legacy hourly resolution and retains credentials and unrelated settings
+ok 31 - explicit customer Tibber save replaces legacy hourly resolution and retains credentials and unrelated settings
+  ---
+  duration_ms: 137.032568
+  type: 'test'
+  ...
+# (node:8027) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Tibber save reaches parent state and survives UI plus whole owner restart (native namespace)
+ok 32 - Tibber save reaches parent state and survives UI plus whole owner restart (native namespace)
+  ---
+  duration_ms: 7226.306273
+  type: 'test'
+  ...
+# Subtest: Tibber save reaches parent state and survives UI plus whole owner restart (preserved namespace)
+ok 33 - Tibber save reaches parent state and survives UI plus whole owner restart (preserved namespace)
+  ---
+  duration_ms: 6781.597633
+  type: 'test'
+  ...
+# (node:8035) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: provider switch invalidates actual EMS numbers and curves before new provider metadata
+ok 34 - provider switch invalidates actual EMS numbers and curves before new provider metadata
+  ---
+  duration_ms: 40.683282
+  type: 'test'
+  ...
+# Subtest: late old-provider reply cannot repopulate price, success, retry timer or provider label
+ok 35 - late old-provider reply cannot repopulate price, success, retry timer or provider label
+  ---
+  duration_ms: 10.774669
+  type: 'test'
+  ...
+# Subtest: credential change fences failed old fetch and new provider failure never reuses prior forecast
+ok 36 - credential change fences failed old fetch and new provider failure never reuses prior forecast
+  ---
+  duration_ms: 6.630435
+  type: 'test'
+  ...
+# Subtest: configuration clearing waits behind an old in-flight state write and finishes with unavailable prices
+ok 37 - configuration clearing waits behind an old in-flight state write and finishes with unavailable prices
+  ---
+  duration_ms: 6.755832
+  type: 'test'
+  ...
+# Subtest: failed clearing rejects the save hook, retains pending fence, and retries before a new fetch
+ok 38 - failed clearing rejects the save hook, retains pending fence, and retries before a new fetch
+  ---
+  duration_ms: 31.140523
+  type: 'test'
+  ...
+# Subtest: equivalent config and unchanged ticks retain cache and fetch schedule without repeatedly hashing secrets
+ok 39 - equivalent config and unchanged ticks retain cache and fetch schedule without repeatedly hashing secrets
+  ---
+  duration_ms: 5.444147
+  type: 'test'
+  ...
+# Subtest: disable and stop prevent an outstanding provider response from publishing again
+ok 40 - disable and stop prevent an outstanding provider response from publishing again
+  ---
+  duration_ms: 4.000213
+  type: 'test'
+  ...
+# Subtest: live source rebind drops all six old readers before awaits, resets conversion and preserves shared sources
+ok 41 - live source rebind drops all six old readers before awaits, resets conversion and preserves shared sources
+  ---
+  duration_ms: 9.176767
+  type: 'test'
+  ...
+# Subtest: removing a tariff mapping fences a delayed old prime without affecting replacement mapping
+ok 42 - removing a tariff mapping fences a delayed old prime without affecting replacement mapping
+  ---
+  duration_ms: 3.400347
+  type: 'test'
+  ...
+# (node:8042) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: tariff editor loads lazily and renders secret presence without copying secret values
+ok 43 - tariff editor loads lazily and renders secret presence without copying secret values
+  ---
+  duration_ms: 23.506823
+  type: 'test'
+  ...
+# Subtest: single setting sends only its revisioned tariff delta, never full AppCenter data or blank secret
+ok 44 - single setting sends only its revisioned tariff delta, never full AppCenter data or blank secret
+  ---
+  duration_ms: 9.692568
+  type: 'test'
+  ...
+# Subtest: source switch requires its own token and clears typed token from the previous source
+ok 45 - source switch requires its own token and clears typed token from the previous source
+  ---
+  duration_ms: 3.083562
+  type: 'test'
+  ...
+# Subtest: actual frontend and backend require a fresh token on provider change even with the same ENTSO-E source
+ok 46 - actual frontend and backend require a fresh token on provider change even with the same ENTSO-E source
+  ---
+  duration_ms: 5.469913
+  type: 'test'
+  ...
+# Subtest: revision conflict preserves edited values and token and never automatically retries
+ok 47 - revision conflict preserves edited values and token and never automatically retries
+  ---
+  duration_ms: 2.74552
+  type: 'test'
+  ...
+# Subtest: source/provider options contain no custom endpoint choice and preserve installer provider until deliberate switch
+ok 48 - source/provider options contain no custom endpoint choice and preserve installer provider until deliberate switch
+  ---
+  duration_ms: 2.50816
+  type: 'test'
+  ...
+# Subtest: a known provider name with an external endpoint remains installer-managed until deliberately selected again
+ok 49 - a known provider name with an external endpoint remains installer-managed until deliberately selected again
+  ---
+  duration_ms: 2.481846
+  type: 'test'
+  ...
+# Subtest: country change cannot post a hidden stale sourceId for a direct provider
+ok 50 - country change cannot post a hidden stale sourceId for a direct provider
+  ---
+  duration_ms: 2.411796
+  type: 'test'
+  ...
+# Subtest: formula and use-for-tariff consent are targeted explicit changes
+ok 51 - formula and use-for-tariff consent are targeted explicit changes
+  ---
+  duration_ms: 2.921402
+  type: 'test'
+  ...
+# Subtest: failed initial load remains locked; untrusted error text is never displayed
+ok 52 - failed initial load remains locked; untrusted error text is never displayed
+  ---
+  duration_ms: 2.32368
+  type: 'test'
+  ...
+# Subtest: authentication failure on save preserves form without replaying writes
+ok 53 - authentication failure on save preserves form without replaying writes
+  ---
+  duration_ms: 2.394743
+  type: 'test'
+  ...
+# Subtest: reload asks before discarding an edit and pagehide clears a typed secret
+ok 54 - reload asks before discarding an edit and pagehide clears a typed secret
+  ---
+  duration_ms: 2.478287
+  type: 'test'
+  ...
+# Subtest: provider labels are rendered as plain text and unrelated server fields never enter a save
+ok 55 - provider labels are rendered as plain text and unrelated server fields never enter a save
+  ---
+  duration_ms: 2.676443
+  type: 'test'
+  ...
+# Subtest: startup loading retries initial GET only, confirms Tibber and stops its single timer
+ok 56 - startup loading retries initial GET only, confirms Tibber and stops its single timer
+  ---
+  duration_ms: 2.852312
+  type: 'test'
+  ...
+# Subtest: startup retries are bounded and closing or leaving the panel cancels the single pending timer
+ok 57 - startup retries are bounded and closing or leaving the panel cancels the single pending timer
+  ---
+  duration_ms: 6.566386
+  type: 'test'
+  ...
+# Subtest: hydration failure has no retry and an existing draft is never replaced by startup reads
+ok 58 - hydration failure has no retry and an existing draft is never replaced by startup reads
+  ---
+  duration_ms: 4.084373
+  type: 'test'
+  ...
+# (node:8051) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: 9.0.21 tibber provider selection, credentials and tariff settings survive upgrade and two restarts
+ok 59 - 9.0.21 tibber provider selection, credentials and tariff settings survive upgrade and two restarts
+  ---
+  duration_ms: 106.051065
+  type: 'test'
+  ...
+# Subtest: 9.0.21 entsoe provider selection, credentials and tariff settings survive upgrade and two restarts
+ok 60 - 9.0.21 entsoe provider selection, credentials and tariff settings survive upgrade and two restarts
+  ---
+  duration_ms: 42.871917
+  type: 'test'
+  ...
+# Subtest: 9.0.21 energyzero provider selection, credentials and tariff settings survive upgrade and two restarts
+ok 61 - 9.0.21 energyzero provider selection, credentials and tariff settings survive upgrade and two restarts
+  ---
+  duration_ms: 30.301698
+  type: 'test'
+  ...
+# Subtest: 9.0.21 market-profile provider selection, credentials and tariff settings survive upgrade and two restarts
+ok 62 - 9.0.21 market-profile provider selection, credentials and tariff settings survive upgrade and two restarts
+  ---
+  duration_ms: 28.343766
+  type: 'test'
+  ...
+# Subtest: 9.0.21 custom-rest provider selection, credentials and tariff settings survive upgrade and two restarts
+ok 63 - 9.0.21 custom-rest provider selection, credentials and tariff settings survive upgrade and two restarts
+  ---
+  duration_ms: 30.488255
+  type: 'test'
+  ...
+# Subtest: 9.0.21 manual-dp provider selection, credentials and tariff settings survive upgrade and two restarts
+ok 64 - 9.0.21 manual-dp provider selection, credentials and tariff settings survive upgrade and two restarts
+  ---
+  duration_ms: 30.47809
+  type: 'test'
+  ...
+# Subtest: UI handover and persisted migration restart retain the original tariff namespace, secret state and protected native configuration
+ok 65 - UI handover and persisted migration restart retain the original tariff namespace, secret state and protected native configuration
+  ---
+  duration_ms: 35.991584
+  type: 'test'
+  ...
+# Subtest: existing EOS update without a handover journal reloads protected UI config and preserves tariffs while external OCPP remains separate
+ok 66 - existing EOS update without a handover journal reloads protected UI config and preserves tariffs while external OCPP remains separate
+  ---
+  duration_ms: 22.491842
+  type: 'test'
+  ...
+# Subtest: unreadable or corrupt existing provider storage never becomes fresh defaults or an older backup
+ok 67 - unreadable or corrupt existing provider storage never becomes fresh defaults or an older backup
+  ---
+  duration_ms: 12.638107
+  type: 'test'
+  ...
+# (node:8067) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: wallet cannot revive an explicitly invalid tariff through fresh budget, direct, history or legacy caches
+ok 68 - wallet cannot revive an explicitly invalid tariff through fresh budget, direct, history or legacy caches
+  ---
+  duration_ms: 2.611274
+  type: 'test'
+  ...
+# Subtest: wallet retains true zero, negative prices and legacy sources without a freshness flag
+ok 69 - wallet retains true zero, negative prices and legacy sources without a freshness flag
+  ---
+  duration_ms: 0.238848
+  type: 'test'
+  ...
+# (node:8075) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: derived balance preserves observation age and valid zero during activity
+ok 70 - derived balance preserves observation age and valid zero during activity
+  ---
+  duration_ms: 9.056691
+  type: 'test'
+  ...
+# Subtest: a new meter sample received during PV discovery is eligible in the same balance
+ok 71 - a new meter sample received during PV discovery is eligible in the same balance
+  ---
+  duration_ms: 1.355221
+  type: 'test'
+  ...
+# Subtest: new balance requests coalesce while a previous frame is being published
+ok 72 - new balance requests coalesce while a previous frame is being published
+  ---
+  duration_ms: 11.882198
+  type: 'test'
+  ...
+# Subtest: a direct meter update triggers a new frame and a derived mirror does not
+ok 73 - a direct meter update triggers a new frame and a derived mirror does not
+  ---
+  duration_ms: 0.476775
+  type: 'test'
+  ...
+# Subtest: building and dashboard NVP use the same normalized sign and physical observation time
+ok 74 - building and dashboard NVP use the same normalized sign and physical observation time
+  ---
+  duration_ms: 3.135374
+  type: 'test'
+  ...
+# Subtest: a signed grid mirror cannot replace a stale or bad-quality physical observation
+ok 75 - a signed grid mirror cannot replace a stale or bad-quality physical observation
+  ---
+  duration_ms: 2.881034
+  type: 'test'
+  ...
+# Subtest: split grid power uses the selected direction timestamp and requires both configured meters
+ok 76 - split grid power uses the selected direction timestamp and requires both configured meters
+  ---
+  duration_ms: 1.618871
+  type: 'test'
+  ...
+# Subtest: farm balance validates battery-side power independently from converter power
+ok 77 - farm balance validates battery-side power independently from converter power
+  ---
+  duration_ms: 3.347073
+  type: 'test'
+  ...
+# Subtest: impossible negative balance is unknown, never fabricated 100W or retained load
+ok 78 - impossible negative balance is unknown, never fabricated 100W or retained load
+  ---
+  duration_ms: 1.632103
+  type: 'test'
+  ...
+# Subtest: fresh direct consumption is authoritative, including a measured zero
+ok 79 - fresh direct consumption is authoritative, including a measured zero
+  ---
+  duration_ms: 1.955204
+  type: 'test'
+  ...
+# Subtest: missing, stale, future, invalid and bad quality sources cannot produce fresh building demand
+ok 80 - missing, stale, future, invalid and bad quality sources cannot produce fresh building demand
+  ---
+  duration_ms: 8.993228
+  type: 'test'
+  ...
+# Subtest: negative remaining demand and missing consumers remain distinct from zero
+ok 81 - negative remaining demand and missing consumers remain distinct from zero
+  ---
+  duration_ms: 1.140839
+  type: 'test'
+  ...
+# Subtest: configured missing extra producers/consumers do not silently disappear
+ok 82 - configured missing extra producers/consumers do not silently disappear
+  ---
+  duration_ms: 1.101321
+  type: 'test'
+  ...
+# Subtest: duplicate physical PV aliases are counted once in the backend balance
+ok 83 - duplicate physical PV aliases are counted once in the backend balance
+  ---
+  duration_ms: 0.892346
+  type: 'test'
+  ...
+# Subtest: EV aggregate becomes unknown if a configured member is unavailable, and retains oldest source time
+ok 84 - EV aggregate becomes unknown if a configured member is unavailable, and retains oldest source time
+  ---
+  duration_ms: 0.760697
+  type: 'test'
+  ...
+# Subtest: measurement reader does not evaluate accessors or inherited cache records
+ok 85 - measurement reader does not evaluate accessors or inherited cache records
+  ---
+  duration_ms: 0.349992
+  type: 'test'
+  ...
+# Subtest: Auto PV rejects bad quality and missing timestamps; persistent PV agrees with API snapshot
+ok 86 - Auto PV rejects bad quality and missing timestamps; persistent PV agrees with API snapshot
+  ---
+  duration_ms: 2.597219
+  type: 'test'
+  ...
+# Subtest: TS candidate cannot resurrect an invalid balance or overwrite a fresh direct observation
+ok 87 - TS candidate cannot resurrect an invalid balance or overwrite a fresh direct observation
+  ---
+  duration_ms: 0.60788
+  type: 'test'
+  ...
+# Subtest: extra production adds distinct configured BHKW and generator sources once with shared snapshot contract
+ok 88 - extra production adds distinct configured BHKW and generator sources once with shared snapshot contract
+  ---
+  duration_ms: 1.128191
+  type: 'test'
+  ...
+# Subtest: source timestamps include only selected contributors and numeric text has bounded decimal syntax
+ok 89 - source timestamps include only selected contributors and numeric text has bounded decimal syntax
+  ---
+  duration_ms: 0.747468
+  type: 'test'
+  ...
+# Subtest: legacy flow-slot aliases remain part of the balance and duplicate consumer mappings subtract once
+ok 90 - legacy flow-slot aliases remain part of the balance and duplicate consumer mappings subtract once
+  ---
+  duration_ms: 0.736222
+  type: 'test'
+  ...
+# Subtest: EV mirror carries source quality and timestamp through actual updateValue aggregation
+ok 91 - EV mirror carries source quality and timestamp through actual updateValue aggregation
+  ---
+  duration_ms: 0.827985
+  type: 'test'
+  ...
+# Subtest: a failed building state write is retried for the same physical observation
+ok 92 - a failed building state write is retried for the same physical observation
+  ---
+  duration_ms: 3.151765
+  type: 'test'
+  ...
+# Subtest: independent AC and DC PV add at equal power, and a missing configured DC meter invalidates the balance
+ok 93 - independent AC and DC PV add at equal power, and a missing configured DC meter invalidates the balance
+  ---
+  duration_ms: 2.63689
+  type: 'test'
+  ...
+# Subtest: measured zero from DC-only and farm-only PV remains an observation, and farm missing is a gap
+ok 94 - measured zero from DC-only and farm-only PV remains an observation, and farm missing is a gap
+  ---
+  duration_ms: 2.009571
+  type: 'test'
+  ...
+# Subtest: persisted meter timeout applies to a direct building meter without refreshing the timestamp
+ok 95 - persisted meter timeout applies to a direct building meter without refreshing the timestamp
+  ---
+  duration_ms: 0.775126
+  type: 'test'
+  ...
+# Subtest: scheduled publication retries once after a transient error even without another meter event
+ok 96 - scheduled publication retries once after a transient error even without another meter event
+  ---
+  duration_ms: 0.657849
+  type: 'test'
+  ...
+# Subtest: headless measurement updates do not allocate SSE batches and connected clients share one patch
+ok 97 - headless measurement updates do not allocate SSE batches and connected clients share one patch
+  ---
+  duration_ms: 0.706452
+  type: 'test'
+  ...
+# Subtest: equal zero readings remain reliable through refresh, expire once at the actual timeout and recover with new physical timestamp
+ok 98 - equal zero readings remain reliable through refresh, expire once at the actual timeout and recover with new physical timestamp
+  ---
+  duration_ms: 3.059713
+  type: 'test'
+  ...
+# Subtest: DC mapping keeps real zero and source time, skips identical polls and clears invalid measurements
+ok 99 - DC mapping keeps real zero and source time, skips identical polls and clears invalid measurements
+  ---
+  duration_ms: 6.805029
+  type: 'test'
+  ...
+# Subtest: a complete farm may replace a confirmed absent template meter; an actual invalid meter is still required
+ok 100 - a complete farm may replace a confirmed absent template meter; an actual invalid meter is still required
+  ---
+  duration_ms: 1.849541
+  type: 'test'
+  ...
+# Subtest: unrelated automatic inverter cannot replace a failed configured AC meter
+ok 101 - unrelated automatic inverter cannot replace a failed configured AC meter
+  ---
+  duration_ms: 0.609555
+  type: 'test'
+  ...
+# Subtest: field readings of 1.2 kW PV, 0.5 kW export and a negative 1.8 kW battery distinguish raw direction, measured demand and incomplete telemetry
+ok 102 - field readings of 1.2 kW PV, 0.5 kW export and a negative 1.8 kW battery distinguish raw direction, measured demand and incomplete telemetry
+  ---
+  duration_ms: 1.95488
+  type: 'test'
+  ...
+# (node:8087) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: 100 ms SSE bursts render latest buffered values once per 10000 ms; source timestamps remain unchanged
+ok 103 - 100 ms SSE bursts render latest buffered values once per 10000 ms; source timestamps remain unchanged
+  ---
+  duration_ms: 5.916011
+  type: 'test'
+  ...
+# Subtest: quiet connections still re-evaluate every 10 s and only a real upstream timestamp refresh changes source age
+ok 104 - quiet connections still re-evaluate every 10 s and only a real upstream timestamp refresh changes source age
+  ---
+  duration_ms: 1.360055
+  type: 'test'
+  ...
+# Subtest: the complete display frame shares one time for freshness checks and releases it afterwards
+ok 105 - the complete display frame shares one time for freshness checks and releases it afterwards
+  ---
+  duration_ms: 1.142507
+  type: 'test'
+  ...
+# Subtest: other pages keep their five-second update interval without an energy flow diagram
+ok 106 - other pages keep their five-second update interval without an energy flow diagram
+  ---
+  duration_ms: 1.642042
+  type: 'test'
+  ...
+# Subtest: wall-clock jumps cannot postpone or burst the monotonic 10 s rendering cadence
+ok 107 - wall-clock jumps cannot postpone or burst the monotonic 10 s rendering cadence
+  ---
+  duration_ms: 1.599485
+  type: 'test'
+  ...
+# Subtest: hidden tabs buffer SSE values without rendering; return immediately projects latest data and resumes exactly one timer
+ok 108 - hidden tabs buffer SSE values without rendering; return immediately projects latest data and resumes exactly one timer
+  ---
+  duration_ms: 1.46856
+  type: 'test'
+  ...
+# Subtest: pagehide clears pending UI work; repeated pageshow does not duplicate periodic timers or rendering
+ok 109 - pagehide clears pending UI work; repeated pageshow does not duplicate periodic timers or rendering
+  ---
+  duration_ms: 1.258762
+  type: 'test'
+  ...
+# Subtest: actual backend polling delivers newly confirmed constant values and preserves upstream timestamps instead of manufacturing freshness
+ok 110 - actual backend polling delivers newly confirmed constant values and preserves upstream timestamps instead of manufacturing freshness
+  ---
+  duration_ms: 1013.259839
+  type: 'test'
+  ...
+# (node:8095) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: OCPP power commands go through the real consumer and registry: 5700W, stop, keepalive, resume
+ok 111 - OCPP power commands go through the real consumer and registry: 5700W, stop, keepalive, resume
+  ---
+  duration_ms: 6.419772
+  type: 'test'
+  ...
+# Subtest: explicit EVCS stop bypasses a configured minimum in W and A, retaining positive minimum and maximum
+ok 112 - explicit EVCS stop bypasses a configured minimum in W and A, retaining positive minimum and maximum
+  ---
+  duration_ms: 1.099393
+  type: 'test'
+  ...
+# Subtest: EVCS zero transitions are not swallowed by deadband in either direction
+ok 113 - EVCS zero transitions are not swallowed by deadband in either direction
+  ---
+  duration_ms: 1.076947
+  type: 'test'
+  ...
+# Subtest: a failed stop is retried, and W-to-kW conversion preserves zero
+ok 114 - a failed stop is retried, and W-to-kW conversion preserves zero
+  ---
+  duration_ms: 0.670426
+  type: 'test'
+  ...
+# Subtest: provided OCPP21 source receives zero unchanged; RPC acceptance remains separate from local ack
+    # Subtest: ocpp1.6: Accepted
+    ok 1 - ocpp1.6: Accepted
+      ---
+      duration_ms: 13.754842
+      type: 'test'
+      ...
+    # Subtest: ocpp1.6: Rejected
+    ok 2 - ocpp1.6: Rejected
+      ---
+      duration_ms: 2.583239
+      type: 'test'
+      ...
+    # Subtest: ocpp2.0.1: Accepted
+    ok 3 - ocpp2.0.1: Accepted
+      ---
+      duration_ms: 2.761624
+      type: 'test'
+      ...
+    # Subtest: ocpp2.0.1: Rejected
+    ok 4 - ocpp2.0.1: Rejected
+      ---
+      duration_ms: 2.948698
+      type: 'test'
+      ...
+    # Subtest: ocpp2.1: Accepted
+    ok 5 - ocpp2.1: Accepted
+      ---
+      duration_ms: 2.309772
+      type: 'test'
+      ...
+    # Subtest: ocpp2.1: Rejected
+    ok 6 - ocpp2.1: Rejected
+      ---
+      duration_ms: 4.804797
+      type: 'test'
+      ...
+    1..6
+ok 115 - provided OCPP21 source receives zero unchanged; RPC acceptance remains separate from local ack
+  ---
+  duration_ms: 40.206441
+  type: 'test'
+  ...
+# (node:8103) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: commissioning both units maps one measured electrical flow and a prepared, inactive PV controller
+ok 116 - commissioning both units maps one measured electrical flow and a prepared, inactive PV controller
+  ---
+  duration_ms: 14.438581
+  type: 'test'
+  ...
+# Subtest: one explicit HSM confirmation activates the licensed thermal app, respecting later app/row disable and changed sources
+ok 117 - one explicit HSM confirmation activates the licensed thermal app, respecting later app/row disable and changed sources
+  ---
+  duration_ms: 3.491366
+  type: 'test'
+  ...
+# Subtest: license, grid, confirmed source and electrical limit are individually enforced before enabling the writer
+ok 118 - license, grid, confirmed source and electrical limit are individually enforced before enabling the writer
+  ---
+  duration_ms: 1.608138
+  type: 'test'
+  ...
+# Subtest: different buses, ambiguous cascades and removed pumps cannot retain or create an HSM writer
+ok 119 - different buses, ambiguous cascades and removed pumps cannot retain or create an HSM writer
+  ---
+  duration_ms: 4.109775
+  type: 'test'
+  ...
+# Subtest: deliberately selected separate RTU links are supported once and never shared by two managers
+ok 120 - deliberately selected separate RTU links are supported once and never shared by two managers
+  ---
+  duration_ms: 0.756939
+  type: 'test'
+  ...
+# Subtest: manual slots and control targets survive, repeated discovery cannot reinsert a deleted mapping
+ok 121 - manual slots and control targets survive, repeated discovery cannot reinsert a deleted mapping
+  ---
+  duration_ms: 2.680639
+  type: 'test'
+  ...
+# Subtest: restart inventory transports protocol+unit grouping without hostnames or login values
+ok 122 - restart inventory transports protocol+unit grouping without hostnames or login values
+  ---
+  duration_ms: 1.721009
+  type: 'test'
+  ...
+# (node:8111) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: opening and saving the App Center retains both MIRA channels, commissioning and flow ownership, including slot ten
+ok 123 - opening and saving the App Center retains both MIRA channels, commissioning and flow ownership, including slot ten
+  ---
+  duration_ms: 338.701496
+  type: 'test'
+  ...
+# Subtest: MIRA can open EMS quick controls without exposing switch, SG Ready or direct power writes
+ok 124 - MIRA can open EMS quick controls without exposing switch, SG Ready or direct power writes
+  ---
+  duration_ms: 445.559629
+  type: 'test'
+  ...
+# Subtest: MIRA readout distinguishes measured zero from unknown after disconnect in the quick control
+ok 125 - MIRA readout distinguishes measured zero from unknown after disconnect in the quick control
+  ---
+  duration_ms: 95.388241
+  type: 'test'
+  ...
+# (node:8125) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: MIRA uses commissioned watt ceiling, genuine register feedback, and neutral return under §14a
+ok 126 - MIRA uses commissioned watt ceiling, genuine register feedback, and neutral return under §14a
+  ---
+  duration_ms: 22.121484
+  type: 'test'
+  ...
+# Subtest: late watt echo and absent physical inputs cannot start MIRA; fresh data recovers
+ok 127 - late watt echo and absent physical inputs cannot start MIRA; fresh data recovers
+  ---
+  duration_ms: 7.496882
+  type: 'test'
+  ...
+# Subtest: no actuator writes until explicit commissioning and no generic switch fallback
+ok 128 - no actuator writes until explicit commissioning and no generic switch fallback
+  ---
+  duration_ms: 7.37368
+  type: 'test'
+  ...
+# Subtest: invalid or crossed HSM command/readback mapping is not controllable
+ok 129 - invalid or crossed HSM command/readback mapping is not controllable
+  ---
+  duration_ms: 1.97998
+  type: 'test'
+  ...
+# Subtest: MIRA manual handoff releases own boost once and preserves subsequent local operation
+ok 130 - MIRA manual handoff releases own boost once and preserves subsequent local operation
+  ---
+  duration_ms: 5.021638
+  type: 'test'
+  ...
+# Subtest: restart adopts active MIRA only from fresh measurements and neutralizes an unverified old boost
+ok 131 - restart adopts active MIRA only from fresh measurements and neutralizes an unverified old boost
+  ---
+  duration_ms: 2.851062
+  type: 'test'
+  ...
+# Subtest: turning MIRA off sends neutral even if a previous raise is queued and feedback is still zero
+ok 132 - turning MIRA off sends neutral even if a previous raise is queued and feedback is still zero
+  ---
+  duration_ms: 2.1031
+  type: 'test'
+  ...
+# Subtest: a different WPM slot or missing numerical commission cannot actuate a hydraulic module
+ok 133 - a different WPM slot or missing numerical commission cannot actuate a hydraulic module
+  ---
+  duration_ms: 1.695257
+  type: 'test'
+  ...
+# Subtest: falling grant neutralizes active boost before staging a smaller request
+ok 134 - falling grant neutralizes active boost before staging a smaller request
+  ---
+  duration_ms: 4.005035
+  type: 'test'
+  ...
+# Subtest: module deactivation waits for HSM neutral readback and reports autonomous heating separately
+ok 135 - module deactivation waits for HSM neutral readback and reports autonomous heating separately
+  ---
+  duration_ms: 3.044706
+  type: 'test'
+  ...
+# (node:8135) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: final EVCS writer blocks and recovers after bad quality
+ok 136 - final EVCS writer blocks and recovers after bad quality
+  ---
+  duration_ms: 11.043136
+  type: 'test'
+  ...
+# Subtest: final EVCS writer blocks and recovers after command instead of measurement
+ok 137 - final EVCS writer blocks and recovers after command instead of measurement
+  ---
+  duration_ms: 2.353373
+  type: 'test'
+  ...
+# Subtest: final EVCS writer blocks and recovers after missing original timestamp on startup
+ok 138 - final EVCS writer blocks and recovers after missing original timestamp on startup
+  ---
+  duration_ms: 2.929446
+  type: 'test'
+  ...
+# Subtest: final EVCS writer blocks and recovers after future observation
+ok 139 - final EVCS writer blocks and recovers after future observation
+  ---
+  duration_ms: 2.830712
+  type: 'test'
+  ...
+# Subtest: final EVCS writer blocks and recovers after exceeded hard meter timeout inside 300-second telemetry window
+ok 140 - final EVCS writer blocks and recovers after exceeded hard meter timeout inside 300-second telemetry window
+  ---
+  duration_ms: 2.339937
+  type: 'test'
+  ...
+# Subtest: a new tick or a genuine watchdog heartbeat does not renew original NVP measurement age
+ok 141 - a new tick or a genuine watchdog heartbeat does not renew original NVP measurement age
+  ---
+  duration_ms: 0.659498
+  type: 'test'
+  ...
+# Subtest: coherent split NVP uses the oldest contributing sample and rejects a corrupt configured direction
+ok 142 - coherent split NVP uses the oldest contributing sample and rejects a corrupt configured direction
+  ---
+  duration_ms: 0.521619
+  type: 'test'
+  ...
+# Subtest: phase measurements require valid metadata and the oldest phase limits the lifetime of the issued envelope
+ok 143 - phase measurements require valid metadata and the oldest phase limits the lifetime of the issued envelope
+  ---
+  duration_ms: 0.775031
+  type: 'test'
+  ...
+# (node:8147) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: generator: a restart during the start pulse releases only that relay and does not replay the request
+ok 144 - generator: a restart during the start pulse releases only that relay and does not replay the request
+  ---
+  duration_ms: 26.717579
+  type: 'test'
+  ...
+# Subtest: generator: a restart during the stop pulse releases only that relay and does not replay the request
+ok 145 - generator: a restart during the stop pulse releases only that relay and does not replay the request
+  ---
+  duration_ms: 15.146275
+  type: 'test'
+  ...
+# Subtest: bhkw: a restart during the start pulse releases only that relay and does not replay the request
+ok 146 - bhkw: a restart during the start pulse releases only that relay and does not replay the request
+  ---
+  duration_ms: 9.287294
+  type: 'test'
+  ...
+# Subtest: bhkw: a restart during the stop pulse releases only that relay and does not replay the request
+ok 147 - bhkw: a restart during the stop pulse releases only that relay and does not replay the request
+  ---
+  duration_ms: 3.592557
+  type: 'test'
+  ...
+# Subtest: failed pulse persistence never energises the relay
+ok 148 - failed pulse persistence never energises the relay
+  ---
+  duration_ms: 1.803064
+  type: 'test'
+  ...
+# Subtest: a failed pulse reset is retried after restart and never energises a new mapping
+ok 149 - a failed pulse reset is retried after restart and never energises a new mapping
+  ---
+  duration_ms: 6.125602
+  type: 'test'
+  ...
+# (node:8147) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+# Subtest: completed pulse leaves no restart write and preserves automatic settling while feedback catches up
+ok 150 - completed pulse leaves no restart write and preserves automatic settling while feedback catches up
+  ---
+  duration_ms: 4.735153
+  type: 'test'
+  ...
+# Subtest: an unsuccessful falling edge is retried in a later tick without restarting
+ok 151 - an unsuccessful falling edge is retried in a later tick without restarting
+  ---
+  duration_ms: 3.381692
+  type: 'test'
+  ...
+# (node:8155) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: SG-Ready completes the contact sequence before release, withdraws release before changing active contacts
+ok 152 - SG-Ready completes the contact sequence before release, withdraws release before changing active contacts
+  ---
+  duration_ms: 4.930557
+  type: 'test'
+  ...
+# Subtest: SG-Ready rolls back partial Boost with release relay true, respecting contact inversion
+ok 153 - SG-Ready rolls back partial Boost with release relay true, respecting contact inversion
+  ---
+  duration_ms: 0.832016
+  type: 'test'
+  ...
+# Subtest: SG-Ready rolls back partial Boost with release relay false, respecting contact inversion
+ok 154 - SG-Ready rolls back partial Boost with release relay false, respecting contact inversion
+  ---
+  duration_ms: 0.325695
+  type: 'test'
+  ...
+# Subtest: SG-Ready cancels a failed enable write, and a missing configured contact blocks release
+ok 155 - SG-Ready cancels a failed enable write, and a missing configured contact blocks release
+  ---
+  duration_ms: 0.827963
+  type: 'test'
+  ...
+# (node:8163) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Fenecon AC load uses the next real measurement when derived load is unknown, preserving actual zero
+ok 156 - Fenecon AC load uses the next real measurement when derived load is unknown, preserving actual zero
+  ---
+  duration_ms: 1.749654
+  type: 'test'
+  ...
+# Subtest: Fenecon missing derived, mapped and rest demand reaches existing NVP/battery fallback instead of invented zero
+ok 157 - Fenecon missing derived, mapped and rest demand reaches existing NVP/battery fallback instead of invented zero
+  ---
+  duration_ms: 0.313491
+  type: 'test'
+  ...
+# Subtest: independent feed-forward rejects missing, empty and boolean load/PV through cache and fresh-helper paths
+ok 158 - independent feed-forward rejects missing, empty and boolean load/PV through cache and fresh-helper paths
+  ---
+  duration_ms: 3.227867
+  type: 'test'
+  ...
+# Subtest: independent derived mirror remains ineligible when source says mapped but measurement is unknown
+ok 159 - independent derived mirror remains ineligible when source says mapped but measurement is unknown
+  ---
+  duration_ms: 0.350121
+  type: 'test'
+  ...
+# Subtest: a bad PV sample cannot reverse the generic storage writer from discharge to charge
+ok 160 - a bad PV sample cannot reverse the generic storage writer from discharge to charge
+  ---
+  duration_ms: 107.331513
+  type: 'test'
+  ...
+# Subtest: self-consumption stops on verified export after loss of battery feedback, preserving measured ramp and the target band
+ok 161 - self-consumption stops on verified export after loss of battery feedback, preserving measured ramp and the target band
+  ---
+  duration_ms: 0.900953
+  type: 'test'
+  ...
+# (node:8171) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: 921-HIS-002 repeated lifecycle aborts cancel the actual response body and remove parent listeners
+ok 162 - 921-HIS-002 repeated lifecycle aborts cancel the actual response body and remove parent listeners
+  ---
+  duration_ms: 164.817681
+  type: 'test'
+  ...
+# Subtest: 921-HIS-002 an already revoked generation cannot start network access and does not retain its listener
+ok 163 - 921-HIS-002 an already revoked generation cannot start network access and does not retain its listener
+  ---
+  duration_ms: 3.82149
+  type: 'test'
+  ...
+# (node:8179) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:8179) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# Subtest: actual dashboard tooltip draws all 96 supplied quarter-hours, including zero and negative intervals, without hourly averaging
+ok 164 - actual dashboard tooltip draws all 96 supplied quarter-hours, including zero and negative intervals, without hourly averaging
+  ---
+  duration_ms: 16.197398
+  type: 'test'
+  ...
+# Subtest: actual dashboard retains all 92/100 quarter-hours on European daylight-saving days and places local clock labels correctly
+ok 165 - actual dashboard retains all 92/100 quarter-hours on European daylight-saving days and places local clock labels correctly
+  ---
+  duration_ms: 13.790734
+  type: 'test'
+  ...
+# Subtest: price card and modal show confirmed Tibber prices while optimization remains off and an unrelated budget price is null
+ok 166 - price card and modal show confirmed Tibber prices while optimization remains off and an unrelated budget price is null
+  ---
+  duration_ms: 3.508081
+  type: 'test'
+  ...
+# Subtest: expired, absent, false or null source values clear the visible price rather than turning into zero or reusing budget values
+ok 167 - expired, absent, false or null source values clear the visible price rather than turning into zero or reusing budget values
+  ---
+  duration_ms: 3.983438
+  type: 'test'
+  ...
+# Subtest: legacy manual mappings remain authoritative, with explicit cent conversion and no connected-provider override
+ok 168 - legacy manual mappings remain authoritative, with explicit cent conversion and no connected-provider override
+  ---
+  duration_ms: 2.223342
+  type: 'test'
+  ...
+# Subtest: hourly source data stays hourly; missing tomorrow does not remove today or invent quarter-hours
+ok 169 - hourly source data stays hourly; missing tomorrow does not remove today or invent quarter-hours
+  ---
+  duration_ms: 4.274336
+  type: 'test'
+  ...
+# Subtest: real provider publication feeds the dashboard without enabling a control or fabricating absent values
+ok 170 - real provider publication feeds the dashboard without enabling a control or fabricating absent values
+  ---
+  duration_ms: 53.038181
+  type: 'test'
+  ...
+# Subtest: both shipped dashboard entry pages load the typed price helper before app.js
+ok 171 - both shipped dashboard entry pages load the typed price helper before app.js
+  ---
+  duration_ms: 1.977794
+  type: 'test'
+  ...
+# Subtest: energy flow always exposes enabled tariff or grid-fee control when its backend status is missing
+ok 172 - energy flow always exposes enabled tariff or grid-fee control when its backend status is missing
+  ---
+  duration_ms: 2.938712
+  type: 'test'
+  ...
+# Subtest: live flow status uses current policy snapshot, keeps unchanged text, and exposes inactive or stale runtime
+ok 173 - live flow status uses current policy snapshot, keeps unchanged text, and exposes inactive or stale runtime
+  ---
+  duration_ms: 3.287784
+  type: 'test'
+  ...
+# Subtest: SSE disconnect clears stale actuator claims in the energy flow immediately and reconnect restores confirmed status
+ok 174 - SSE disconnect clears stale actuator claims in the energy flow immediately and reconnect restores confirmed status
+  ---
+  duration_ms: 2.440601
+  type: 'test'
+  ...
+# Subtest: invalid quality and expired source states cannot confirm charging or append a stale PV block
+ok 175 - invalid quality and expired source states cannot confirm charging or append a stale PV block
+  ---
+  duration_ms: 2.569912
+  type: 'test'
+  ...
+# Subtest: atomic storage reserve snapshot keeps a constant block visible without recycling old standalone flags
+ok 176 - atomic storage reserve snapshot keeps a constant block visible without recycling old standalone flags
+  ---
+  duration_ms: 2.440694
+  type: 'test'
+  ...
+# (node:8187) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: 921-HIS-001 initial outage respects scheduled retry for 120 successive EMS ticks
+ok 177 - 921-HIS-001 initial outage respects scheduled retry for 120 successive EMS ticks
+  ---
+  duration_ms: 85.425071
+  type: 'test'
+  ...
+# Subtest: 921-HIS-001 recovery occurs at retry deadline and an explicit configuration change can retry immediately
+ok 178 - 921-HIS-001 recovery occurs at retry deadline and an explicit configuration change can retry immediately
+  ---
+  duration_ms: 6.674886
+  type: 'test'
+  ...
+# Subtest: 921-HIS-002 unresolved cloud fetch does not hold the local tick, permits no overlap and stops cleanly
+ok 179 - 921-HIS-002 unresolved cloud fetch does not hold the local tick, permits no overlap and stops cleanly
+  ---
+  duration_ms: 20.075354
+  type: 'test'
+  ...
+# Subtest: 921-HIS-002 source replacement revokes the old request before permitting another provider
+ok 180 - 921-HIS-002 source replacement revokes the old request before permitting another provider
+  ---
+  duration_ms: 5.570885
+  type: 'test'
+  ...
+# Subtest: 921-HIS-002 background publication failure retains its reader fence and recovers only after DB writes work
+ok 181 - 921-HIS-002 background publication failure retains its reader fence and recovers only after DB writes work
+  ---
+  duration_ms: 8.033186
+  type: 'test'
+  ...
+# (node:8195) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Tibber masks survive unrelated Installer edits and a disk-backed owner restart (native namespace)
+ok 182 - Tibber masks survive unrelated Installer edits and a disk-backed owner restart (native namespace)
+  ---
+  duration_ms: 7342.73304
+  type: 'test'
+  ...
+# Subtest: Tibber masks survive unrelated Installer edits and a disk-backed owner restart (preserved namespace)
+ok 183 - Tibber masks survive unrelated Installer edits and a disk-backed owner restart (preserved namespace)
+  ---
+  duration_ms: 5926.344748
+  type: 'test'
+  ...
+# Subtest: Installer HTTP credential persistence: home/country selection and disable
+ok 184 - Installer HTTP credential persistence: home/country selection and disable
+  ---
+  duration_ms: 414.2144
+  type: 'test'
+  ...
+# Subtest: Installer HTTP credential persistence: explicit credential deletion
+ok 185 - Installer HTTP credential persistence: explicit credential deletion
+  ---
+  duration_ms: 39.450805
+  type: 'test'
+  ...
+# Subtest: Installer HTTP credential persistence: changed token recipient
+ok 186 - Installer HTTP credential persistence: changed token recipient
+  ---
+  duration_ms: 35.082815
+  type: 'test'
+  ...
+# Subtest: Installer HTTP private string headers/body: same recipient preserves masks
+ok 187 - Installer HTTP private string headers/body: same recipient preserves masks
+  ---
+  duration_ms: 34.34368
+  type: 'test'
+  ...
+# Subtest: Installer HTTP private string headers/body: changed recipient clears masks
+ok 188 - Installer HTTP private string headers/body: changed recipient clears masks
+  ---
+  duration_ms: 32.246904
+  type: 'test'
+  ...
+# Subtest: Installer HTTP private object headers/body: same recipient preserves masks
+ok 189 - Installer HTTP private object headers/body: same recipient preserves masks
+  ---
+  duration_ms: 34.007121
+  type: 'test'
+  ...
+# Subtest: Installer HTTP private object headers/body: changed recipient clears masks
+ok 190 - Installer HTTP private object headers/body: changed recipient clears masks
+  ---
+  duration_ms: 30.740364
+  type: 'test'
+  ...
+# Subtest: Installer token context: partial edit
+ok 191 - Installer token context: partial edit
+  ---
+  duration_ms: 0.47116
+  type: 'test'
+  ...
+# Subtest: Installer token context: home and country selection
+ok 192 - Installer token context: home and country selection
+  ---
+  duration_ms: 0.093762
+  type: 'test'
+  ...
+# Subtest: Installer token context: disabled provider
+ok 193 - Installer token context: disabled provider
+  ---
+  duration_ms: 0.057109
+  type: 'test'
+  ...
+# Subtest: Installer token context: equivalent default endpoint
+ok 194 - Installer token context: equivalent default endpoint
+  ---
+  duration_ms: 0.042768
+  type: 'test'
+  ...
+# Subtest: Installer token context: different endpoint
+ok 195 - Installer token context: different endpoint
+  ---
+  duration_ms: 0.035173
+  type: 'test'
+  ...
+# Subtest: Installer token context: different provider
+ok 196 - Installer token context: different provider
+  ---
+  duration_ms: 0.057114
+  type: 'test'
+  ...
+# Subtest: Installer token context: fresh credential on changed provider
+ok 197 - Installer token context: fresh credential on changed provider
+  ---
+  duration_ms: 0.036758
+  type: 'test'
+  ...
+# Subtest: Installer token context: intentional empty field
+ok 198 - Installer token context: intentional empty field
+  ---
+  duration_ms: 0.034585
+  type: 'test'
+  ...
+# Subtest: market source and configurable OAuth recipients/identity fence retained credentials
+ok 199 - market source and configurable OAuth recipients/identity fence retained credentials
+  ---
+  duration_ms: 0.263983
+  type: 'test'
+  ...
+# Subtest: private request masks preserve same-recipient headers/body but never revive an explicit request clear
+ok 200 - private request masks preserve same-recipient headers/body but never revive an explicit request clear
+  ---
+  duration_ms: 0.219257
+  type: 'test'
+  ...
+# Subtest: an early real startup failure cannot let Devices or OCPP overwrite an unread tariff
+ok 201 - an early real startup failure cannot let Devices or OCPP overwrite an unread tariff
+  ---
+  duration_ms: 4.896644
+  type: 'test'
+  ...
+# (node:8203) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Tibber requests and normalizes quarter-hours even with an older hourly setting; zero/negative remain valid and null is rejected
+ok 202 - Tibber requests and normalizes quarter-hours even with an older hourly setting; zero/negative remain valid and null is rejected
+  ---
+  duration_ms: 21.745783
+  type: 'test'
+  ...
+# Subtest: local calendar splitting retains 92/96/100 quarter-hours and the next day across DST boundaries
+ok 203 - local calendar splitting retains 92/96/100 quarter-hours and the next day across DST boundaries
+  ---
+  duration_ms: 180.252708
+  type: 'test'
+  ...
+# Subtest: actual provider tick selects each cached quarter-hour without network calls and refreshes before customer freshness expires
+ok 204 - actual provider tick selects each cached quarter-hour without network calls and refreshes before customer freshness expires
+  ---
+  duration_ms: 148.251617
+  type: 'test'
+  ...
+# Subtest: provider failures do not extend freshness, do not spin requests and clear expired prices instead of creating zero
+ok 205 - provider failures do not extend freshness, do not spin requests and clear expired prices instead of creating zero
+  ---
+  duration_ms: 135.814937
+  type: 'test'
+  ...
+# Subtest: other providers retain their resolution and normal jittered cadence, while a shorter customer deadline still bounds refresh
+ok 206 - other providers retain their resolution and normal jittered cadence, while a shorter customer deadline still bounds refresh
+  ---
+  duration_ms: 111.660803
+  type: 'test'
+  ...
+# (node:8225) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: missing tariff and import values remain unknown through interval and whole-period totals
+ok 207 - missing tariff and import values remain unknown through interval and whole-period totals
+  ---
+  duration_ms: 68.171097
+  type: 'test'
+  ...
+# Subtest: real zero and canonical negative EUR prices retain their value and calculated costs
+ok 208 - real zero and canonical negative EUR prices retain their value and calculated costs
+  ---
+  duration_ms: 16.490744
+  type: 'test'
+  ...
+# Subtest: missing quarters and pre-range samples are not indefinitely carried into report costs
+ok 209 - missing quarters and pre-range samples are not indefinitely carried into report costs
+  ---
+  duration_ms: 10.119354
+  type: 'test'
+  ...
+# Subtest: enabled missing network fee keeps its breakdown unknown while recorded total cost remains usable
+ok 210 - enabled missing network fee keeps its breakdown unknown while recorded total cost remains usable
+  ---
+  duration_ms: 9.004502
+  type: 'test'
+  ...
+# Subtest: static zero fallback is explicit and genuine network fees preserve the existing split
+ok 211 - static zero fallback is explicit and genuine network fees preserve the existing split
+  ---
+  duration_ms: 11.406175
+  type: 'test'
+  ...
+# Subtest: an open current quarter is not reported as a complete quarter of imported energy
+ok 212 - an open current quarter is not reported as a complete quarter of imported energy
+  ---
+  duration_ms: 12.091914
+  type: 'test'
+  ...
+# Subtest: malformed, reversed and over-730-day report ranges fail before history IO or allocation
+ok 213 - malformed, reversed and over-730-day report ranges fail before history IO or allocation
+  ---
+  duration_ms: 29.163725
+  type: 'test'
+  ...
+# Subtest: 730-day inclusive date ranges remain accepted without using a smaller chart limit
+ok 214 - 730-day inclusive date ranges remain accepted without using a smaller chart limit
+  ---
+  duration_ms: 8.634612
+  type: 'test'
+  ...
+# Subtest: report formatting and CSV leave missing values empty while keeping zero and negative costs
+ok 215 - report formatting and CSV leave missing values empty while keeping zero and negative costs
+  ---
+  duration_ms: 10.786346
+  type: 'test'
+  ...
+# (node:8243) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: new EOS installations read active tariff settings from their actual runtime and produce a live status
+ok 216 - new EOS installations read active tariff settings from their actual runtime and produce a live status
+  ---
+  duration_ms: 27.882291
+  type: 'test'
+  ...
+# Subtest: explicit legacy VIS namespace remains authoritative and cannot be overridden by local settings
+ok 217 - explicit legacy VIS namespace remains authoritative and cannot be overridden by local settings
+  ---
+  duration_ms: 2.435085
+  type: 'test'
+  ...
+# Subtest: runtime namespace default preserves tariff freshness and AppCenter blocking
+ok 218 - runtime namespace default preserves tariff freshness and AppCenter blocking
+  ---
+  duration_ms: 6.303153
+  type: 'test'
+  ...
+# Subtest: tariff status preserves a constant PV reserve through fresh storage policy and invalidates a stopped writer
+ok 219 - tariff status preserves a constant PV reserve through fresh storage policy and invalidates a stopped writer
+  ---
+  duration_ms: 4.268484
+  type: 'test'
+  ...
+# Subtest: persistent tariff settings still control storage and EVs after more than one year
+ok 220 - persistent tariff settings still control storage and EVs after more than one year
+  ---
+  duration_ms: 2.809732
+  type: 'test'
+  ...
+# Subtest: current verified price has priority over a conflicting negative curve; valid curves can replace an unavailable price
+ok 221 - current verified price has priority over a conflicting negative curve; valid curves can replace an unavailable price
+  ---
+  duration_ms: 5.185482
+  type: 'test'
+  ...
+# Subtest: EV departure planner uses the verified live gate for the current slot and discards unverified forecast inputs
+ok 222 - EV departure planner uses the verified live gate for the current slot and discards unverified forecast inputs
+  ---
+  duration_ms: 110.919175
+  type: 'test'
+  ...
+1..222
+# tests 228
+# suites 0
+# pass 228
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 20364.566286

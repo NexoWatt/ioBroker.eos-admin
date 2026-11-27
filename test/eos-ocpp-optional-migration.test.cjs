@@ -135,13 +135,13 @@ test('optional OCPP handling does not bypass the core license gate', async t => 
     assertExternalRetained(f);
 });
 
-test('invalid actual Devices migration candidate still blocks startup', async t => {
+test('a configured Devices target and an incompatible source cannot overwrite an unrelated external OCPP', async t => {
     const f = await setup(t);
     const id = 'system.adapter.nexowatt-devices.0';
-    f.objects.set(id, { _id: id, type: 'instance', common: { enabled: true, host: 'fixture', version: 'unknown' }, native: {} });
+    f.objects.set(id, { _id: id, type: 'instance', common: { enabled: true, host: 'fixture', version: 'unknown' }, native: { unknownDeviceInventory: ['retained'] } });
     await f.migration.start();
     assert.equal(f.migration.phase, 'BLOCKED');
-    assert.equal(f.migration.status().code, 'EOS_MIGRATION_SOURCE_VERSION');
+    assert.equal(f.migration.status().code, 'EOS_MIGRATION_DESTINATION_CONFIGURED');
     assert.deepEqual(f.migration.status().sources.map(row => row.id), ['devices']);
     assert.equal(f.migration.allowsStartup(), false);
     assertExternalRetained(f);

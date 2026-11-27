@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/modules/para14a.ts
- * Quell-Hash: sha256:9f7a9f836cb28da9b5419fc822da6b223f48f6c74421539f1448106af11998e1
+ * Quell-Hash: sha256:7219232d9d414842c9c091a7400cf28db294467aa79bda6698d1df401c49c169
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -526,6 +526,7 @@ class Para14aModule extends BaseModule {
      */
     async _setupAuditHistory() {
         let historyInstance = '';
+        let providerReady = true;
         let dedicatedHistory = false;
         let autoProvisioned = false;
         let provisionState = '';
@@ -536,6 +537,7 @@ class Para14aModule extends BaseModule {
                 const historyInfo = await this.adapter._nwEnsurePara14aInfluxInstance();
                 if (historyInfo && typeof historyInfo === 'object') {
                     historyInstance = String(historyInfo.instance || '').trim();
+                    providerReady = historyInfo.ready !== false;
                     dedicatedHistory = historyInfo.dedicated === true;
                     autoProvisioned = historyInfo.autoProvisioned === true;
                     provisionState = String(historyInfo.provisionState || '').trim();
@@ -551,14 +553,17 @@ class Para14aModule extends BaseModule {
             try {
                 if (this.adapter && typeof this.adapter._nwDetectInfluxInstance === 'function') {
                     historyInstance = String((await this.adapter._nwDetectInfluxInstance()) || '').trim();
-                    if (historyInstance && !provisionState) provisionState = 'fallback_existing';
+                    if (historyInstance) {
+                        providerReady = true;
+                        if (!provisionState) provisionState = 'fallback_existing';
+                    }
                 }
             } catch {
                 historyInstance = '';
             }
         }
 
-        const historyReady = !!historyInstance && !!(this.adapter && typeof this.adapter._nwEnsureInfluxCustom === 'function');
+        const historyReady = providerReady && !!historyInstance && !!(this.adapter && typeof this.adapter._nwEnsureInfluxCustom === 'function');
         this._audit.historyInstance = historyInstance;
         this._audit.historyReady = historyReady;
 

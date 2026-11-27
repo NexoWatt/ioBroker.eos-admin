@@ -115,3 +115,41 @@ for (const type of ['number', 'boolean']) test(`actual SmartHome history route โ
     assert.equal(f.writes.length, 1);
     assert.match(JSON.parse(f.writes[0].body).query, /_field == "value"/);
 });
+
+test('migrated ยง14a logging follows the configured legacy historian through read outages, a disabled source and recovery', async t => {
+    const { adapter } = await fixture(t, true);
+    adapter.config.history = { instance: 'influxdb.4' };
+    let sourceState = 'unreadable';
+    const registered = [], disabled = [], configured = [], auditStates = new Map();
+    adapter.getForeignObjectAsync = async id => {
+        if (id === 'system.adapter.influxdb.4') {
+            if (sourceState === 'unreadable') throw new Error('simulated controller read failure');
+            if (sourceState === 'absent') return null;
+            return { type: 'instance', common: { name: 'influxdb', enabled: sourceState === 'enabled' }, native: {} };
+        }
+        throw new Error('Unexpected history object lookup ' + id);
+    };
+    adapter._nwListAdapterInstances = async () => [
+        { instanceId: 'influxdb.0', num: 0, obj: { common: { enabled: true }, native: {} } },
+        { instanceId: 'influxdb.20', num: 20, obj: { common: { enabled: true }, native: { nexowattDedicatedPara14a: true, nexowattManagedFor: 'para14a', nexowattManagedBy: adapter.namespace } } },
+    ];
+    adapter._nwDetectInfluxInstance = async () => 'influxdb.0';
+    adapter._nwEnsureInfluxCustom = async (name, instance) => registered.push([name, instance]);
+    adapter.nwSimSetInstanceEnabled = async (name, enabled) => disabled.push([name, enabled]);
+    const module = new Para14aModule(adapter, {});
+    module._setStateIfChanged = async (name, value) => auditStates.set(name, value);
+    for (sourceState of ['unreadable', 'absent', 'disabled', 'enabled']) {
+        const result = await adapter._nwEnsurePara14aInfluxInstance();
+        await module._setupAuditHistory();
+        assert.equal(result.instance, 'influxdb.4');
+        assert.equal(result.ready, sourceState === 'enabled');
+        assert.equal(auditStates.get('para14a.audit.historyInstance'), 'influxdb.4');
+        assert.equal(auditStates.get('para14a.audit.historyEnabled'), sourceState === 'enabled');
+        if (sourceState !== 'enabled') assert.equal(registered.length, 0);
+        configured.push(adapter.config.history.instance);
+    }
+    assert.deepEqual(disabled, []);
+    assert.ok(registered.length > 0);
+    assert.ok(registered.every(([, instance]) => instance === 'influxdb.4'));
+    assert.deepEqual([...new Set(configured)], ['influxdb.4']);
+});

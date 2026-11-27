@@ -1,0 +1,28 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: real host starts three real device profiles while their first physical responses are still pending
+ok 1 - real host starts three real device profiles while their first physical responses are still pending
+  ---
+  duration_ms: 699.378783
+  type: 'test'
+  ...
+# (node:56) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: an EMS crash blocks manual starts until its accepted write completes, then recovers automatically
+ok 2 - an EMS crash blocks manual starts until its accepted write completes, then recovers automatically
+  ---
+  duration_ms: 6290.841101
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7309.038853

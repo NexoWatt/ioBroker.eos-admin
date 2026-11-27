@@ -24,7 +24,7 @@
  * - Der nächste Schritt ist pro Modul echte Typisierung statt pauschalem No-Check.
  * - Fachliche Kommentare markieren die Abschnitte, die später einzeln migriert werden.
  *
- * Original-Hash: 623ba2345852fc5f80d92ee248f28e7c55b175ab8db38869d9692528cb1171b1
+ * Original-Hash: a8515cd9ff4fdf7c65f4f20d8ba1d445124e7c9a1cf3d654d55c8d64dbae0b82
  */
 
 /**
@@ -323,6 +323,9 @@ async function testMultiUseDoesNotActivateHardwareWriter() {
     },
   });
   assert.strictEqual(adapter.states.get('speicher.regelung.aktiv').val, false, 'MultiUse darf keinen Hardwarewriter heimlich aktivieren');
+  const decision = JSON.parse(adapter.states.get('speicher.regelung.dispatcherJson').val);
+  assert.strictEqual(decision.active, false);
+  assert.strictEqual(decision.src, 'aus');
   assert.strictEqual(adapter.states.get('speicher.regelung.aktivAutoMultiUse').val, true, 'MultiUse-Policy muss diagnostisch aktiv bleiben');
   assert.strictEqual(dp.writes.length, 0, 'Ohne Single-/Farm-Writer darf MultiUse keinen Speicher-DP schreiben');
 }
@@ -444,6 +447,10 @@ async function testStorageFarmStartsAndDispatchesPolicy() {
     entries,
   });
   assert.strictEqual(adapter.states.get('speicher.regelung.aktiv').val, true, 'Aktive Farm muss die Basis-Eigenverbrauchsregelung starten');
+  const decision = JSON.parse(adapter.states.get('speicher.regelung.dispatcherJson').val);
+  assert.strictEqual(decision.active, true);
+  assert.strictEqual(decision.src, 'eigenverbrauch');
+  assert.strictEqual(decision.finalW, adapter.farmWrites[0].w);
   assert.strictEqual(adapter.states.get('speicher.regelung.aktivAutoSpeicherfarm').val, true, 'Farm-Autostart Diagnose fehlt');
   assert.strictEqual(dp.writes.length, 0, 'Aktive Farm darf keinen Einzel-Sollwertpfad verwenden');
   assert.strictEqual(adapter.farmWrites.length, 1, 'Aktive Farm muss den zentralen Sollwert verteilen');

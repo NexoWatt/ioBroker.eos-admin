@@ -1184,7 +1184,7 @@ class Admin extends Adapter {
         deadline.unref?.();
         // Revoke new control jobs synchronously; drain an already-issued commit
         // together with the worker shutdowns before completing normal unload.
-        const controlsStopped = this.eosRuntimeControl?.close() || Promise.resolve();
+        const controlsStopped = Promise.all([this.eosRuntimeControl?.close(), this.eosMigration?.whenManualIdle?.()]);
         cleanup(() => this.eosOwnership?.stop());
         cleanup(() => this.eosMigration?.stop());
         cleanup(() => this.eosDiscovery?.stop());

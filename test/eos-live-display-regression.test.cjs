@@ -40,10 +40,46 @@ test('stale, future, absent or offline measurements stay unknown in the same flo
  f.ctx.nwSetLiveOnline(false);assert.equal(f.text('centerPower'),'--');assert.equal(f.text('sideEms'),'Verbindung unterbrochen');
 });
 test('no measurement/engine data never claims active engine, stable grid or healthy system',()=>{
- const f=fixture();f.state({});f.side();assert.equal(f.text('sideEms'),'Status unbekannt');assert.equal(f.text('sideGridStatus'),'Messstatus unbekannt');assert.equal(f.text('sideStatusText'),'Betriebsstatus prüfen');
+ const f=fixture();f.state({});f.side();assert.equal(f.text('sideEms'),'EMS-Betriebsmeldung fehlt');assert.equal(f.text('sideGridStatus'),'NVP-Bestätigung fehlt');assert.equal(f.text('sideStatusText'),'EMS-Betriebsmeldung fehlt');
  f.state({...valid,'ems.core.schedulerAlive':true,'ems.core.schedulerHeartbeatAt':f.now(),'ems.gridMeasurementFresh':true});f.side();assert.equal(f.text('sideEms'),'Aktiv');assert.equal(f.text('sideGridStatus'),'Messung aktuell');
- f.advance(31000);f.side();assert.equal(f.text('sideEms'),'Status unbekannt');assert.equal(f.text('sideGridStatus'),'Messstatus unbekannt');
+ f.advance(31000);f.side();assert.equal(f.text('sideEms'),'EMS-Betriebsmeldung veraltet');assert.equal(f.text('sideGridStatus'),'NVP-Bestätigung veraltet');
 });
+test('a status-only refresh keeps headline and rows synchronized between power frames', () => {
+ const f=fixture();
+ const alive='ems.core.schedulerAlive', heartbeat='ems.core.schedulerHeartbeatAt', nvp='ems.gridMeasurementFresh';
+ f.ctx.window.NexoWattDashboardProcesses={current:()=>({state:'ok',observedAt:f.now(),failed:[],paused:[],deviceHealth:{state:'ok',offline:[],totalOffline:0}})};
+ f.state({...valid,[alive]:true,[heartbeat]:f.now(),'derived.core.grid.netW':0});
+ f.ctx.nwRefreshDashboardStatus();
+ assert.equal(f.text('sideEms'),'Aktiv');
+ assert.equal(f.text('sideGridStatus'),'Messwert vorhanden · Bestätigung fehlt');
+ assert.equal(f.text('sideStatusText'),'NVP-Bestätigung fehlt');
+ f.advance(1);
+ const previous=f.ctx.state;
+ const sample=(value,extra={})=>({ts:f.now(),value,q:0,ack:true,...extra});
+ const update=patch=>{
+  const changed=f.ctx.nwDashboardAlarmChanged(patch,previous);
+  Object.assign(previous,patch);
+  if(changed) f.ctx.nwRefreshDashboardStatus();
+  return changed;
+ };
+ assert.equal(update({[heartbeat]:sample(f.now())}),false);
+ assert.equal(update({[nvp]:null}),false);
+ assert.equal(update({[nvp]:sample(true)}),true);
+ assert.equal(f.text('sideGridStatus'),'Messung aktuell');
+ assert.equal(f.text('sideStatusText'),'Alle Systeme normal');
+ assert.equal(update({[nvp]:sample(true,{ts:f.now()-31000})}),true);
+ assert.equal(f.text('sideGridStatus'),'NVP-Bestätigung veraltet');
+ assert.equal(f.text('sideStatusText'),'NVP-Bestätigung veraltet');
+ assert.equal(update({[nvp]:sample(true)}),true);
+ assert.equal(update({[heartbeat]:sample(f.now()-31000)}),true);
+ assert.equal(f.text('sideEms'),'EMS-Herzschlag veraltet');
+ assert.equal(f.text('sideStatusText'),'EMS-Herzschlag veraltet');
+ assert.equal(update({[heartbeat]:sample(f.now())}),true);
+ assert.equal(f.text('sideEms'),'Aktiv');
+ assert.equal(f.text('sideStatusText'),'Alle Systeme normal');
+ assert.equal(f.text('centerPower'),'');
+});
+
 test('canonical NVP-invalid signal prevents a stale fallback from appearing as import/export or 100 percent self-sufficiency',()=>{
  const f=fixture();f.state({...valid,consumptionTotal:5000,gridPointPower:5000,'ems.gridMeasurementFresh':false});f.flow();assert.equal(f.text('gridVal'),'--');assert.equal(f.ctx.computeDerived().autarky,undefined);
 });
@@ -263,4 +299,38 @@ test('the missing source diagnostic identifies absent, expired and invalid grid 
  f.ctx.state.gridPointPower={value:0,ts:f.now()-31000,lc:f.now()-86400000,q:0};
  f.flow();assert.match(f.text('energyFlowQuality'),/Netzmessung ist zu alt/);
  f.ctx.state.gridPointPower.q=32;f.flow();assert.match(f.text('energyFlowQuality'),/keine gültige Netzmessung/);
+});
+
+test('real dashboard keeps routine farm samples in the power frame and announces a specific affected member', () => {
+ const f = fixture(), key = 'storageFarm.storagesStatusJson';
+ f.ctx.window.NexoWattDashboardProcesses = {current:()=>({state:'ok',observedAt:f.now(),failed:[],paused:[],deviceHealth:{state:'ok',offline:[],totalOffline:0}})};
+ f.state({'ems.core.schedulerAlive':true,'ems.core.schedulerHeartbeatAt':f.now(),'ems.gridMeasurementFresh':true});
+ const sample = (differenceW, options = {}) => ({ dispatchKey:'a', name:'Speicher Nord', online:true,
+   powerComparison:{v:1,targetW:636,measuredW:636-differenceW,differenceW,commandAt:f.now()-300,sampledAt:f.now()-100,validUntil:f.now()+1000,warning:differenceW>200}, ...options });
+ const push = rows => {
+   const patch = {[key]:{value:JSON.stringify(rows),ts:f.now()}};
+   const changed = f.ctx.nwDashboardAlarmChanged(patch,f.ctx.state);
+   Object.assign(f.ctx.state, patch);
+   if (changed) f.ctx.nwRefreshDashboardStatus();
+   return changed;
+ };
+ f.ctx.nwRefreshDashboardStatus();
+ assert.equal(push([sample(60)]),false);
+ assert.equal(push([sample(200)]),false);
+ assert.equal(f.text('sideStatusText'),'Alle Systeme normal');
+ assert.equal(push([sample(201)]),true);
+ assert.equal(f.text('sideStatusText'),'Speicherabweichung: Speicher Nord · 201 W');
+ assert.equal(push([sample(202)]),false);
+ assert.equal(f.text('sideStatusText'),'Speicherabweichung: Speicher Nord · 201 W');
+ f.side();
+ assert.equal(f.text('sideStatusText'),'Speicherabweichung: Speicher Nord · 202 W');
+ assert.equal(push([sample(202),sample(250,{name:'Süd',dispatchKey:'b'})]),true);
+ assert.equal(f.text('sideStatusText'),'Speicherabweichung: Speicher Nord · 202 W (+1)');
+ assert.match(f.text('sideStatusDeviceNames'),/Süd · 250 W/);
+ assert.equal(push([sample(199)]),true);
+ assert.equal(f.text('sideStatusText'),'Alle Systeme normal');
+ assert.equal(f.text('sideStatusDeviceNames'),'');
+ assert.equal(push([sample(201)]),true);
+ f.advance(1001);f.side();
+ assert.equal(f.text('sideStatusText'),'Alle Systeme normal');
 });

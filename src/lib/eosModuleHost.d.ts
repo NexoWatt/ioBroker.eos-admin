@@ -44,6 +44,8 @@ export class EosModuleHost {
     readonly configurationSavePromise: Promise<unknown> | null;
     start(): Promise<void>;
     stop(): Promise<void>;
+    holdMigrationModules(ids: string[]): Promise<void>;
+    releaseMigrationModules(ids: string[], transferred: boolean): Promise<void>;
     controlProcess(id: string, action: 'stop' | 'start'): Promise<void>;
     enableProcessModule(id: string): Promise<void>;
     onObjectChange(id: string, object?: unknown): void;

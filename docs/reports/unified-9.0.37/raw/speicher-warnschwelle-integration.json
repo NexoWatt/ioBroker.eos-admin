@@ -1,0 +1,172 @@
+[
+  {
+    "product": "9.0.37",
+    "node": "v22.23.4",
+    "evidence": [
+      {
+        "scenario": "636 W requested, 576 W measured",
+        "individualSignedDifferences": [
+          60
+        ],
+        "publicState": true,
+        "sse": "update",
+        "headline": "Alle Systeme normal"
+      },
+      {
+        "scenario": "200 W exactly",
+        "individualSignedDifferences": [
+          200
+        ],
+        "publicState": true,
+        "sse": "update",
+        "headline": "Alle Systeme normal"
+      },
+      {
+        "scenario": "201 W",
+        "individualSignedDifferences": [
+          201
+        ],
+        "publicState": true,
+        "sse": "update",
+        "headline": "Speicherabweichung: Fenecon Home · 201 W"
+      },
+      {
+        "scenario": "recovery from 201 W to exactly 200 W",
+        "individualSignedDifferences": [
+          200
+        ],
+        "publicState": true,
+        "sse": "update",
+        "headline": "Alle Systeme normal"
+      },
+      {
+        "scenario": "two opposite deviations, zero aggregate delta",
+        "individualSignedDifferences": [
+          201,
+          -201
+        ],
+        "publicState": true,
+        "sse": "update",
+        "headline": "Speicherabweichung: Fenecon Home · 201 W (+1)",
+        "details": "Speicherabweichung: Fenecon Home · 201 W · Speicherabweichung: SolaX Hybrid · 201 W"
+      },
+      {
+        "scenario": "inconsistent flag at exactly 200 W",
+        "individualSignedDifferences": [
+          200
+        ],
+        "publicState": true,
+        "sse": "update",
+        "headline": "Alle Systeme normal"
+      },
+      {
+        "scenario": "expired comparison does not maintain a storage warning",
+        "individualSignedDifferences": [
+          201
+        ],
+        "publicState": true,
+        "sse": "update",
+        "headline": "Alle Systeme normal"
+      },
+      {
+        "scenario": "recovery at 60 W",
+        "individualSignedDifferences": [
+          60
+        ],
+        "publicState": true,
+        "sse": "update",
+        "headline": "Alle Systeme normal"
+      },
+      {
+        "scenario": "bad metering while storage exceeds limit",
+        "headline": "Netzmessung fehlt oder ist veraltet",
+        "grid": "Messung fehlt / veraltet"
+      }
+    ]
+  },
+  {
+    "product": "9.0.37",
+    "node": "v24.22.3",
+    "evidence": [
+      {
+        "scenario": "636 W requested, 576 W measured",
+        "individualSignedDifferences": [
+          60
+        ],
+        "publicState": true,
+        "sse": "update",
+        "headline": "Alle Systeme normal"
+      },
+      {
+        "scenario": "200 W exactly",
+        "individualSignedDifferences": [
+          200
+        ],
+        "publicState": true,
+        "sse": "update",
+        "headline": "Alle Systeme normal"
+      },
+      {
+        "scenario": "201 W",
+        "individualSignedDifferences": [
+          201
+        ],
+        "publicState": true,
+        "sse": "update",
+        "headline": "Speicherabweichung: Fenecon Home · 201 W"
+      },
+      {
+        "scenario": "recovery from 201 W to exactly 200 W",
+        "individualSignedDifferences": [
+          200
+        ],
+        "publicState": true,
+        "sse": "init",
+        "headline": "Alle Systeme normal"
+      },
+      {
+        "scenario": "two opposite deviations, zero aggregate delta",
+        "individualSignedDifferences": [
+          201,
+          -201
+        ],
+        "publicState": true,
+        "sse": "update",
+        "headline": "Speicherabweichung: Fenecon Home · 201 W (+1)",
+        "details": "Speicherabweichung: Fenecon Home · 201 W · Speicherabweichung: SolaX Hybrid · 201 W"
+      },
+      {
+        "scenario": "inconsistent flag at exactly 200 W",
+        "individualSignedDifferences": [
+          200
+        ],
+        "publicState": true,
+        "sse": "update",
+        "headline": "Alle Systeme normal"
+      },
+      {
+        "scenario": "expired comparison does not maintain a storage warning",
+        "individualSignedDifferences": [
+          201
+        ],
+        "publicState": true,
+        "sse": "update",
+        "headline": "Alle Systeme normal"
+      },
+      {
+        "scenario": "recovery at 60 W",
+        "individualSignedDifferences": [
+          60
+        ],
+        "publicState": true,
+        "sse": "update",
+        "headline": "Alle Systeme normal"
+      },
+      {
+        "scenario": "bad metering while storage exceeds limit",
+        "headline": "Netzmessung fehlt oder ist veraltet",
+        "grid": "Messung fehlt / veraltet"
+      }
+    ]
+  }
+]

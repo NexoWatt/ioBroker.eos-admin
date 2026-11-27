@@ -2,6 +2,8 @@
 
 | Thema | Einstieg |
 | --- | --- |
+| Deaktivierte Altinstanzen übernehmen und frühere InfluxDB-Werte anzeigen | [Anleitung für 9.0.38](start/START_HIER_9.0.38.md) · [Prüfbericht](reports/unified-9.0.38/PRUEFBERICHT.md) |
+| Live-Betriebsstatus, NVP-Bestätigung und Rückmeldung der Speicherfarm | [Anleitung für 9.0.37](start/START_HIER_9.0.37.md) · [Prüfbericht](reports/unified-9.0.37/PRUEFBERICHT.md) |
 | Übernahme aus den Altadaptern, Anlauf der Module und Prozessbereitschaft | [Anleitung für 9.0.36](start/START_HIER_9.0.36.md) · [Prüfbericht](reports/unified-9.0.36/PRUEFBERICHT.md) |
 | Systemstatus, Prozess- und Geräteüberwachung, Benachrichtigungen | [Anleitung für 9.0.35](start/START_HIER_9.0.35.md) · [Prüfbericht](reports/unified-9.0.35/PRUEFBERICHT.md) |
 | Installation, Git/npm und Einrichtung der OVUM MIRA | [Anleitung für 9.0.34](start/START_HIER_9.0.34.md) |

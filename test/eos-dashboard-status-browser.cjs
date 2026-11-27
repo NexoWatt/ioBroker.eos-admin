@@ -140,6 +140,53 @@ async function run(browser, language) {
         const repeated = await page.evaluate(() => window.statusEvidence.writes.filter(x=>x.phase==='repeatInit').map(x=>x.text));
         if (!legacy) assert.deepEqual(repeated, [], 'Repeated full snapshots must keep healthy state stable');
         const cases = {startup,stable};
+        if (!legacy) {
+            const meterOnly = snapshot();
+            delete meterOnly[keys.grid];
+            meterOnly['derived.core.grid.netW'] = fresh(100);
+            await phase('meterWithoutEmsConfirmation');
+            server.reset(meterOnly);
+            await wait(() => document.getElementById('sideStatusText').textContent ===
+                window.NexoWattI18n.translateText('NVP-Bestätigung fehlt'));
+            cases.meterWithoutEmsConfirmation = await read();
+            assert.match(cases.meterWithoutEmsConfirmation.panel, /is-warn/);
+            assert.equal(cases.meterWithoutEmsConfirmation.grid, await page.evaluate(() =>
+                window.NexoWattI18n.translateText('Messwert vorhanden · Bestätigung fehlt')));
+            await phase('gridConfirmationRestored');
+            server.update({[keys.grid]:fresh(true)});
+            await wait(label => document.getElementById('sideStatusText').textContent === label,labels[language]);
+            cases.gridConfirmationRestored = await read();
+
+            // One timestamped, signed comparison per physical storage unit.
+            // A healthy heartbeat and identical grid watts isolate this headline.
+            const storageKey = 'storageFarm.storagesStatusJson';
+            const storageName = 'Speicher West';
+            for (const delta of [60, 201, 200]) {
+                const now = Date.now();
+                const comparison = {v:1, targetW:636, measuredW:636-delta, differenceW:delta,
+                    sampledAt:now-500, commandAt:now-2000, validUntil:now+20000, warning:delta>200};
+                const row = {dispatchKey:'west', name:storageName, online:true, powerComparison:comparison};
+                await phase('storageDeviation'+delta);
+                server.update({[storageKey]:fresh(JSON.stringify([row])), [keys.beat]:fresh(now)});
+                const headline = delta <= 200 ? labels[language] :
+                    {de:'Speicherabweichung',en:'Storage deviation',nl:'Opslagafwijking'}[language] + ': ' + storageName + ' · ' + delta + ' W';
+                await wait((key, expectedDelta, expectedLabel) => {
+                    const raw = window.latestState?.[key]?.value;
+                    return typeof raw === 'string' && JSON.parse(raw)[0].powerComparison.differenceW === expectedDelta
+                        && document.getElementById('sideStatusText').textContent === expectedLabel;
+                },storageKey,delta,headline);
+                cases['storageDeviation'+delta] = await read();
+                assert.equal(cases['storageDeviation'+delta].panel.includes('is-warn'), delta > 200);
+            }
+            await phase('confirmedGridLoss');
+            server.update({[keys.grid]:fresh(false)});
+            await wait(() => document.getElementById('sideStatusText').textContent ===
+                window.NexoWattI18n.translateText('Netzmessung fehlt oder ist veraltet'));
+            cases.confirmedGridLoss = await read();
+            assert.match(cases.confirmedGridLoss.panel,/is-warn/);
+            server.update({[keys.grid]:fresh(true)});
+            await wait(label => document.getElementById('sideStatusText').textContent === label,labels[language]);
+        }
         // Simulate a transport outage with retained charge-point data, then an EventSource that is connected
         // but has not yet received a full snapshot. Only the full snapshot may restore a known state.
         await phase('disconnect');

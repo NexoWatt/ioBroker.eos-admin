@@ -19,7 +19,9 @@
 /* Diagnose trennt tatsächliche Messung von Verteilung und Befehlsannahme. */
 .nw-farm-dispatch { margin-top: 24px; padding-top: 20px; border-top: 1px solid #244251; }
 .nw-farm-dispatch h3 { color: #e5f5f5; font-size: 1.1rem; margin: 0 0 12px; }
-#sf_dispatch_status { color: #ead5a5; line-height: 1.5; overflow-wrap: anywhere; }
+#sf_dispatch_status { color: #c1d5dd; line-height: 1.5; overflow-wrap: anywhere; }
+#sf_dispatch_status[data-warning="true"], #sf_dispatch_deviation, .nw-farm-dispatch-member[data-warning="true"] summary { color: #ffd166; }
+#sf_dispatch_deviation { overflow-wrap: anywhere; }
 .nw-farm-dispatch .nw-farm-metric { border-top-color: #4e91a1; }
 .nw-farm-dispatch-members { display: grid; gap: 10px; margin-top: 16px; }
 .nw-farm-dispatch-member { background: #081c29; border: 1px solid #244251; border-radius: 12px; min-width: 0; }

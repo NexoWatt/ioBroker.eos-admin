@@ -13,627 +13,627 @@
   "entrySha256": "415bf30b78e1d4829da1ac44b3ad23ff35df13c3c02ded2a95de79f5b95ec0de",
   "inputs": [
     {
-      "path": "src-admin/node_modules/ccount/index.js",
+      "path": "../eos37/src-admin/node_modules/ccount/index.js",
       "sha256": "cbba065a9f66c5909d49f740a64f12cfde03220303a845b2273d54af59e70af9"
     },
     {
-      "path": "src-admin/node_modules/decode-named-character-reference/index.dom.js",
+      "path": "../eos37/src-admin/node_modules/decode-named-character-reference/index.dom.js",
       "sha256": "d296a0defb6543a1ce986412d9b50d4cff4557059f490c2aa97172537c195c00"
     },
     {
-      "path": "src-admin/node_modules/devlop/lib/default.js",
+      "path": "../eos37/src-admin/node_modules/devlop/lib/default.js",
       "sha256": "702fcb7d6bfdfe7b673b8bb7fa9d531d9b7d02693bed89f8dbb0a2c461604cf6"
     },
     {
-      "path": "src-admin/node_modules/longest-streak/index.js",
+      "path": "../eos37/src-admin/node_modules/longest-streak/index.js",
       "sha256": "41d5da657563b0bf09d2e5235349195276e9246e1239370d98416e27a85b989c"
     },
     {
-      "path": "src-admin/node_modules/markdown-table/index.js",
+      "path": "../eos37/src-admin/node_modules/markdown-table/index.js",
       "sha256": "2dd3014e8ce92317dfd819fc678217d8fdf47086a4607cc49566f0dee02b832a"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-find-and-replace/index.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-find-and-replace/index.js",
       "sha256": "7a4656d4f6e259733e75f160544e681c1250180db6f099907dde936bce1d8c7b"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-find-and-replace/lib/index.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-find-and-replace/lib/index.js",
       "sha256": "b171699f61c99a82565a6d6f8f3a1348d7d37756f889be30def0337caa9dbe2f"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-find-and-replace/node_modules/escape-string-regexp/index.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-find-and-replace/node_modules/escape-string-regexp/index.js",
       "sha256": "af2065ad2f2d2b91946c2121e21618daa3f4b18787af9226f8c953ca54cca2f5"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-from-markdown/index.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-from-markdown/index.js",
       "sha256": "b5ac1d75a898f7e28ae90ce26ab937b5f574bd5b4e8c17745bd15ba78a4a33f5"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-from-markdown/lib/index.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-from-markdown/lib/index.js",
       "sha256": "f4988c625ebb2b09384b141e8e0d5d6997b382dac58c8c62fd6e3ce597ff7364"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-gfm-autolink-literal/index.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-gfm-autolink-literal/index.js",
       "sha256": "c3c1073e83ac96d470b41a7ace9636321578659a83e1d14d4c8ac7f7f85db8a8"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-gfm-autolink-literal/lib/index.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-gfm-autolink-literal/lib/index.js",
       "sha256": "4965bd92f22009a0fd0fa4f7af73903e4d793165634c26ab5827fe5386fbcff2"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-gfm-footnote/index.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-gfm-footnote/index.js",
       "sha256": "b94bca85a6eefc173cd3a68381c45bfdc75643ed8f901a428d311d5a01575678"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-gfm-footnote/lib/index.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-gfm-footnote/lib/index.js",
       "sha256": "47f5f97e3698325187eff57567e05f0a63162506cdd95f8f6468f2a7bbf69eff"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-gfm-strikethrough/index.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-gfm-strikethrough/index.js",
       "sha256": "0156f05d678b6885b4e2a41248ac1366232e51e92bb0b6fc561c209062f5a721"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-gfm-strikethrough/lib/index.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-gfm-strikethrough/lib/index.js",
       "sha256": "808441e33c8419430429dba66470f34367636fac752cb89d1fb5473bc4d29d83"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-gfm-table/index.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-gfm-table/index.js",
       "sha256": "9cc7b5b80a5b94d6c0803936b9a120c272e32a63f802cb960de7c6c59907ee65"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-gfm-table/lib/index.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-gfm-table/lib/index.js",
       "sha256": "5f5fc1551fe95d4e4e5a8729e52391abb9a053c0a618aa79dfb0364728299be8"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-gfm-task-list-item/index.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-gfm-task-list-item/index.js",
       "sha256": "38e8209a8b251e633588fd16ad1152c33daced7ff21be821827c29be7bf37d3f"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-gfm-task-list-item/lib/index.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-gfm-task-list-item/lib/index.js",
       "sha256": "1986b0f334e23659909982bc930ebc11784212d9331ef97efa14f268af01d852"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-gfm/index.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-gfm/index.js",
       "sha256": "f6d345b843a3b44d74a5e8ee123f90c7d16f0c670542810c8b06367c44a01b50"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-gfm/lib/index.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-gfm/lib/index.js",
       "sha256": "0ead64b5f705ade5818adf7059c62c34353f00aaf4528549aceccd342004297e"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-phrasing/index.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-phrasing/index.js",
       "sha256": "f87bb5f2c3fe0f98bd2802db6438ecf751f051c64fe502377444067a9c59ce6e"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-phrasing/lib/index.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-phrasing/lib/index.js",
       "sha256": "cfba43614dcc2d644d7f0b2a83a172b6119aa70ba10a504f03528a0fb4c873eb"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/index.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/index.js",
       "sha256": "424f094d7793c73a0a94e6b11bc747d122fa409037cf13e48ac490c2e283c03a"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/configure.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/configure.js",
       "sha256": "e5264debb8cb4bbe153339e366aa790ddd2d271ae864a712eacb61e10dc11656"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/handle/blockquote.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/handle/blockquote.js",
       "sha256": "b6dd851a1714f34fabdefb0cdacc77443326c9b6b8f5e83a90cada5d3bc71354"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/handle/break.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/handle/break.js",
       "sha256": "7bd4f6ce61d3b082fc679aba40b8c7944637ac1ae202d54857e5480d075fc120"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/handle/code.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/handle/code.js",
       "sha256": "628bbd3ac2d8027d6c532689d0022e4f4c97740228bb7d13717b0c487bb4ce9d"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/handle/definition.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/handle/definition.js",
       "sha256": "83a7f5799a2622ae6256d5ee8a9612ebb1335809ffe63729cf57822816d33383"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/handle/emphasis.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/handle/emphasis.js",
       "sha256": "bea3469e986f837b2b07deb2d6018394d84d3e6ce87f5df0155b3f4b099177b5"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/handle/heading.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/handle/heading.js",
       "sha256": "16e615ef320f6e1f1244366abc52df0916ee7e904dc3294b5461ebd00251a35b"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/handle/html.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/handle/html.js",
       "sha256": "07aae47b1697513c04efedc45f2cf10047e680d7af3c7e517ec126578a092d83"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/handle/image-reference.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/handle/image-reference.js",
       "sha256": "8da0d0564cefefdc0442961c72d33c7e8bf924f1933be9fe646ccffc5545c438"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/handle/image.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/handle/image.js",
       "sha256": "6ca9becc1bc294a246d6134ad546591580eb641a38c3120ff149cf090ed1ec69"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/handle/index.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/handle/index.js",
       "sha256": "490a5bac7d713e0c0576cde3bad5e18a581836540f62c2bb08ec6ecb01fd6c83"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/handle/inline-code.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/handle/inline-code.js",
       "sha256": "82024330cc4f32d476d81f572ce2c760bc43975bb1030d73c064a391df694971"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/handle/link-reference.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/handle/link-reference.js",
       "sha256": "27f4e01096422e1b897b65d3f2511240e518550968ed3e2f20a15f5459093ac6"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/handle/link.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/handle/link.js",
       "sha256": "7c1f94738795ca9988655a7425ddb4bfaa1671884a598b639766608938278830"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/handle/list-item.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/handle/list-item.js",
       "sha256": "1d386f2d5cb3af88f88ab6ae52384f64d52726b4107206782d9ea3d3c3a1f75f"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/handle/list.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/handle/list.js",
       "sha256": "226202457c9f1da831f98dde5c9824b85087d61a04024eb1915f10278ea11013"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/handle/paragraph.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/handle/paragraph.js",
       "sha256": "777de9e03969c3e98ec5b1df78de243954be4008eeab44d77ee873900e397e00"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/handle/root.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/handle/root.js",
       "sha256": "9689eed04d6cce3d528882e780d94e3a9932e2409a70f53ce26f28f20cf63af8"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/handle/strong.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/handle/strong.js",
       "sha256": "a4c417b138d263546b5e2e5f4105db9fdf64e39cd5bf32ca51ebca2bfc8f1f98"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/handle/text.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/handle/text.js",
       "sha256": "82c7802143c42efbb86f81ae026ea8b21bb6181a79b5a179db668deabed42c39"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/handle/thematic-break.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/handle/thematic-break.js",
       "sha256": "e6ba03c46587555d686a3d9d707be2b94ecc0c4d08df302cb19aa76391e0dc27"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/index.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/index.js",
       "sha256": "00c783f8e7168233253e04066aa9e06753754e916eacaa636e1f76e2ef8c7c38"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/join.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/join.js",
       "sha256": "4bbacdff9179436225a16583a30a428415a106005058a3d315468526cd53cedc"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/unsafe.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/unsafe.js",
       "sha256": "748691eabb03fb76b35f43690f510eb23902397cc2cb2ce75371aae177857b13"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/util/association.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/util/association.js",
       "sha256": "a7059dc12cccb03befe1d118d062240b0f08201be9da238f2056f4cfe5d3ba53"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/util/check-bullet-ordered.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/util/check-bullet-ordered.js",
       "sha256": "e5b643295c4d28ca25a58701b0acf19873032ee6385d8e7bf92298cfb3010df2"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/util/check-bullet-other.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/util/check-bullet-other.js",
       "sha256": "b5c1d4e8085dec4551dc27d79cc37995b5da2c9a620798e70a708713a27d8906"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/util/check-bullet.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/util/check-bullet.js",
       "sha256": "c9e29e954a8976cf2b86b93414e4a4d40ba904fef02ba47dea4ca3790dcfdfc5"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/util/check-emphasis.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/util/check-emphasis.js",
       "sha256": "ed8cbf60a71d9cd433dd1af38bb690afafc45c7c657fc62cba8e161a8aee6878"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/util/check-fence.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/util/check-fence.js",
       "sha256": "2319c48816ce3d363ab42687621d64824dafabb2747540396192806e5a51992d"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/util/check-list-item-indent.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/util/check-list-item-indent.js",
       "sha256": "2966c2cae70ef1dc0a71b84cf821c65a12fb4d41da76aae3de5e33eba6265d09"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/util/check-quote.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/util/check-quote.js",
       "sha256": "ce4b9514ae41379d7156ffedd44b15e421fd0518ee8668c1914bf5baf3a0985a"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/util/check-rule-repetition.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/util/check-rule-repetition.js",
       "sha256": "ed3e4bec7a04ea73d842017a8164915e5b35f9b37470f4be99ecfe7eacaf8321"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/util/check-rule.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/util/check-rule.js",
       "sha256": "95ab8adc95f1e590e3433d739c79d2132833b3397fcc833db9c79aee582ea988"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/util/check-strong.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/util/check-strong.js",
       "sha256": "65a9dcd6c2e771b10c524a85ea72e985e64362f001317a4e90d7318644551bd5"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/util/compile-pattern.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/util/compile-pattern.js",
       "sha256": "cc5942773ca68186c628ae956e7734709376dbf94df3c57ef5e7be276e4ba7a6"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/util/container-flow.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/util/container-flow.js",
       "sha256": "462a5ba7f6fbeb0e21f5021a4f07961c0e93108660dda27b559cad88eb09dc66"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/util/container-phrasing.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/util/container-phrasing.js",
       "sha256": "9172b7a8114cf4123e6a67ccf1de5d8c6d4492fa760217fad8c04a7dcf703675"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/util/encode-character-reference.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/util/encode-character-reference.js",
       "sha256": "a1aacc0ea2e4cd7fb84deaa115a5deaf4576e0701dd9441d5d6ffa70386c5dfd"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/util/encode-info.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/util/encode-info.js",
       "sha256": "919824b727823671cf6188fb17e5c012a29059d88e821135371e5309c103f03d"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/util/format-code-as-indented.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/util/format-code-as-indented.js",
       "sha256": "875735363c778c12d8a760e77420d636b7d2e111c955c2002168ba744e12d30b"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/util/format-heading-as-setext.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/util/format-heading-as-setext.js",
       "sha256": "7efc6b494ee952b1831053decae18e702be275ec0ff93ea3069c8730f65ecb73"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/util/format-link-as-autolink.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/util/format-link-as-autolink.js",
       "sha256": "f7ae2fab97bc8541829b81eb84f9e5e6dffec2ed38172b8242d4e7876f0a346b"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/util/indent-lines.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/util/indent-lines.js",
       "sha256": "1f0fdb29bf49d7c189d161f16c7d3f91a9d8ce625f5a6aeaad9de9810bd93782"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/util/pattern-in-scope.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/util/pattern-in-scope.js",
       "sha256": "be9c737be3309735314d3b20d73afebff1d9d8d6681d43fe517fa573a193d255"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/util/safe.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/util/safe.js",
       "sha256": "8a8db3e41daf6c810cb289406fb9e46dde2dfaf4a0789c7193db90de3cfdfa77"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-markdown/lib/util/track.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-markdown/lib/util/track.js",
       "sha256": "a7254e9fa9b1c92e349e2fde6bbacfc9b2453806f9cf06f16ff735fdde900f8e"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-string/index.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-string/index.js",
       "sha256": "46fb60d03aacb0a3f66c7be7f7c93e85013076f59d595c7220554b05027d8ada"
     },
     {
-      "path": "src-admin/node_modules/mdast-util-to-string/lib/index.js",
+      "path": "../eos37/src-admin/node_modules/mdast-util-to-string/lib/index.js",
       "sha256": "53015b2b0b7a72aed1c2d880d3c2aaed73972241f968d4a206a18d92fbe57b21"
     },
     {
-      "path": "src-admin/node_modules/micromark-core-commonmark/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-core-commonmark/index.js",
       "sha256": "67211c138962eb4153158d185781612cb5a4f811a7f26f98863d03e7560595b6"
     },
     {
-      "path": "src-admin/node_modules/micromark-core-commonmark/lib/attention.js",
+      "path": "../eos37/src-admin/node_modules/micromark-core-commonmark/lib/attention.js",
       "sha256": "0c4d5d13b7c56ed8e3c7b4617a1a2624c827576e652e65140478c47545526314"
     },
     {
-      "path": "src-admin/node_modules/micromark-core-commonmark/lib/autolink.js",
+      "path": "../eos37/src-admin/node_modules/micromark-core-commonmark/lib/autolink.js",
       "sha256": "d0762261ea02440fbc81b5facf994bc42ba1561d4c7bf822dd9d09a7c05a69ed"
     },
     {
-      "path": "src-admin/node_modules/micromark-core-commonmark/lib/blank-line.js",
+      "path": "../eos37/src-admin/node_modules/micromark-core-commonmark/lib/blank-line.js",
       "sha256": "ef542164abcf6a5e6806720105146feba7e340a1f6d8c08c840707208ca76d69"
     },
     {
-      "path": "src-admin/node_modules/micromark-core-commonmark/lib/block-quote.js",
+      "path": "../eos37/src-admin/node_modules/micromark-core-commonmark/lib/block-quote.js",
       "sha256": "dc87caa801ada12890767e83534b15746097b3cc6c9d5a99c046c1a252632366"
     },
     {
-      "path": "src-admin/node_modules/micromark-core-commonmark/lib/character-escape.js",
+      "path": "../eos37/src-admin/node_modules/micromark-core-commonmark/lib/character-escape.js",
       "sha256": "8fd107627d4f0363999adf68fadd375a17a7536da8eee96799c805e3e57b3fe4"
     },
     {
-      "path": "src-admin/node_modules/micromark-core-commonmark/lib/character-reference.js",
+      "path": "../eos37/src-admin/node_modules/micromark-core-commonmark/lib/character-reference.js",
       "sha256": "cc8138483321def7b2f4304df0e76ee2bcea84bb1bc5bc603534063b30ddd959"
     },
     {
-      "path": "src-admin/node_modules/micromark-core-commonmark/lib/code-fenced.js",
+      "path": "../eos37/src-admin/node_modules/micromark-core-commonmark/lib/code-fenced.js",
       "sha256": "ad089ec3656e37e3adbcda1fa873a8377d0b4143d556e279424b65b49f0d209f"
     },
     {
-      "path": "src-admin/node_modules/micromark-core-commonmark/lib/code-indented.js",
+      "path": "../eos37/src-admin/node_modules/micromark-core-commonmark/lib/code-indented.js",
       "sha256": "179e7327f4c7565b0f1f74042e8fca37f232750f52e8bb4064a8f7602abce01c"
     },
     {
-      "path": "src-admin/node_modules/micromark-core-commonmark/lib/code-text.js",
+      "path": "../eos37/src-admin/node_modules/micromark-core-commonmark/lib/code-text.js",
       "sha256": "6e59e9b77a76a825c8cd142b0a2f0495aa5122da271770cb09322456a5207451"
     },
     {
-      "path": "src-admin/node_modules/micromark-core-commonmark/lib/content.js",
+      "path": "../eos37/src-admin/node_modules/micromark-core-commonmark/lib/content.js",
       "sha256": "86fe007055efee6edaecfbb2ccebb9bdd1e7887a45d1c5881bcaa7ed6a973b77"
     },
     {
-      "path": "src-admin/node_modules/micromark-core-commonmark/lib/definition.js",
+      "path": "../eos37/src-admin/node_modules/micromark-core-commonmark/lib/definition.js",
       "sha256": "800e7ef9f722e2536dc5e9774d0e22b0dcc58770d7a8011dc2c205f5fd263009"
     },
     {
-      "path": "src-admin/node_modules/micromark-core-commonmark/lib/hard-break-escape.js",
+      "path": "../eos37/src-admin/node_modules/micromark-core-commonmark/lib/hard-break-escape.js",
       "sha256": "a84fdfcc8ad17557345f074d2cc61ac902349ae4666a86c934be7914029a80bd"
     },
     {
-      "path": "src-admin/node_modules/micromark-core-commonmark/lib/heading-atx.js",
+      "path": "../eos37/src-admin/node_modules/micromark-core-commonmark/lib/heading-atx.js",
       "sha256": "963cbe1d91fcbd825cb452cea673e1ca874a7533a31a5c48b674cb4817799b40"
     },
     {
-      "path": "src-admin/node_modules/micromark-core-commonmark/lib/html-flow.js",
+      "path": "../eos37/src-admin/node_modules/micromark-core-commonmark/lib/html-flow.js",
       "sha256": "907e1b73e4eb1e51e818ab74698872906f3163788aeea7232b36d0d30aafedd0"
     },
     {
-      "path": "src-admin/node_modules/micromark-core-commonmark/lib/html-text.js",
+      "path": "../eos37/src-admin/node_modules/micromark-core-commonmark/lib/html-text.js",
       "sha256": "017f2b1f7be2303f4b849394f29430f4daea803dbb7eaf4ce82bb63e42e6c47c"
     },
     {
-      "path": "src-admin/node_modules/micromark-core-commonmark/lib/label-end.js",
+      "path": "../eos37/src-admin/node_modules/micromark-core-commonmark/lib/label-end.js",
       "sha256": "0fb2b950e1ed066cc1af4072bb4ff841a640aa8e02a43dc6de288ea8044e67e4"
     },
     {
-      "path": "src-admin/node_modules/micromark-core-commonmark/lib/label-start-image.js",
+      "path": "../eos37/src-admin/node_modules/micromark-core-commonmark/lib/label-start-image.js",
       "sha256": "60877f46d816d25fe11d86e24b703b4501240cdb89d63f7cc978d39af500abb8"
     },
     {
-      "path": "src-admin/node_modules/micromark-core-commonmark/lib/label-start-link.js",
+      "path": "../eos37/src-admin/node_modules/micromark-core-commonmark/lib/label-start-link.js",
       "sha256": "ffdab4c9eb7c16743e91f3b20711cdded335413c279aa4fa76d2d98d515cc0ec"
     },
     {
-      "path": "src-admin/node_modules/micromark-core-commonmark/lib/line-ending.js",
+      "path": "../eos37/src-admin/node_modules/micromark-core-commonmark/lib/line-ending.js",
       "sha256": "3fa206316adeeb5a76e93c52d044f9ed32c1c1aad3a25346b913fec375ada089"
     },
     {
-      "path": "src-admin/node_modules/micromark-core-commonmark/lib/list.js",
+      "path": "../eos37/src-admin/node_modules/micromark-core-commonmark/lib/list.js",
       "sha256": "86115cefb14f3d7076cfe28a6f06dd805ae4e024b0897eaa897d64db1966c7e4"
     },
     {
-      "path": "src-admin/node_modules/micromark-core-commonmark/lib/setext-underline.js",
+      "path": "../eos37/src-admin/node_modules/micromark-core-commonmark/lib/setext-underline.js",
       "sha256": "36d333f33ee829a005a116ff464f7be89e2311650a36f3837bc20915c2d2d6c9"
     },
     {
-      "path": "src-admin/node_modules/micromark-core-commonmark/lib/thematic-break.js",
+      "path": "../eos37/src-admin/node_modules/micromark-core-commonmark/lib/thematic-break.js",
       "sha256": "0249d3b4ed750ed74d7b9cdcf7b0ad07048a6fcf735c22a41c43d6f54c8d4a10"
     },
     {
-      "path": "src-admin/node_modules/micromark-extension-gfm-autolink-literal/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-extension-gfm-autolink-literal/index.js",
       "sha256": "df8add1053d02f32b6fbbd72d5d7fb213590ea32d666bc15c7f4e69467d021be"
     },
     {
-      "path": "src-admin/node_modules/micromark-extension-gfm-autolink-literal/lib/html.js",
+      "path": "../eos37/src-admin/node_modules/micromark-extension-gfm-autolink-literal/lib/html.js",
       "sha256": "531d28a41ae6add3cdb04ecf8be50bace69bd334df9271cd146907ac4c5eb685"
     },
     {
-      "path": "src-admin/node_modules/micromark-extension-gfm-autolink-literal/lib/syntax.js",
+      "path": "../eos37/src-admin/node_modules/micromark-extension-gfm-autolink-literal/lib/syntax.js",
       "sha256": "2b45c68982c1f80daf125b709faba88803b131a0d710b0374dd309495a74efeb"
     },
     {
-      "path": "src-admin/node_modules/micromark-extension-gfm-footnote/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-extension-gfm-footnote/index.js",
       "sha256": "9f2dd0393871a1d2db494fd4e5502ede219eda13ac05fea9ea6dd9c8ccf8dff6"
     },
     {
-      "path": "src-admin/node_modules/micromark-extension-gfm-footnote/lib/html.js",
+      "path": "../eos37/src-admin/node_modules/micromark-extension-gfm-footnote/lib/html.js",
       "sha256": "eb300069225e67d6a71c96d16c7e69c64d14ba54c42c2ea7a3bfb5a8012d83b3"
     },
     {
-      "path": "src-admin/node_modules/micromark-extension-gfm-footnote/lib/syntax.js",
+      "path": "../eos37/src-admin/node_modules/micromark-extension-gfm-footnote/lib/syntax.js",
       "sha256": "5fd8d63fcbb9918a0f7b92f2ba6adea3845e9cbf7f1e74ee239f4d018943ef6b"
     },
     {
-      "path": "src-admin/node_modules/micromark-extension-gfm-strikethrough/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-extension-gfm-strikethrough/index.js",
       "sha256": "0ee76753d9416266808227424eac60626edd98daeb27b74df4da71d2444c147c"
     },
     {
-      "path": "src-admin/node_modules/micromark-extension-gfm-strikethrough/lib/html.js",
+      "path": "../eos37/src-admin/node_modules/micromark-extension-gfm-strikethrough/lib/html.js",
       "sha256": "6230e158b586049d3ba5612c7a2cd781bb48af69e5f3985339519d0720a7eeea"
     },
     {
-      "path": "src-admin/node_modules/micromark-extension-gfm-strikethrough/lib/syntax.js",
+      "path": "../eos37/src-admin/node_modules/micromark-extension-gfm-strikethrough/lib/syntax.js",
       "sha256": "293e9b13a554fe569efd096cd7f1c3f4d6da861f30bba701e8b923f621181250"
     },
     {
-      "path": "src-admin/node_modules/micromark-extension-gfm-table/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-extension-gfm-table/index.js",
       "sha256": "bfdd4285a9f61faa334ced8f98fbbd1c3ba35f00a1613839c23c30c0786dcc97"
     },
     {
-      "path": "src-admin/node_modules/micromark-extension-gfm-table/lib/edit-map.js",
+      "path": "../eos37/src-admin/node_modules/micromark-extension-gfm-table/lib/edit-map.js",
       "sha256": "47e082373ee2022e2569ea4c0d7e05dbeae0a55885a6b5fb7efce65436b9bd82"
     },
     {
-      "path": "src-admin/node_modules/micromark-extension-gfm-table/lib/html.js",
+      "path": "../eos37/src-admin/node_modules/micromark-extension-gfm-table/lib/html.js",
       "sha256": "e01378aaa7ce1f99b772f486606e3fa6fc1e48839ce6c79c4586127ccfc69852"
     },
     {
-      "path": "src-admin/node_modules/micromark-extension-gfm-table/lib/infer.js",
+      "path": "../eos37/src-admin/node_modules/micromark-extension-gfm-table/lib/infer.js",
       "sha256": "c2a038479872bd8026d513d528e56717fa266f09905f53192c6b5a0da6bc9ea7"
     },
     {
-      "path": "src-admin/node_modules/micromark-extension-gfm-table/lib/syntax.js",
+      "path": "../eos37/src-admin/node_modules/micromark-extension-gfm-table/lib/syntax.js",
       "sha256": "45aac9771cc150aa2e3b62ae12fc370c07b72732d84e847b47e09dd17b3a7bfe"
     },
     {
-      "path": "src-admin/node_modules/micromark-extension-gfm-tagfilter/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-extension-gfm-tagfilter/index.js",
       "sha256": "11a91af64d788b9cef27855f6dad3cd2bf5f5b7a5b0ce3ba6794ef587699675f"
     },
     {
-      "path": "src-admin/node_modules/micromark-extension-gfm-tagfilter/lib/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-extension-gfm-tagfilter/lib/index.js",
       "sha256": "ea626eefc8e4c741e450f31eed8476eeb1b344ea0db00363ad176c117a845a35"
     },
     {
-      "path": "src-admin/node_modules/micromark-extension-gfm-task-list-item/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-extension-gfm-task-list-item/index.js",
       "sha256": "9642f1c0386a40107895796c2207e55f981c762614887835e56ad18849f24788"
     },
     {
-      "path": "src-admin/node_modules/micromark-extension-gfm-task-list-item/lib/html.js",
+      "path": "../eos37/src-admin/node_modules/micromark-extension-gfm-task-list-item/lib/html.js",
       "sha256": "8a90e3c2badc4eb1f640f7ae84d9ec5c6835c17c39aaec9a08c0014fdcad1623"
     },
     {
-      "path": "src-admin/node_modules/micromark-extension-gfm-task-list-item/lib/syntax.js",
+      "path": "../eos37/src-admin/node_modules/micromark-extension-gfm-task-list-item/lib/syntax.js",
       "sha256": "b819eb327b98387d58b3c254df11324b9291420e7b59306cc41d8a25b0820385"
     },
     {
-      "path": "src-admin/node_modules/micromark-extension-gfm/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-extension-gfm/index.js",
       "sha256": "66b05551c6efe3d6a1c75bca914c192139bc3c998fdb2b0d0784ab6685934bbc"
     },
     {
-      "path": "src-admin/node_modules/micromark-factory-destination/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-factory-destination/index.js",
       "sha256": "8ef4475091af9f26c98ef6ee0fcccc8964fcbf60c7654b9f3d4af34da2adaa4b"
     },
     {
-      "path": "src-admin/node_modules/micromark-factory-label/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-factory-label/index.js",
       "sha256": "011484772e200ea32f3139c0a258627af573dcabd78bd4eb514a34495cb4aea0"
     },
     {
-      "path": "src-admin/node_modules/micromark-factory-space/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-factory-space/index.js",
       "sha256": "0325d6a34aeb0f069e764ea25a48874c5c1f95b70a35590b9767eef0e66a2617"
     },
     {
-      "path": "src-admin/node_modules/micromark-factory-title/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-factory-title/index.js",
       "sha256": "1556b0f5d6f04b32d7178ea89b6381b936d7b8a18c92f4ca2844c4c062ed7a89"
     },
     {
-      "path": "src-admin/node_modules/micromark-factory-whitespace/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-factory-whitespace/index.js",
       "sha256": "8cdbba455b8ff17dee625a111eab27ccf3966ac3840e66a8b21aa0d800c639d4"
     },
     {
-      "path": "src-admin/node_modules/micromark-util-character/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-util-character/index.js",
       "sha256": "0ec487160ae3fa7f375698f9f951a0c5d7d752800bca2e3b1de15e3a07ee0417"
     },
     {
-      "path": "src-admin/node_modules/micromark-util-chunked/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-util-chunked/index.js",
       "sha256": "0776986647dd83ca16594bc02984a288f11e4c8a2d6f81b2487b3c9ef3a34f94"
     },
     {
-      "path": "src-admin/node_modules/micromark-util-classify-character/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-util-classify-character/index.js",
       "sha256": "fa7b4a93bc117a88844216e2bb8fef3483825bac1d9186126048ca42f1ed3e57"
     },
     {
-      "path": "src-admin/node_modules/micromark-util-combine-extensions/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-util-combine-extensions/index.js",
       "sha256": "b2aaec9f3549d92afb610d41b4f5ab73293fbeab0d2b6080ad7a8bd3518e46e1"
     },
     {
-      "path": "src-admin/node_modules/micromark-util-decode-numeric-character-reference/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-util-decode-numeric-character-reference/index.js",
       "sha256": "74d2139b3651d79a7f4c1d3b21159d9c89459256e12b263ed2eb6b4fce599f87"
     },
     {
-      "path": "src-admin/node_modules/micromark-util-decode-string/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-util-decode-string/index.js",
       "sha256": "d38b07736ff9de94721153d910fd2966608bf8cd423f2dad9c091acf8ef3377d"
     },
     {
-      "path": "src-admin/node_modules/micromark-util-encode/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-util-encode/index.js",
       "sha256": "323cc4fbd190cdcb56be068ff98e104aa2f431ea1039d7e967f3f7891cb859f0"
     },
     {
-      "path": "src-admin/node_modules/micromark-util-html-tag-name/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-util-html-tag-name/index.js",
       "sha256": "da74ea4080075b3f45a13eda9a05789e7038e1560954aff6979daafa68d0f096"
     },
     {
-      "path": "src-admin/node_modules/micromark-util-normalize-identifier/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-util-normalize-identifier/index.js",
       "sha256": "6def6e2422ac8905df740d27603d8eaa5d2fdbe41122c40958ac785ff0c8dfe3"
     },
     {
-      "path": "src-admin/node_modules/micromark-util-resolve-all/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-util-resolve-all/index.js",
       "sha256": "fa3b71cedce7b6f31ae68720dccfd561b7191e3d7280663cee1400a2dd38698c"
     },
     {
-      "path": "src-admin/node_modules/micromark-util-sanitize-uri/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-util-sanitize-uri/index.js",
       "sha256": "c8c100c6e730dd6b19ecaa70ef9f1da99c10c415dc9b6539820d41756c0fc197"
     },
     {
-      "path": "src-admin/node_modules/micromark-util-subtokenize/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark-util-subtokenize/index.js",
       "sha256": "a70e48d4652be4f956606dcda3e4c13707952dc74b86f6f71990eba88d4a1e79"
     },
     {
-      "path": "src-admin/node_modules/micromark-util-subtokenize/lib/splice-buffer.js",
+      "path": "../eos37/src-admin/node_modules/micromark-util-subtokenize/lib/splice-buffer.js",
       "sha256": "addce56cc7eccc0cb0ba10f7f8eab4c902f5ddf55ff43e0fb2907815ea63440e"
     },
     {
-      "path": "src-admin/node_modules/micromark/index.js",
+      "path": "../eos37/src-admin/node_modules/micromark/index.js",
       "sha256": "0abeeca43ffae89b3d911da05de284f4ea6b80bde67ee8f30d7bc9655f4dad97"
     },
     {
-      "path": "src-admin/node_modules/micromark/lib/compile.js",
+      "path": "../eos37/src-admin/node_modules/micromark/lib/compile.js",
       "sha256": "8bf26920007f3a8886c120cd863872d1372d30ccee99bfb549a15135a698e471"
     },
     {
-      "path": "src-admin/node_modules/micromark/lib/constructs.js",
+      "path": "../eos37/src-admin/node_modules/micromark/lib/constructs.js",
       "sha256": "afecd299e4b5e7edb3ecba007000c311ed2b7c86e4e28729f9783da9021da2cf"
     },
     {
-      "path": "src-admin/node_modules/micromark/lib/create-tokenizer.js",
+      "path": "../eos37/src-admin/node_modules/micromark/lib/create-tokenizer.js",
       "sha256": "fb3354e4cf38590a70e83f8556e96d717800b4f20e4e30949ae50d8c36ed09d1"
     },
     {
-      "path": "src-admin/node_modules/micromark/lib/initialize/content.js",
+      "path": "../eos37/src-admin/node_modules/micromark/lib/initialize/content.js",
       "sha256": "a1e1ad9cb372cc3ad2caa172de2f0658a9d38cde01a3f1109041a8b1ea83345e"
     },
     {
-      "path": "src-admin/node_modules/micromark/lib/initialize/document.js",
+      "path": "../eos37/src-admin/node_modules/micromark/lib/initialize/document.js",
       "sha256": "a27b0a34fe26d7000ed4e5dfbde302a3dd01eb01d20aaa74c2033694b7b9cac8"
     },
     {
-      "path": "src-admin/node_modules/micromark/lib/initialize/flow.js",
+      "path": "../eos37/src-admin/node_modules/micromark/lib/initialize/flow.js",
       "sha256": "36a507211b00526d6ec1e9d9cca7547d26a5b01db61bb6d0d94d625d2babe66f"
     },
     {
-      "path": "src-admin/node_modules/micromark/lib/initialize/text.js",
+      "path": "../eos37/src-admin/node_modules/micromark/lib/initialize/text.js",
       "sha256": "c0e5b3edbad427ce44aac1b33ed78361c85fc521e52e534cdd43873a0d8e7982"
     },
     {
-      "path": "src-admin/node_modules/micromark/lib/parse.js",
+      "path": "../eos37/src-admin/node_modules/micromark/lib/parse.js",
       "sha256": "a8e110b17213a26a212332b2c8c39d31c302735c810bb0078e00b752f00552d9"
     },
     {
-      "path": "src-admin/node_modules/micromark/lib/postprocess.js",
+      "path": "../eos37/src-admin/node_modules/micromark/lib/postprocess.js",
       "sha256": "0faf397c79cefaa71f92b00aa11c5b2e954aa7560ceb1c93d85d21853136b5d6"
     },
     {
-      "path": "src-admin/node_modules/micromark/lib/preprocess.js",
+      "path": "../eos37/src-admin/node_modules/micromark/lib/preprocess.js",
       "sha256": "b582f16d9bc04d93d388004544be9c5293fda614eb86f8d02b97c3e57b9409e1"
     },
     {
-      "path": "src-admin/node_modules/unist-util-is/index.js",
+      "path": "../eos37/src-admin/node_modules/unist-util-is/index.js",
       "sha256": "037c062d404356c6bbb8dad28d39445165d23e84ac35a63496a98d40aaa8d645"
     },
     {
-      "path": "src-admin/node_modules/unist-util-is/lib/index.js",
+      "path": "../eos37/src-admin/node_modules/unist-util-is/lib/index.js",
       "sha256": "ce90bad6b772a7e1115d76e4cc53bfade1ee1fe8ac1b8880f48b0e1512ffba44"
     },
     {
-      "path": "src-admin/node_modules/unist-util-stringify-position/index.js",
+      "path": "../eos37/src-admin/node_modules/unist-util-stringify-position/index.js",
       "sha256": "7b80d608db2ab15251da8c71c4ed8029102b16677d80f4977487136e6b9e5774"
     },
     {
-      "path": "src-admin/node_modules/unist-util-stringify-position/lib/index.js",
+      "path": "../eos37/src-admin/node_modules/unist-util-stringify-position/lib/index.js",
       "sha256": "9d66941cf43fa4f4faa5912019ad9dae3f1ea3395b0c2fe64c2bcd5c2d4b2c28"
     },
     {
-      "path": "src-admin/node_modules/unist-util-visit-parents/index.js",
+      "path": "../eos37/src-admin/node_modules/unist-util-visit-parents/index.js",
       "sha256": "6e3e10026230a33197e56422a2d95fc1815528c0bde7c1c790fd1a733b04bd39"
     },
     {
-      "path": "src-admin/node_modules/unist-util-visit-parents/lib/color.js",
+      "path": "../eos37/src-admin/node_modules/unist-util-visit-parents/lib/color.js",
       "sha256": "84d02ef62d60a8e4fc8529fa6725abb85729274a873afbb8d4d9fb317ae01135"
     },
     {
-      "path": "src-admin/node_modules/unist-util-visit-parents/lib/index.js",
+      "path": "../eos37/src-admin/node_modules/unist-util-visit-parents/lib/index.js",
       "sha256": "8789a4f20d3e3c82bcaeec9628697752d662461bf6237ecfba61cfcc00f30bf7"
     },
     {
-      "path": "src-admin/node_modules/unist-util-visit/index.js",
+      "path": "../eos37/src-admin/node_modules/unist-util-visit/index.js",
       "sha256": "0bd7a392932d4578d13e0ab49705ba1488ecaad56fa4cf865f85dac64d34de91"
     },
     {
-      "path": "src-admin/node_modules/unist-util-visit/lib/index.js",
+      "path": "../eos37/src-admin/node_modules/unist-util-visit/lib/index.js",
       "sha256": "5975b3ce75ad71fa77c9bb7ba0b6886a26c37c1128e21e0ab6474ad56397fc57"
     },
     {
-      "path": "src-admin/node_modules/zwitch/index.js",
+      "path": "../eos37/src-admin/node_modules/zwitch/index.js",
       "sha256": "81f592d700aff8042238e7cab8e03c002e689117ecf15844ed753e08825a2873"
     }
   ],

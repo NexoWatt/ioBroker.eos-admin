@@ -1,5 +1,7 @@
 # Bestandsübernahme in NexoWatt EOS 9.0.7
 
+Die aktuelle Bedienung und die Kompatibilitätsprüfung für UI und Devices beschreibt die [Anleitung zu 9.0.38](../start/START_HIER_9.0.38.md). Die folgende Dokumentation hält den ursprünglichen Ablauf von 9.0.7 und seine Ergänzungen fest.
+
 Stand: 23.11.2026. Geltungsbereich: automatische Übernahme von Konfiguration und Zuständigkeit in derselben ioBroker-Installation. Der Ablauf ersetzt weder eine rücksicherbare Gesamtsicherung noch die Abnahme an den Geräten der Anlage. Eine unterbrechungsfreie oder für jede beliebige Kundenversion vollständige Migration wird nicht behauptet.
 
 ## Erhaltene Daten

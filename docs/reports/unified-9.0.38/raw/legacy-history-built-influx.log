@@ -1,0 +1,10 @@
+✔ stopped UI 1.0.35 and Devices 0.5.172 keep old Influx history readable over HTTP, restart and rollback (1412.644793ms)
+ℹ Disposable InfluxDB 2.x + stock ioBroker.influxdb 5.5.1 writePoint/getHistoryV2
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1604.170646

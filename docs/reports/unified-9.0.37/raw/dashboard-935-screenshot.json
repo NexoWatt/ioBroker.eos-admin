@@ -1,0 +1,15 @@
+{
+  "version": "9.0.35",
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "test": "Shipped status page with otherwise healthy simulated SSE and supervisor; only confirmation changes.",
+  "withoutConfirmation": {
+    "sideEms": "Aktiv",
+    "sideGridStatus": "Messung aktuell",
+    "sideStatusText": "Betriebsstatus prüfen"
+  },
+  "withConfirmation": {
+    "sideEms": "Aktiv",
+    "sideGridStatus": "Messung aktuell",
+    "sideStatusText": "Alle Systeme normal"
+  }
+}

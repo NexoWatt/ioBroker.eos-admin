@@ -1,8 +1,16 @@
 {
   "common": {
     "name": "nexowatt-ui",
-    "version": "9.0.36",
+    "version": "9.0.38",
     "news": {
+      "9.0.38": {
+        "de": "Die Bestandsübernahme lässt sich im Admin starten oder erneut prüfen. Auch bei bereits beendeten Altadaptern prüft EOS Konfiguration und Historienanbindung.",
+        "en": "Administrators can start or recheck migration. EOS checks the configuration and history connection even when the legacy adapters have already stopped."
+      },
+      "9.0.37": {
+        "de": "Das Dashboard benennt offene Betriebszustände. Die Speicherfarm zeigt die aktuelle Reglerentscheidung und meldet Leistungsabweichungen über 200 W je beauftragtem Speicher.",
+        "en": "The dashboard identifies pending operating states. The storage farm shows the current control decision and reports power deviations above 200 W per dispatched storage unit."
+      },
       "9.0.36": {
         "de": "EOS übernimmt eine bestätigte, bereits deaktivierte Alt-UI automatisch. Die Startdiagnose und der Wiederanlauf der Module wurden überarbeitet.",
         "en": "EOS automatically migrates a verified legacy UI that was already disabled. Module startup diagnostics and recovery have been revised."

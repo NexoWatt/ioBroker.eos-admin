@@ -26,7 +26,8 @@
         const value = number(ts); return value !== null && value > 0 && value <= now + 5000 && now - value <= ageMs;
     }
     function value(snapshot: unknown, key: string, connected: boolean, now: number): unknown {
-        const row = entry(snapshot, key); return connected && row && fresh(row.ts, now) ? row.value : undefined;
+        const row = entry(snapshot, key);
+        return connected && row && row.ack !== false && (row.q === undefined || row.q === 0) && fresh(row.ts, now) ? row.value : undefined;
     }
     function json(snapshot: unknown, key: string, connected: boolean, now: number): unknown {
         const raw = value(snapshot, key, connected, now);
@@ -68,8 +69,12 @@
         const n = number(input); if (n === null) return '—';
         const abs = Math.abs(n); return (abs >= 1000 ? (n / 1000).toLocaleString('de-DE', { maximumFractionDigits: 2 }) + ' kW' : Math.round(n).toLocaleString('de-DE') + ' W');
     }
-    function signed(input: unknown): string {
-        const n = number(input); return n === null ? '—' : n > 0 ? 'Entladen ' + power(n) : n < 0 ? 'Laden ' + power(-n) : power(0);
+    function signed(input: unknown, converter = false): string {
+        const n = number(input);
+        if (n === null) return '—';
+        if (n === 0) return power(0);
+        const direction = converter ? (n > 0 ? 'AC-Abgabe' : 'AC-Aufnahme') : (n > 0 ? 'Entladen' : 'Laden');
+        return direction + ' ' + power(Math.abs(n));
     }
     function capability(input: unknown, direction: 'charge' | 'discharge'): string {
         if (!record(input)) return 'Nicht mitgeteilt';
@@ -116,6 +121,8 @@
         container.replaceChildren();
         const members = rows(snapshot, connected, now);
         const results = diag && Array.isArray(diag.results) && diag.results.length <= 128 ? diag.results.filter(record) : [];
+        const display = (window as Window & { NexoWattLiveDisplay?: { farmPowerComparison?(row: Row, now: number): Row | null } }).NexoWattLiveDisplay;
+        const warnings: string[] = [];
         for (const row of members) {
             const detail = document.createElement('details'), heading = document.createElement('summary'), list = document.createElement('dl');
             const memberKey = text(row.dispatchKey, 512) || 'name:' + text(row.name);
@@ -124,6 +131,23 @@
             detail.className = 'nw-farm-dispatch-member'; heading.textContent = text(row.name) || 'Speicher';
             list.className = 'nw-farm-dispatch-details'; detail.append(heading, list);
             const result = match(row, members, results);
+            const comparison = row.dispatchKey && members.filter(other => other.dispatchKey === row.dispatchKey).length === 1
+                ? display?.farmPowerComparison?.(row, now) : null;
+            if (comparison) {
+                const delta = number(comparison.differenceW);
+                const difference = delta !== null ? delta.toLocaleString('de-DE', { maximumSignificantDigits: 12 }) + ' W' : '—';
+                const converter = comparison.domain === 'ess-ac';
+                const detailText = 'Soll ' + signed(comparison.targetW, converter) + ' · Ist ' + signed(comparison.measuredW, converter) + ' · Abweichung ' + difference;
+                line(list, converter ? 'Soll-/Ist-Vergleich · ESS-Wechselrichter (AC)' : 'Soll-/Ist-Vergleich', detailText);
+                if (comparison.warning === true) {
+                    const name = text(row.name) || 'Speicher';
+                    warnings.push(name + ' (' + difference + ')');
+                    heading.textContent = name + ' · Leistungsabweichung';
+                    detail.setAttribute('data-warning', 'true');
+                }
+            } else {
+                line(list, 'Soll-/Ist-Vergleich', 'Kein zeitlich zuordenbares Wertepaar');
+            }
             const blocked = [...codes(row.dispatchBlockedReasons), ...codes(row.dischargeBlockedReasons)];
             line(list, 'Entladehinweise', blocked.length ? [...new Set(blocked)].map(reason).join(' · ') : 'Keine Sperre gemeldet; keine Zusage einer Zuteilung');
             const hasConfiguredLimit = Object.hasOwn(row, 'configuredMaxDischargeW');
@@ -166,12 +190,28 @@
             }
             container.append(detail);
         }
+        const alert = document.getElementById('sf_dispatch_deviation');
+        if (alert) {
+            alert.hidden = !warnings.length;
+            alert.textContent = warnings.length ? 'Leistungsabweichung: ' + warnings.join(' · ') : '';
+        }
         if (!members.length) { const note = document.createElement('p'); note.textContent = 'Keine aktuellen Einzelspeicher-Diagnosen.'; container.append(note); }
     }
     function render(snapshot: unknown, connected: boolean, now = Date.now()): void {
         const diag = dispatch(snapshot, connected, now);
         const read = (key: string): unknown => value(snapshot, key, connected, now);
-        const emsTarget = number(read('speicher.regelung.sollW'));
+        const enabledState = read('speicher.regelung.aktiv');
+        const decision = json(snapshot, 'speicher.regelung.dispatcherJson', connected, now);
+        // Die Entscheidung ist pro Reglerzyklus datiert. Aktiv/Quelle als Einzelwerte
+        // werden dagegen nur bei Änderung geschrieben und können im Normalbetrieb alt sein.
+        const activeTs = number(entry(snapshot, 'speicher.regelung.aktiv')?.ts);
+        const decisionTs = record(decision) ? number(decision.ts) : null;
+        const current = record(decision) && decisionTs !== null && fresh(decisionTs, now)
+            && typeof decision.active === 'boolean' && !(decision.active && decision.disabled === true)
+            && !(typeof enabledState === 'boolean' && enabledState !== decision.active && activeTs !== null && activeTs >= decisionTs)
+            ? decision : null;
+        const active = current ? current.active : enabledState;
+        const emsTarget = active === false ? null : number(read('speicher.regelung.sollW'));
         const requested = diag ? number(diag.requestedW) : emsTarget;
         const accepted = diag ? number(diag.acceptedDeliveredW) : null;
         const overview = json(snapshot, 'storageFarm.overviewJson', connected, now);
@@ -190,13 +230,22 @@
             else if (requested !== null && accepted === 0) summary = 'Leistung angefordert, aber kein Leistungsbefehl angenommen';
             else if (requested !== null && accepted !== null && Math.sign(requested) !== Math.sign(accepted)) summary = 'Richtung der Befehlsannahme weicht von der Anforderung ab';
             else if (requested !== null && accepted !== null && Math.abs(accepted) < Math.abs(requested)) summary = 'Leistungsanforderung nur teilweise angenommen';
-            else if (accepted !== null && accepted !== 0) summary = 'Schreibauftrag übergeben; tatsächliche Leistung separat prüfen';
+            else if (accepted !== null && accepted !== 0) summary = 'Schreibauftrag übergeben';
             if (state) summary += ' · ' + reason(state);
             if (why) summary += ' · ' + reason(why);
+            const dispatchSource = text(diag.source);
+            if (dispatchSource && (!current || dispatchSource !== text(current.src))) summary += ' · Quelle des letzten Farmauftrags: ' + dispatchSource;
         }
         set('sf_dispatch_status', summary);
-        const active = read('speicher.regelung.aktiv'), source = text(read('speicher.regelung.quelle')), why = text(read('speicher.regelung.grund'), 260);
-        set('sf_dispatch_ems', 'Speicherregelung: ' + (active === true ? 'aktiv' : active === false ? 'deaktiviert' : 'Status unbekannt') + ' · EMS-Soll: ' + signed(emsTarget) + ' · Quelle: ' + (source || 'unbekannt') + ' · Grund: ' + (why || 'nicht mitgeteilt'));
+        const writeWarning = diag && (diag.writeOk === false || ['farm-write-failed', 'farm-partial', 'farm-stop-failed'].includes(text(diag.status))
+            || (requested !== null && accepted !== null && (Math.abs(accepted) < Math.abs(requested) || Math.sign(requested) !== Math.sign(accepted))));
+        document.getElementById('sf_dispatch_status')?.setAttribute('data-warning', writeWarning ? 'true' : 'false');
+        const source = text(current ? current.src : read('speicher.regelung.quelle'));
+        const why = text(current ? current.reason : read('speicher.regelung.grund'), 260);
+        const target = current
+            ? ' · Reglerziel vor Schreibprüfung: ' + signed(active === true ? current.finalW : null)
+            : ' · EMS-Soll: ' + signed(emsTarget);
+        set('sf_dispatch_ems', 'Speicherregelung: ' + (active === true ? 'aktiv' : active === false ? 'deaktiviert' : 'Status unbekannt') + target + ' · Quelle: ' + (source || 'unbekannt') + ' · Grund: ' + (why || 'nicht mitgeteilt'));
         set('sf_dispatch_floor', diag && number(diag.dischargeFloorSocPct) !== null ? 'Mindest-SoC dieser Verteilung: ' + String(diag.dischargeFloorSocPct) + ' %' : 'Mindest-SoC der aktuellen Verteilung: nicht mitgeteilt');
         memberDiagnostics(snapshot, connected, now, diag);
     }

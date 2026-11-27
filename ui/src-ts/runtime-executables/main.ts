@@ -41,6 +41,7 @@ const bodyParser = express.json({ limit: '5mb', inflate: false });
 const crypto = require('crypto');
 const { installerRevision, assertInstallerRevision, provisionInstallerObjects, assertDeviceAppActivations, numericMeasurement, activeDeviceProfileReferences, awaitEmsTransition } = require('./lib/installer-lifecycle');
 const { buildFarmOverview } = require('./lib/storage-farm-overview');
+const { compareFarmPower } = require('./www/live-display');
 const { readFlowMeasurement, sumFlowMeasurements } = require('./lib/flow-measurement');
 const nwDefaultFlowMappings = require('./io-package.json').native.datapoints;
 const { tariffDisplayConfig, tariffPriceNumber } = require('./lib/tariff-price');
@@ -226,6 +227,15 @@ class NexoWattVis extends HostedAdapter {
     });
 
     this.stateCache = {};
+    // Read-only projection of the three EMS health reports. Keep producer evidence
+    // separate from normalized cache rows used by flow calculations and controls.
+    this._nwDashboardHealth = {
+      'ems.core.schedulerAlive': undefined,
+      'ems.core.schedulerHeartbeatAt': undefined,
+      'ems.gridMeasurementFresh': undefined,
+    };
+    this._nwDashboardHealthSent = Object.create(null);
+    this._nwFarmDisplay = Object.create(null);
     // Public values may be normalized for UI/module safety (e.g. charge/discharge magnitudes).
     // Keep the original signed input values as well so signed battery fallbacks can be split correctly.
     this._nwRawValueCache = {};
@@ -262,7 +272,7 @@ class NexoWattVis extends HostedAdapter {
               const snapshot = client?.internal
                   ? adapter.stateCache
                   : publicBuilder(adapter.stateCache, true);
-              const chunk = `data: ${JSON.stringify({ type: 'init', payload: snapshot })}\n\n`;
+              const chunk = `data: ${JSON.stringify({ type: 'init', payload: Object.assign(client?.internal ? { ...snapshot, ...adapter._nwFarmDisplay } : snapshot, adapter._nwDashboardHealth) })}\n\n`;
               cacheRoot[cacheKey] = { createdAt: now, chunk };
               adapter._nwSseSnapshotBuilds = Number(adapter._nwSseSnapshotBuilds || 0) + 1;
               return chunk;
@@ -6700,6 +6710,7 @@ class NexoWattVis extends HostedAdapter {
       const getUnit = async (id) => {
         const sid = String(id || '').trim();
         if (!sid) return '';
+        if (this._sfTrackingLayout?.units.has(sid)) return this._sfTrackingLayout.units.get(sid);
         if (_unitCache.has(sid)) return _unitCache.get(sid) || '';
 
         let unit = '';
@@ -6835,6 +6846,29 @@ class NexoWattVis extends HostedAdapter {
       const statusRows = [];
       const overviewMembers = [];
       const overviewPvSources = [];
+      // A shared actuator or meter cannot identify a single battery. Count owners
+      // before inspecting live values so even the first duplicate is excluded.
+      const trackingOwners = new Map();
+      const trackingForbiddenMeters = new Set();
+      const trackingRoutes = await this._sfTrackingRoutes(list, cfg);
+      assertCurrent();
+      for (const member of list.filter(entry => entry.enabled !== false)) {
+        const actuators = [member.setSignedPowerId, member.setChargePowerId, member.setDischargePowerId, member.feneconGridSetpointId]
+          .filter(Boolean).map(id => trackingRoutes.write.get(id));
+        const meters = [member.batteryFlowPowerId, member.signedPowerId, member.feneconEssActualPowerId,
+          member.chargePowerId, member.dischargePowerId].filter(Boolean).map(id => trackingRoutes.read.get(id));
+        const foreignRoles = [member.pvPowerId, member.feneconPvDcId, member.feneconPvAcId, member.feneconPvTotalId,
+          member.feneconNvpPowerId, member.feneconConsumptionTotalId, member.feneconActualSetpointId, member.socId];
+        for (const id of [...actuators, ...foreignRoles.map(id => trackingRoutes.read.get(id))]) {
+          if (id) trackingForbiddenMeters.add(id);
+        }
+        const hardware = member._eosDevice?.baseId;
+        for (const id of new Set([...actuators, ...meters, ...(hardware ? [`device:${hardware}`] : [])].filter(Boolean))) {
+          trackingOwners.set(id, (trackingOwners.get(id) || 0) + 1);
+        }
+      }
+      const trackingMaxAgeMs = Math.min(staleMs, 30000);
+      const trackingBindings = [];
       const farmWritableStorageCount = list.filter((row) => this._nwStorageFarmRowHasWritableDatapoint(row)).length;
 
       const maxLicensedStorages = this._nwLicenseMaxStorages();
@@ -6861,6 +6895,7 @@ class NexoWattVis extends HostedAdapter {
           dischargePowerId: String(row.dischargePowerId || '').trim(),
           socId: String(row.socId || '').trim(),
           soc: null,
+          powerComparison: null,
           chargePowerW: null,
           dischargePowerW: null,
           signedPowerW: null,
@@ -7499,8 +7534,42 @@ class NexoWattVis extends HostedAdapter {
             status.batteryFlowPowerW = physicalPower;
             overviewMember.batteryPowerW = physicalPower;
             if (duplicateBatteryFlow) status.batteryFlowDuplicate = true;
+
           } else {
             status.batteryFlowMissing = true;
+          }
+        }
+        // A direct Home ESS command addresses the AC converter (706 → 604).
+        // Its battery-only channel 415 can differ substantially whenever DC PV runs.
+        const essAc = feneconHybridRow && feneconMode.mode === 'direct-ess'
+          && this._sfHasHomeEssComparison(row, trackingRoutes) && signedFeedbackUsable;
+        const domain = essAc ? 'ess-ac' : 'battery';
+        const signedMeasurement = !!(essAc || batteryFlowId || signedFeedbackUsable);
+        const observedIds = essAc ? [signedId] : batteryFlowId ? [batteryFlowId] : signedFeedbackUsable ? [signedId] : [chgId, dchgId];
+        const observedKeys = observedIds.map(id => trackingRoutes.read.get(id));
+        const targetKeys = targetPowerIds.map(id => trackingRoutes.write.get(id));
+        const deviceKey = row._eosDevice?.baseId;
+        const unique = [...targetKeys, ...observedKeys, ...(deviceKey ? [`device:${deviceKey}`] : [])]
+          .every(key => !!key && trackingOwners.get(key) === 1);
+        if (!status.licenseBlocked && status.dispatchAvailable && directTargetAvailable && (!feneconHybridRow || essAc)
+          && !['fems-grid', 'invalid'].includes(feneconMode.mode) && unique
+          && (signedMeasurement || (chargeFeedbackUsable && dischargeFeedbackUsable && observedKeys[0] !== observedKeys[1]))
+          && observedKeys.every(key => !trackingForbiddenMeters.has(key) && key !== trackingRoutes.read.get(pvId))) {
+          const samples = observedIds.map(id => _stCache.get(id));
+          const valid = samples.every(st => st?.ack === true && (st.q === undefined || st.q === 0)
+            && Number.isFinite(st.ts) && st.ts > 0 && st.ts <= now && now - st.ts <= trackingMaxAgeMs
+            && (typeof st.val === 'number' && Number.isFinite(st.val) || typeof st.val === 'string'
+              && /^[-+]?\d+(?:[.,]\d+)?(?:e[-+]?\d+)?\s*(?:[kmg]?w|(?:kilo|mega|giga)?watts?)?$/i.test(st.val.trim())));
+          // Already read for this snapshot. Reject a direction/sign conflict
+          // rather than inheriting display-only clamping of an invalid split.
+          const charge = !signedMeasurement && valid ? parseNum(samples[0].val) * (invChg ? -1 : 1) : 0;
+          const discharge = !signedMeasurement && valid ? parseNum(samples[1].val) * (invDchg ? -1 : 1) : 0;
+          const measured = essAc ? await readNumber(signedId, 'power', { allowStale: false, display: true })
+            : status.batteryFlowPowerW;
+          if (valid && Number.isFinite(measured) && charge >= 0 && discharge >= 0 && !(charge > 0 && discharge > 0)) {
+            const observedAt = Math.min(...samples.map(st => st.ts));
+            status.trackingMeasurement = { signedW: measured, observedAt, domain };
+            trackingBindings.push({ status, binding: this._sfPowerComparisonBinding(row), domain });
           }
         }
         statusRows.push(status);
@@ -7553,6 +7622,17 @@ class NexoWattVis extends HostedAdapter {
       const capacityWeightedSocOnlineState = Math.round(capacityWeightedSocOnline * 10) / 10;
       const totalPowerState = Math.round(totalPower);
       const farmOverview = buildFarmOverview(overviewMembers, overviewPvSources, now);
+      // Join only the currently accepted command phase. All lookups are synchronous
+      // and local; no new timers, physical reads or actuator writes are introduced.
+      if (!runtimeInfo.dispatchActive || dynamicGridHasControl(this)) this._sfInvalidatePowerTracking();
+      for (const { status, binding, domain } of trackingBindings) {
+        const command = this._sfPowerTracking?.get(status.dispatchKey);
+        if (!command || command.binding !== binding || command.config !== cfg) continue;
+        const sample = status.trackingMeasurement;
+        const validUntil = Math.min(command.acceptedAt, sample.observedAt) + trackingMaxAgeMs;
+        status.powerComparison = compareFarmPower(command.signedW, sample.signedW, command.acceptedSince,
+          sample.observedAt, validUntil, Date.now(), domain === 'ess-ac' ? domain : undefined);
+      }
       const farmOverviewJson = JSON.stringify(farmOverview);
       const totalBatteryPowerState = farmOverview.battery.netW;
       const totalChargeState = Math.round(totalCharge);
@@ -8045,7 +8125,116 @@ class NexoWattVis extends HostedAdapter {
       return { ok: false, skipped: false, changed: false, error: msg };
     }
   }
+  _sfInvalidatePowerTracking() {
+    this._sfPowerTracking?.clear();
+    if (this._sfTrackingWriters) this._sfTrackingOverlap = true;
+  }
+
+  async _sfTrackingRoutes(rows, config) {
+    // Resolve the configured metadata graph once per layout. State observations
+    // always come from the aggregation's existing per-tick cache.
+    const inputs = new Set(), outputs = new Set();
+    for (const row of rows) {
+      if (!row.enabled) continue;
+      for (const id of [row.setSignedPowerId, row.setChargePowerId, row.setDischargePowerId, row.feneconGridSetpointId]) if (id) outputs.add(id);
+      for (const id of [row.batteryFlowPowerId, row.signedPowerId, row.feneconEssActualPowerId, row.chargePowerId,
+        row.dischargePowerId, row.socId, row.pvPowerId, row.feneconPvDcId, row.feneconPvAcId,
+        row.feneconPvTotalId, row.feneconNvpPowerId, row.feneconConsumptionTotalId, row.feneconActualSetpointId]) if (id) inputs.add(id);
+    }
+    const signature = JSON.stringify([[...inputs], [...outputs]]);
+    const previous = this._sfTrackingLayout;
+    if (previous?.signature === signature && previous.config === config && Date.now() < previous.retryAt) return previous;
+    const layout = previous?.signature === signature && previous.config === config
+      ? { ...previous, retryAt: Infinity }
+      : { config, signature, retryAt: Infinity, read: new Map(), write: new Map(), units: new Map(), homeIds: new Set() };
+    const objects = new Map();
+    const resolve = async (start, write) => {
+      let id = start;
+      const visited = new Set();
+      while (id && !visited.has(id) && visited.size < 8) {
+        visited.add(id);
+        if (!objects.has(id)) objects.set(id, await this.getForeignObjectAsync(id).catch(() => null));
+        const obj = objects.get(id);
+        if (obj?.type !== 'state' || !obj.common) {
+          layout.retryAt = Math.min(layout.retryAt, Date.now() + 30000);
+          return null;
+        }
+        if (write ? obj.common.write === false : obj.common.read === false) return null;
+        layout.units.set(id, String(obj.common.unit || '').trim());
+        const native = obj.native || {};
+        const alias = obj.common.alias;
+        if (alias !== undefined && alias !== null) {
+          const next = typeof alias.id === 'string' ? alias.id : alias.id?.[write ? 'write' : 'read'];
+          if (typeof next !== 'string' || !next || alias[write ? 'write' : 'read']) return null;
+          id = next;
+          continue;
+        }
+        if (native.isAlias === true) {
+          const base = id.split('.aliases.')[0];
+          const dp = (write && native.writeDpId) || native.dpId;
+          if (base === id || !native.deviceId || !base.endsWith(`.devices.${native.deviceId}`) || typeof dp !== 'string' || !dp) return null;
+          id = `${base}.${dp}`;
+          continue;
+        }
+        if (native.templateId === 'ess.fenecon.FeneconHomeEssImpl' && native.deviceId && native.datapointId
+          && id.endsWith(`.devices.${native.deviceId}.${native.datapointId}`)) layout.homeIds.add(id);
+        return id;
+      }
+      return null;
+    };
+    for (const id of inputs) if (!layout.read.get(id)) layout.read.set(id, await resolve(id, false));
+    for (const id of outputs) if (!layout.write.get(id)) layout.write.set(id, await resolve(id, true));
+    this._sfTrackingLayout = layout;
+    return layout;
+  }
+
+  _sfHasHomeEssComparison(s, layout) {
+    if (!layout || s.setChargePowerId && s.setDischargePowerId) return false;
+    const actualDp = s.feneconEssActualPowerId || s.signedPowerId;
+    const targetDp = s.setSignedPowerId;
+    const actual = layout.read.get(actualDp);
+    const target = layout.write.get(targetDp);
+    if (!target?.endsWith('.sET_ACTIVE_POWER') || !layout.homeIds.has(target) || !layout.homeIds.has(actual)) return false;
+    const base = s._eosDevice?.baseId || target.slice(0, -'.sET_ACTIVE_POWER'.length);
+    const matches = (id, leaf, alias) => [`${base}.${leaf}`, `${base}.aliases.${alias}`, `${base}.aliases.v1.${alias}`].includes(id);
+    return target === `${base}.sET_ACTIVE_POWER` && actual === `${base}.eSS0_ACTIVE_POWER`
+      && matches(targetDp, 'sET_ACTIVE_POWER', 'ctrl.powerSetpointW') && matches(actualDp, 'eSS0_ACTIVE_POWER', 'r.essActivePower')
+      && layout.units.get(targetDp) === 'W' && ['W', 'kW'].includes(layout.units.get(actualDp));
+
+  }
+
+  _sfPowerComparisonBinding(s) {
+    // A retained name/command value is insufficient after replacing a meter, a
+    // port, a wiring convention or the physical member.
+    return JSON.stringify([s._eosDevice?.baseId, s._eosDevice?.devId, s.socId, s.vendorProfile, s.coupling, s.feneconControlMode,
+      s.setSignedPowerId, s.setChargePowerId, s.setDischargePowerId, s.feneconGridSetpointId,
+      s.batteryFlowPowerId, s.signedPowerId, s.feneconEssActualPowerId, s.chargePowerId, s.dischargePowerId,
+      s.invertSignedPowerSign, s.invertSetSignedPowerSign, s.invertChargeSign, s.invertDischargeSign]);
+  }
+
   async applyStorageFarmTargetW(targetW, meta = {}) {
+    // Journal covers only the current dispatch and the current member list.
+    // Overlap, early exits, handover and restart invalidate comparison evidence.
+    const writesInFlight = this._sfTrackingWriters || 0;
+    this._sfTrackingWriters = writesInFlight + 1;
+    if (writesInFlight) {
+      this._sfTrackingOverlap = true;
+      this._sfPowerTracking?.clear();
+    }
+    const tracking = { next: new Map(), config: this.config };
+    try {
+      const result = await this._sfApplyStorageFarmTargetW(targetW, meta, tracking);
+      if (!this._sfTrackingOverlap && this.config === tracking.config) this._sfPowerTracking = tracking.next;
+      return result;
+    } catch (error) {
+      this._sfPowerTracking?.clear();
+      throw error;
+    } finally {
+      if (!--this._sfTrackingWriters) this._sfTrackingOverlap = false;
+    }
+  }
+
+  async _sfApplyStorageFarmTargetW(targetW, meta, tracking) {
     if (dynamicGridHasControl(this)) return { applied: false, reason: 'dynamic-grid-owns-storage' };
     const w = Number.isFinite(Number(targetW)) ? Math.round(Number(targetW)) : 0;
     const sf = this._sfGetNormalizedFarmConfig();
@@ -8924,6 +9113,14 @@ class NexoWattVis extends HostedAdapter {
         writes: {},
       };
 
+      const signedAllocatedW = direction === 'charge' ? -Math.abs(alloc) : (direction === 'discharge' ? Math.abs(alloc) : 0);
+      const homeEssAc = nwIsFeneconHybrid(s) && commandFamily === 'signed' && this._sfHasHomeEssComparison(s, this._sfTrackingLayout);
+      const trackingSignedW = homeEssAc ? outSignedW : signedAllocatedW;
+      const binding = this._sfPowerComparisonBinding(s);
+      const previous = this._sfPowerTracking?.get(r.dispatchKey);
+      const continuity = previous && previous.config === tracking.config && previous.binding === binding && previous.source === src
+        && previous.signedW === trackingSignedW && previous.acceptedAt <= now && now - previous.acceptedAt < 30000;
+      if (!continuity) this._sfPowerTracking?.delete(r.dispatchKey);
       const selectedIds = new Set();
       if (commandFamily === 'signed' && signedId) selectedIds.add(signedId);
       if (commandFamily === 'split') {
@@ -8992,7 +9189,6 @@ class NexoWattVis extends HostedAdapter {
         && !r.writes.conflict
         && releaseAccepted
         && selectedAccepted;
-      const signedAllocatedW = direction === 'charge' ? -Math.abs(alloc) : (direction === 'discharge' ? Math.abs(alloc) : 0);
       r.commandRequired = commandRequired;
       r.commandAccepted = commandAccepted;
       r.releaseAccepted = releaseAccepted;
@@ -9001,6 +9197,22 @@ class NexoWattVis extends HostedAdapter {
       r.failedW = (commandRequired && commandAccepted !== true && direction !== 'idle') ? signedAllocatedW : 0;
       r.stopAccepted = direction === 'idle' && commandRequired ? commandAccepted === true : null;
 
+      // A skipped equal command alone cannot prove a new phase or extend its
+      // lifetime. Keep its first acceptance only while the whole path is valid.
+      const submitted = selectedWrites.every(write => write.submitted === true);
+      const freshlySent = submitted && selectedWrites.every(write => write.changed === true);
+      if (commandAccepted && submitted && (freshlySent || continuity) && !this._sfTrackingOverlap
+        && s.statusMatch === 'dispatch-key' && !s.licenseBlocked && s.dispatchAvailable && s.online
+        && (commandFamily === 'signed' || completeSplit) && !splitPairConflict
+        && [...selectedIds].every(id => this._sfTrackingLayout?.units.get(id) === 'W')
+        && (!nwIsFeneconHybrid(s) || homeEssAc)) {
+        const acceptedAt = freshlySent ? Date.now() : previous.acceptedAt;
+        const acceptedSince = continuity ? previous.acceptedSince : acceptedAt;
+        r.trackingCommand = { signedW: trackingSignedW, acceptedSince, acceptedAt };
+        tracking.next.set(r.dispatchKey, { ...r.trackingCommand, binding, source: src, config: tracking.config });
+      } else {
+        this._sfPowerTracking?.delete(r.dispatchKey);
+      }
       if (commandAccepted === true) this._sfRememberDispatchSnapshot(s, direction, alloc);
       results.push(r);
     }
@@ -9134,6 +9346,7 @@ class NexoWattVis extends HostedAdapter {
             commandRequired: r.commandRequired === true,
             commandAccepted: r.commandAccepted === true,
             acceptedW: Number.isFinite(Number(r.acceptedW)) ? Math.round(Number(r.acceptedW)) : 0,
+            ...(r.trackingCommand ? { trackingCommand: r.trackingCommand } : {}),
             failedW: Number.isFinite(Number(r.failedW)) ? Math.round(Number(r.failedW)) : 0,
             stopAccepted: r.stopAccepted,
             authorityBlocked: authorityBlocks.length > 0,
@@ -12571,6 +12784,16 @@ async onReady() {
     try { await this.subscribeForeignStatesAsync(`${this.namespace}.chargingManagement.*`); } catch (_e) {}
     try { await this.subscribeForeignStatesAsync(`${this.namespace}.ems.*`); } catch (_e2) {}
 
+    // The subscription is live before the reads. A delayed read must never
+    // resurrect a state that was changed or deleted during startup.
+    await Promise.all(Object.keys(this._nwDashboardHealth).map(async key => {
+      const before = this._nwDashboardHealth[key];
+      try {
+        const state = await this.getStateAsync(key);
+        if (before === this._nwDashboardHealth[key] && (state || before)) this._nwObserveDashboardHealth(key, state);
+      } catch (_ignored) {}
+    }));
+
     // Prime a minimal subset that the UI uses on first render.
     /**
      * Code-Teil: primeKey
@@ -12924,10 +13147,32 @@ async onReady() {
 
     /** Öffentlichen State-/SSE-Snapshot erzeugen; operative Leistungswerte bleiben unverändert. */
     const nwBuildPublicStateSnapshot = (source, includeDerived = true) => {
-      const input = (source && typeof source === 'object') ? source : {};
+      // Apply canonical diagnostics before the public privacy filter, also on backpressure resync.
+      const input = includeDerived && this._nwFarmDisplay
+        ? Object.assign({}, source, this._nwFarmDisplay) : (source || {});
       const out = {};
       for (const [key, entry] of Object.entries(input)) {
         if (nwPublicStateKeyBlocked(key)) continue;
+        if (key === 'speicher.regelung.dispatcherJson') {
+          // Die Farmseite benötigt nur die Reglerentscheidung. Hersteller- und
+          // Prüfdaten des internen Dispatchers gehören nicht in den Kundenfeed.
+          let publicDecision = null;
+          if (entry && typeof entry.value === 'string' && entry.value.length <= 262144) {
+            try {
+              const data = JSON.parse(entry.value);
+              if (data && Number.isFinite(data.ts) && typeof data.active === 'boolean') {
+                publicDecision = JSON.stringify({
+                  ts: data.ts, active: data.active, disabled: data.disabled === true,
+                  finalW: Number.isFinite(data.finalW) ? data.finalW : null,
+                  src: typeof data.src === 'string' ? data.src.slice(0, 180) : '',
+                  reason: typeof data.reason === 'string' ? data.reason.slice(0, 260) : '',
+                });
+              }
+            } catch (_) { /* Ungültige Meldung ersetzt den vorherigen Kundenwert. */ }
+          }
+          out[key] = { value: publicDecision, ts: entry?.ts, q: entry?.q, ack: entry?.ack };
+          continue;
+        }
         if (entry && typeof entry === 'object' && Object.prototype.hasOwnProperty.call(entry, 'value')) {
           out[key] = Object.assign({}, entry, { value: nwRedactPublicValue(entry.value) });
         } else {
@@ -24512,7 +24757,8 @@ settingsConfig: {
       const source = tsStates || this.stateCache;
       const access = authEnabled ? await resolveAccess(req) : null;
       const installerAccess = !!(authEnabled && access && access.isInstaller);
-      return res.json(installerAccess ? source : nwBuildPublicStateSnapshot(source, true));
+      const visible = installerAccess ? source : nwBuildPublicStateSnapshot(source, true);
+      return res.json(Object.assign(installerAccess ? { ...visible, ...this._nwFarmDisplay } : visible, this._nwDashboardHealth));
     });
 
     // RFID-Kundendaten liegen bewusst nicht mehr im globalen State-/SSE-Snapshot.
@@ -26679,7 +26925,7 @@ return res.json(out);
       const initialPayload = client.internal ? this.stateCache : nwBuildPublicStateSnapshot(this.stateCache, true);
       this._nwSseGuard.write(
         client,
-        "retry: 3000\n" + "data: " + JSON.stringify({ type: 'init', payload: initialPayload }) + "\n\n",
+        "retry: 3000\n" + "data: " + JSON.stringify({ type: 'init', payload: Object.assign(client.internal ? { ...initialPayload, ...this._nwFarmDisplay } : initialPayload, this._nwDashboardHealth) }) + "\n\n",
         { kind: 'init' },
       );
     });
@@ -27407,7 +27653,7 @@ return res.json(out);
     // "Datenpunkte" gemappt wurden. Daher wird im Subscribe-Loop unten auf die lokalen
     // Adapter-States (namespace + key) zurückgefallen.
     const localUiKeys = [
-      'speicher.dcPvPowerW',
+      'speicher.dcPvPowerW', 'speicher.regelung.dispatcherJson',
       'tarif.statusText', 'tarif.intentStatusText', 'tarif.intentSnapshotAgeMs', 'tarif.intentSnapshotFresh', 'tarif.statusJson',
       'tarif.speicherIntentW', 'tarif.speicherIntentStatus', 'tarif.speicherIntentGrund',
       'tarif.speicherRequestW', 'tarif.speicherRequestQuelle', 'tarif.speicherRequestGrund',
@@ -27467,13 +27713,20 @@ return res.json(out);
 
       if (!id) continue;
 
-      // subscribe
-      this.subscribeForeignStates(id);
+      const farmDisplay = this._nwIsFarmDisplayKey(key) && id === namespace + key;
+      const before = farmDisplay ? this._nwFarmDisplay?.[key] : undefined;
+      if (farmDisplay && typeof this.subscribeForeignStatesAsync === 'function') {
+        try { await this.subscribeForeignStatesAsync(id); }
+        catch (error) { this.log.warn(`Live-Diagnose ${key} konnte nicht abonniert werden: ${error.message}`); }
+      } else this.subscribeForeignStates(id);
 
       // get initial value
       try {
         await this._nwPrimeForeignPowerScale(id);
         const state = await this.getForeignStateAsync(id);
+        if (farmDisplay && before === this._nwFarmDisplay?.[key] && (state || before)) {
+          this._nwObserveFarmDisplay(key, state);
+        }
         if (state && state.val !== undefined) {
           this.updateValue(key, this._nwScaleMappedValue(key, id, state.val), state.ts, { q: state.q });
         }
@@ -27593,6 +27846,11 @@ return res.json(out);
   async onStateChange(id, state) {
     if (this._nwShuttingDown) return;
     this._ocppAutoDiscovery?.onStateChange(id, state);
+    if (typeof id === 'string' && id.startsWith(this.namespace + '.')) {
+      const key = id.slice(this.namespace.length + 1);
+      if (Object.hasOwn(this._nwDashboardHealth || {}, key)) this._nwObserveDashboardHealth(key, state);
+      else if (this._nwIsFarmDisplayKey(key)) this._nwObserveFarmDisplay(key, state);
+    }
     if (state && state.ack === false && String(id).startsWith(this.namespace + '.')
       && !centralLicenseSnapshot(this._bridge).ok) return;
     // Ordinary ioBroker controls remain usable without a separate token or
@@ -32151,7 +32409,9 @@ return res.json(out);
     }
     const now = Date.now();
     const cached = this._nwPara14aInfluxProvision;
-    if (!force && cached && cached.result && (now - Number(cached.ts || 0) < 10 * 60 * 1000)) {
+    const configured = this._nwTrimId(this.config && this.config.history && this.config.history.instance);
+    const retainedHistorian = configured && this.namespace !== this.hostNamespace && /^nexowatt-ui\.\d+$/.test(this.namespace);
+    if (!retainedHistorian && !force && cached && cached.result && (now - Number(cached.ts || 0) < 10 * 60 * 1000)) {
       return cached.result;
     }
 
@@ -32171,7 +32431,7 @@ return res.json(out);
         provisionError: '',
       }, partial || {});
       out.instance = this._nwTrimId(out.instance);
-      out.ready = !!out.instance && typeof this._nwEnsureInfluxCustom === 'function';
+      out.ready = partial.ready !== false && !!out.instance && typeof this._nwEnsureInfluxCustom === 'function';
       this._nwPara14aInfluxProvision = { ts: Date.now(), result: out };
       return out;
     };
@@ -32227,7 +32487,14 @@ return res.json(out);
     };
 
     try {
-      const configured = this._nwTrimId(this.config && this.config.history && this.config.history.instance);
+      if (retainedHistorian) {
+        // Der Bestand bleibt auch bei Lesefehlern an seinem gespeicherten Historiker.
+        // Eine benachbarte Influx-Instanz kann eine andere Datenbank bedienen.
+        const object = await this.getForeignObjectAsync(`system.adapter.${configured}`).catch(() => null);
+        const available = object?.type === 'instance' && object.common?.enabled === true;
+        return finish({ instance: configured, ready: available, provisionState: available ? 'shared_configured' : 'configured_unavailable',
+          provisionError: available ? '' : `Übernommene History-Instanz ist nicht verfügbar: ${configured}` });
+      }
       const existingInfluxInstances = await this._nwListAdapterInstances('influxdb');
       const sharedInflux = pickSharedInfluxInstance(existingInfluxInstances);
 
@@ -34294,6 +34561,49 @@ return res.json(out);
       }
     }
   }
+  _nwIsFarmDisplayKey(key) {
+    return key === 'storageFarm.storagesStatusJson' || key === 'storageFarm.lastDispatchJson'
+      || key === 'storageFarm.overviewJson' || key === 'speicher.regelung.dispatcherJson';
+  }
+
+  _nwObserveFarmDisplay(key, state) {
+    // Preserve the source's observation across separate EMS and UI processes.
+    // The regular control and history caches retain their existing semantics.
+    const value = typeof state?.val === 'string' && state.val.length <= 262144 ? state.val : null;
+    const ts = Number.isSafeInteger(state?.ts) && state.ts > 0 ? state.ts : 0;
+    const q = state?.q === undefined ? undefined : Number.isSafeInteger(state.q) ? state.q : 128;
+    const row = { value, ts, ack: state?.ack === true, ...(q === undefined ? {} : { q }) };
+    this._nwFarmDisplay ??= Object.create(null);
+    this._nwFarmDisplay[key] = row;
+    this._nwSseSnapshotChunkCache = null;
+    if (!this.sseClients?.size) return;
+    (this._ssePendingPayload ??= Object.create(null))[key] = row;
+    this._nwScheduleSseFlush();
+  }
+
+  _nwObserveDashboardHealth(key, state) {
+    const heartbeat = key === 'ems.core.schedulerHeartbeatAt';
+    const raw = state?.val;
+    const value = (heartbeat ? Number.isSafeInteger(raw) && raw > 0 : typeof raw === 'boolean') ? raw : null;
+    const ts = Number.isSafeInteger(state?.ts) && state.ts > 0 ? state.ts : 0;
+    const ack = state?.ack === true;
+    const q = state?.q === undefined ? undefined : Number.isSafeInteger(state.q) ? state.q : 128;
+    const row = { value, ts, ack, ...(q === undefined ? {} : { q }) };
+    this._nwDashboardHealth[key] = row;
+    this._nwSseSnapshotChunkCache = null;
+    // No timers, serialization or broadcasts for an idle dashboard. Repeated
+    // confirmations share the existing SSE batch; faults and recovery go at once.
+    if (!this.sseClients?.size) return;
+    const sent = this._nwDashboardHealthSent[key];
+    const regularHeartbeat = heartbeat && value > 0 && sent?.value > 0 && value >= sent.value
+      && Math.abs(value - ts) < 4000 && Math.abs(sent.value - sent.ts) < 4000;
+    if (sent && sent.ack === ack && sent.q === q && (sent.value === value || regularHeartbeat)
+      && ts >= sent.ts && ts - sent.ts < 4000) return;
+    this._nwDashboardHealthSent[key] = row;
+    (this._ssePendingPayload ??= Object.create(null))[key] = row;
+    this._nwScheduleSseFlush();
+  }
+
   updateValue(key, value, ts, opts = {}) {
     // Nach Beginn des Unloads keine Cache-Kaskaden, abgeleiteten Berechnungen oder
     // SSE-Batches mehr erzeugen. Laufende Hardware-/State-Schreibvorgänge werden durch
@@ -34323,9 +34633,16 @@ return res.json(out);
 
     this.stateCache[key] = { value, ts, ...(opts.q !== undefined ? { q: opts.q } : {}) };
 
+    // The admin overview periodically normalizes scheduler rows for its own cache.
+    // Only the original producer observation may reach dashboard clients.
+    if (this._nwDashboardHealth && Object.hasOwn(this._nwDashboardHealth, key)) return;
+    // A synthetic local refresh must not replace the producer's ack/q/ts in the
+    // outgoing batch. Other calculations below still see their original cache value.
+    const authoritativeFarmRow = this._nwFarmDisplay?.[key];
+
     // Allocate one patch per delivery batch, and none while no dashboard is listening.
     const payload = this.sseClients?.size ? (this._ssePendingPayload ??= Object.create(null)) : null;
-    if (payload) payload[key] = this.stateCache[key];
+    if (payload) payload[key] = authoritativeFarmRow || this.stateCache[key];
 
     // derived EVCS aggregates
     try {
@@ -34384,15 +34701,16 @@ return res.json(out);
       if (isTrigger) this.scheduleDerivedFlowUpdate(`key:${key}`);
     } catch (_e3) {}
 
-// push update to all SSE clients (batched to avoid UI freezes)
+    // RC88_SSE_IDLE_ZERO_ALLOCATION: only schedule a batch for active dashboards.
+    if (!payload) {
+      this._ssePendingPayload = null;
+      return;
+    }
+    this._nwScheduleSseFlush();
+  }
+
+  _nwScheduleSseFlush() {
     try {
-      // RC88_SSE_IDLE_ZERO_ALLOCATION: without connected dashboards there is
-      // nothing to batch or serialize. Avoid a permanent 120-ms timer/allocation
-      // chain on headless customer systems.
-      if (!payload) {
-        this._ssePendingPayload = null;
-        return;
-      }
       if (!this._sseFlushTimer) {
         const batchMs = (this.config && Number(this.config.sseBatchMs)) || 120;
         this._sseFlushTimer = this._nwSetTimeout(() => {

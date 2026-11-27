@@ -1,0 +1,245 @@
+[
+  {
+    "product": "9.0.35",
+    "node": "v24.22.3",
+    "results": [
+      {
+        "test": "Commissioned grid, actual EMS and UI in distinct children, real Chromium",
+        "distinctProcesses": true,
+        "sensor": 100,
+        "controller": true,
+        "controllerStatus": "ok",
+        "publicState": null,
+        "sseInitHasGrid": false,
+        "process": "ok",
+        "devices": "ok",
+        "dom": {
+          "headline": "Betriebsstatus prüfen",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "conn": "ready"
+        }
+      }
+    ]
+  },
+  {
+    "product": "9.0.37",
+    "node": "v22.23.4",
+    "results": [
+      {
+        "test": "Commissioned grid, actual EMS and UI in distinct children, real Chromium",
+        "distinctProcesses": true,
+        "sensor": 100,
+        "controller": true,
+        "controllerStatus": "ok",
+        "publicState": true,
+        "sseInitHasGrid": true,
+        "process": "ok",
+        "devices": "ok",
+        "dom": {
+          "headline": "Alle Systeme normal",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "conn": "ready"
+        }
+      },
+      {
+        "test": "Real NVP meter q=128, grid rejected by EMS",
+        "controller": false,
+        "source": "stale",
+        "publicState": false,
+        "sseUpdate": false,
+        "dom": {
+          "headline": "Netzmessung fehlt oder ist veraltet",
+          "ems": "Aktiv",
+          "grid": "Messung fehlt / veraltet",
+          "conn": "ready"
+        }
+      },
+      {
+        "test": "Valid zero watts after quality fault",
+        "controller": true,
+        "measured": 0,
+        "publicState": true,
+        "sseUpdate": true,
+        "dom": {
+          "headline": "Alle Systeme normal",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "conn": "ready"
+        }
+      },
+      {
+        "test": "Customer /api/state + actual display: missing confirmation",
+        "publicState": null,
+        "headline": "NVP-Bestätigung fehlt",
+        "level": "warn"
+      },
+      {
+        "test": "Customer /api/state + actual display: bad quality",
+        "publicState": {
+          "value": true,
+          "ts": 1795727435712,
+          "ack": true,
+          "q": 128
+        },
+        "headline": "NVP-Bestätigung ungültig",
+        "level": "warn"
+      },
+      {
+        "test": "Customer /api/state + actual display: unacknowledged",
+        "publicState": {
+          "value": true,
+          "ts": 1795727435712,
+          "ack": false,
+          "q": 0
+        },
+        "headline": "NVP-Bestätigung ungültig",
+        "level": "warn"
+      },
+      {
+        "test": "Customer /api/state + actual display: expired",
+        "publicState": {
+          "value": true,
+          "ts": 1795727315712,
+          "ack": true,
+          "q": 0
+        },
+        "headline": "NVP-Bestätigung veraltet",
+        "level": "warn"
+      },
+      {
+        "test": "Customer /api/state + actual display: false",
+        "publicState": {
+          "value": false,
+          "ts": 1795727435712,
+          "ack": true,
+          "q": 0
+        },
+        "headline": "Netzmessung fehlt oder ist veraltet",
+        "level": "warn"
+      },
+      {
+        "test": "Customer /api/state + actual display: true",
+        "publicState": {
+          "value": true,
+          "ts": 1795727435712,
+          "ack": true,
+          "q": 0
+        },
+        "headline": "Alle Systeme normal",
+        "level": "ok"
+      }
+    ]
+  },
+  {
+    "product": "9.0.37",
+    "node": "v24.22.3",
+    "results": [
+      {
+        "test": "Commissioned grid, actual EMS and UI in distinct children, real Chromium",
+        "distinctProcesses": true,
+        "sensor": 100,
+        "controller": true,
+        "controllerStatus": "ok",
+        "publicState": true,
+        "sseInitHasGrid": true,
+        "process": "ok",
+        "devices": "ok",
+        "dom": {
+          "headline": "Alle Systeme normal",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "conn": "ready"
+        }
+      },
+      {
+        "test": "Real NVP meter q=128, grid rejected by EMS",
+        "controller": false,
+        "source": "stale",
+        "publicState": false,
+        "sseUpdate": false,
+        "dom": {
+          "headline": "Netzmessung fehlt oder ist veraltet",
+          "ems": "Aktiv",
+          "grid": "Messung fehlt / veraltet",
+          "conn": "ready"
+        }
+      },
+      {
+        "test": "Valid zero watts after quality fault",
+        "controller": true,
+        "measured": 0,
+        "publicState": true,
+        "sseUpdate": true,
+        "dom": {
+          "headline": "Alle Systeme normal",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "conn": "ready"
+        }
+      },
+      {
+        "test": "Customer /api/state + actual display: missing confirmation",
+        "publicState": null,
+        "headline": "NVP-Bestätigung fehlt",
+        "level": "warn"
+      },
+      {
+        "test": "Customer /api/state + actual display: bad quality",
+        "publicState": {
+          "value": true,
+          "ts": 1795727325195,
+          "ack": true,
+          "q": 128
+        },
+        "headline": "NVP-Bestätigung ungültig",
+        "level": "warn"
+      },
+      {
+        "test": "Customer /api/state + actual display: unacknowledged",
+        "publicState": {
+          "value": true,
+          "ts": 1795727325195,
+          "ack": false,
+          "q": 0
+        },
+        "headline": "NVP-Bestätigung ungültig",
+        "level": "warn"
+      },
+      {
+        "test": "Customer /api/state + actual display: expired",
+        "publicState": {
+          "value": true,
+          "ts": 1795727205195,
+          "ack": true,
+          "q": 0
+        },
+        "headline": "NVP-Bestätigung veraltet",
+        "level": "warn"
+      },
+      {
+        "test": "Customer /api/state + actual display: false",
+        "publicState": {
+          "value": false,
+          "ts": 1795727325195,
+          "ack": true,
+          "q": 0
+        },
+        "headline": "Netzmessung fehlt oder ist veraltet",
+        "level": "warn"
+      },
+      {
+        "test": "Customer /api/state + actual display: true",
+        "publicState": {
+          "value": true,
+          "ts": 1795727325195,
+          "ack": true,
+          "q": 0
+        },
+        "headline": "Alle Systeme normal",
+        "level": "ok"
+      }
+    ]
+  }
+]

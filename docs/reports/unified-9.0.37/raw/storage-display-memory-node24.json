@@ -1,0 +1,19 @@
+{
+  "node": "v24.22.3",
+  "platform": "linux",
+  "arch": "x64",
+  "scope": "Synthetic 128-member JSON snapshots, alternating 200 W and 201 W on one member. Three real display classifications per snapshot, no DOM, EMS, or I/O.",
+  "warmupSnapshots": 500,
+  "measuredSnapshots": 3000,
+  "renderingDecisions": 9000,
+  "elapsedMs": 1216,
+  "initialHeapBytesAfterGC": 7396112,
+  "heapBytesAfterEvery500Snapshots": [
+    7394520,
+    7393592,
+    7398336,
+    7397200,
+    7406024,
+    7404496
+  ]
+}

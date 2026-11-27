@@ -1,0 +1,22 @@
+✔ explicit runtime scope accepts normal 0775/2775 parents and preserves private storage across restart (360.440047ms)
+✔ omitting the explicit root retains strict group-write rejection without creating a leaf (16.648103ms)
+✔ trusted runtime root must be absolute, canonical and narrower than the filesystem root (12.693063ms)
+✔ parents above the trusted runtime and unrelated or prefix-sibling trees remain strict (54.070587ms)
+✔ group-writable runtime ancestors require the service UID and exact primary GID (38.480532ms)
+✔ trusted runtime scope does not admit non-sticky world-writable ancestors (47.274441ms)
+✔ existing sticky temporary ancestors remain compatible without broadening the private leaf (38.898802ms)
+✔ runtime root, intermediate and leaf symlinks are rejected without touching their targets (6.166865ms)
+✔ the compatibility option never relaxes leaf, storage-key or encrypted-file modes (14.01821ms)
+✔ inherited ioBroker group ACLs keep newly created license leaf and files private (50.26819ms)
+✔ fixed public trust storage is bounded, private, serialized and survives restart independently of a license (51.911733ms)
+✔ public trust writes accept only a bounded Buffer and never mutate an existing record on invalid input (23.494645ms)
+✔ public trust rejects unsafe modes, symlinks, hardlinks and oversized existing records (38.277585ms)
+✔ a failed atomic public trust replacement preserves the old record and removes its private temporary file (38.983283ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1020.394718

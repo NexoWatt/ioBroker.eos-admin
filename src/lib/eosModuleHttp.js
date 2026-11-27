@@ -3,6 +3,7 @@
 const { join } = require('node:path');
 const { Transform } = require('node:stream');
 const { bounded } = require('./eosModuleHost');
+const { cleanVersion } = require('./eosLegacySource');
 const { createRuntimeHealthReader, readDashboardProcessStatus } = require('./eosRuntimeHealth');
 const MIGRATION_PHASES = new Set(['IDLE', 'DISABLED', 'LICENSE_REQUIRED', 'NOT_NEEDED', 'BLOCKED', 'PREPARED',
     'STOPPING', 'TRANSFERRED', 'COMMITTED', 'ROLLING_BACK', 'ROLLED_BACK', 'ROLLBACK_REQUIRED', 'NOT_AVAILABLE']);
@@ -18,6 +19,11 @@ function publicMigrationStatus(value, migration) {
             !new RegExp(`^${MIGRATION_SOURCES[row.id]}\\.\\d{1,8}$`).test(row.source) || seen.has(row.source)) continue;
         seen.add(row.source);
         sources.push({ id: row.id, source: row.source,
+            ...(Object.hasOwn(row,'sourceVersion') ? { sourceVersion:cleanVersion(row.sourceVersion),
+                instanceVersion:cleanVersion(row.instanceVersion), adapterVersion:cleanVersion(row.adapterVersion) } : {}),
+            ...(['EOS_MIGRATION_VERSION_MISSING','EOS_MIGRATION_VERSION_DIFFERENT','EOS_MIGRATION_VERSION_INVALID'].includes(row.versionCode) ? { versionCode:row.versionCode } : {}),
+            ...(typeof row.enabled === 'boolean' ? { enabled:row.enabled } : {}),
+            ...(typeof row.targetEnabled === 'boolean' ? { targetEnabled:row.targetEnabled } : {}),
             namespacePreserved: row.namespacePreserved === true && ['TRANSFERRED', 'COMMITTED'].includes(phase) });
     }
     const issues = [];
@@ -42,10 +48,10 @@ function publicMigrationStatus(value, migration) {
 
 /** Fixed same-origin module routes; no arbitrary file or ioBroker-command proxy. */
 function registerEosModuleRoutes({ app, host, baseDir, jsonParser, authorize, csrfAllowed, requestAllowed, runtimeStatus, runtimeControl }) {
-    const guard = (write = false, page = false, dashboard = false) => (req, res, next) => {
+    const guard = (write = false, page = false, dashboard = false, migrationAdmin = false) => (req, res, next) => {
         res.setHeader('Cache-Control', 'no-store');
         if (!requestAllowed(req)) { res.status(403).json({ error: 'AUTH_ORIGIN' }); return; }
-        void bounded(Promise.resolve().then(() => authorize(req)), 5000).then(status => {
+        void bounded(Promise.resolve().then(() => authorize(req)), 5000).then(async status => {
             const runtimePage = page && /^\/runtime(?:\/|$)/.test(req.path || '');
             if (!status?.authenticated || (runtimePage && status.kiosk === true)) {
                 if (page) res.redirect(runtimePage
@@ -64,7 +70,8 @@ function registerEosModuleRoutes({ app, host, baseDir, jsonParser, authorize, cs
                     res.status(403).json({ error: 'FRONTEND_ACCESS_REQUIRED' }); return;
                 }
             } else if (status.role !== 'admin') { res.status(403).json({ error: 'ADMIN_REQUIRED' }); return; }
-            if (write && !csrfAllowed(req)) { res.status(403).json({ error: 'AUTH_CSRF' }); return; }
+            if (migrationAdmin && status.kiosk === true) { res.status(403).json({ error: 'ADMIN_REQUIRED' }); return; }
+            if (write && !(await csrfAllowed(req))) { res.status(403).json({ error: 'AUTH_CSRF' }); return; }
             res.locals.eosModuleCsrf = status.csrfToken;
             next();
         }).catch(() => { if (!res.headersSent) res.status(503).json({ error: 'AUTH_UNAVAILABLE' }); });
@@ -140,21 +147,52 @@ function registerEosModuleRoutes({ app, host, baseDir, jsonParser, authorize, cs
     for (const asset of ['index.js', 'style.css']) {
         app.get(`/runtime/${asset}`, guard(false, true), sendFile(join(baseDir, 'public', 'eos-runtime', asset)));
     }
-    app.get('/api/eos/migration', guard(), (_req, res) => {
-        void migrationReport().then(value => res.json(value),
+    const manualReport = () => host.owner?.eosMigration?.manualView?.() ||
+        { canStart:false, canActivateDevices:false, revision:null, operation:{ state:'idle', code:'' } };
+    app.get('/api/eos/migration', guard(false,false,false,true), (_req, res) => {
+        const migration = host.owner?.eosMigration;
+        const report = typeof migration?.manualReview === 'function'
+            ? bounded(migration.manualReview()).then(value => publicMigrationStatus(value,migration)) : migrationReport();
+        void report.then(value => res.json({ ...value, ...manualReport(), csrfToken:res.locals.eosModuleCsrf }),
             () => res.status(503).json({ error: 'EOS_MIGRATION_STATUS_UNAVAILABLE' }));
     });
+    app.post('/api/eos/migration/start', guard(true,false,false,true), jsonParser, guard(true,false,false,true), (req,res) => {
+        const body = req.body;
+        if (!body || typeof body !== 'object' || Array.isArray(body) || Object.keys(body).length !== 2 ||
+            !Object.hasOwn(body,'expectedRevision') || !Object.hasOwn(body,'activateDevices') || typeof body.activateDevices !== 'boolean' ||
+            typeof body.expectedRevision !== 'string' || !/^[a-f0-9-]{36}$/.test(body.expectedRevision)) {
+            res.status(400).json({ error:'EOS_MIGRATION_REQUEST_INVALID' }); return;
+        }
+        const migration = host.owner?.eosMigration;
+        try {
+            if (typeof migration?.requestManual !== 'function') throw {code:'EOS_MIGRATION_ACTION_UNAVAILABLE'};
+            migration.requestManual(body.activateDevices, body.expectedRevision, async () => {
+                const status = await bounded(Promise.resolve().then(() => authorize(req)), 5000);
+                return requestAllowed(req) && status?.authenticated === true && status.role === 'admin' &&
+                    status.kiosk !== true && !status.mustChangePassword && await csrfAllowed(req);
+            });
+            res.status(202).json({ ...publicMigrationStatus(migration.status(),migration), ...manualReport(), csrfToken:res.locals.eosModuleCsrf });
+        } catch (error) {
+            const code = /^EOS_MIGRATION_[A-Z_]{1,65}$/.test(error?.code) ? error.code : 'EOS_MIGRATION_ACTION_UNAVAILABLE';
+            res.status(code === 'EOS_MIGRATION_REQUEST_INVALID' ? 400 : 409).json({error:code});
+        }
+    });
+    app.all('/api/eos/migration/start', guard(false,false,false,true), (_req,res) => res.setHeader('Allow','POST').status(405).json({error:'METHOD_NOT_ALLOWED'}));
+    app.use('/api/eos/migration/start', (error,_req,res,next) => {
+        if (res.headersSent) { next(error); return; }
+        res.status(error?.type === 'entity.too.large' ? 413 : 400).json({error:'EOS_MIGRATION_INVALID_JSON'});
+    });
     app.all('/api/eos/migration', guard(), (_req, res) => res.setHeader('Allow', 'GET').status(405).json({ error: 'METHOD_NOT_ALLOWED' }));
-    app.get('/migration', guard(false, true), (req, res, next) => {
+    app.get('/migration', guard(false, true, false, true), (req, res, next) => {
         if (req.path.endsWith('/')) { next(); return; }
         res.redirect(308, '/migration/');
     });
-    app.get('/migration/', guard(false, true), (req, res) => {
+    app.get('/migration/', guard(false, true, false, true), (req, res) => {
         res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; object-src 'none'; frame-ancestors 'self'");
         res.setHeader('X-Content-Type-Options', 'nosniff');
         sendFile(join(baseDir, 'public', 'eos-migration', 'index.html'))(req, res);
     });
-    app.get('/migration/index.js', guard(false, true), sendFile(join(baseDir, 'public', 'eos-migration', 'index.js')));
+    app.get('/migration/index.js', guard(false, true, false, true), sendFile(join(baseDir, 'public', 'eos-migration', 'index.js')));
     for (const id of ['devices', 'eebus', 'backup', 'ocpp']) {
         const api = `/api/eos/modules/${id}`;
         app.get(api, guard(), (req, res) => {

@@ -2,11 +2,13 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const path = require('node:path');
-const { EosLegacyMigration } = require('../src/lib/eosLegacyMigration');
-const { EosModuleHost } = require('../src/lib/eosModuleHost');
-const { EosModuleConfigStore } = require('../src/lib/eosModuleConfigStore');
+const productRoot = path.resolve(process.env.EOS_MIGRATION_PACKAGE_ROOT || path.join(__dirname,'..'));
+const libraries = path.join(productRoot,process.env.EOS_MIGRATION_PACKAGE_ROOT ? 'build/lib' : 'src/lib');
+const { EosLegacyMigration } = require(path.join(libraries,'eosLegacyMigration'));
+const { EosModuleHost } = require(path.join(libraries,'eosModuleHost'));
+const { EosModuleConfigStore } = require(path.join(libraries,'eosModuleConfigStore'));
 const { randomBytes, createCipheriv, createDecipheriv } = require('node:crypto');
-const defaults = require('../io-package.json').native.eosUi;
+const defaults = require(path.join(productRoot,'io-package.json')).native.eosUi;
 function fixture(sources = [{ id: 'devices', source: 'nexowatt-devices.0', version: '0.5.176', native: { devices: [], pollIntervalMs: 2500 } }]) {
     const objects = new Map(); const states = new Map(); const mutations = []; const logs = [];
     const secret = randomBytes(32);
@@ -35,7 +37,7 @@ function fixture(sources = [{ id: 'devices', source: 'nexowatt-devices.0', versi
         objects.set(object._id, object); states.set(`${object._id}.alive`, { val: object.common.enabled, ack: true, ts: Date.now() });
     }
     const factories = { devices: { validateConfig: value => ({ ...value, enabled: value.enabled === true }), createHostedModule: ({ adapter }) => ({ async start() { await adapter.setStateAsync('devices.ess1.power', { val: 10, ack: true }); }, async stop() {}, getStatus: () => ({}) }) } };
-    const migration = new EosLegacyMigration(owner, { baseDir: path.resolve(__dirname, '..'), dataDir: '/tmp/eos-migration-test-unused', factories, stopTimeoutMs: 150, startTimeoutMs: 200 });
+    const migration = new EosLegacyMigration(owner, { baseDir: productRoot, dataDir: '/tmp/eos-migration-test-unused', factories, stopTimeoutMs: 150, startTimeoutMs: 200 });
     owner.eosMigration = migration;
     return { owner, migration, objects, states, mutations, factories, logs };
 }
@@ -156,10 +158,10 @@ test('automatic handover preserves namespace, custom/history objects and setting
     assert.equal(x.mutations.filter(row => row.id.startsWith('system.adapter.')).length, before);
 });
 
-test('preflight ambiguity, unknown version, remote host, missing license and existing destination never stop a source', async () => {
+test('preflight ambiguity, incompatible device shape, remote host, missing license and existing destination never stop a source', async () => {
     const scenarios = [
         x => { const other = structuredClone(x.objects.get('system.adapter.nexowatt-devices.0')); other._id = 'system.adapter.nexowatt-devices.2'; x.objects.set(other._id, other); },
-        x => { x.objects.get('system.adapter.nexowatt-devices.0').common.version = '99.0.0'; },
+        x => { x.objects.get('system.adapter.nexowatt-devices.0').native = { unrecognizedDeviceInventory: [{ id: 'retained' }] }; },
         x => { x.objects.get('system.adapter.nexowatt-devices.0').common.host = 'remote'; },
         x => { x.owner.eosLicenseService.allowsEmbeddedModule = () => false; },
         x => { x.owner.config.eosModules.devices = x.migration.envelope({ enabled: false }); },
@@ -620,7 +622,7 @@ test('atomic mixed group leaves retained legacy devices live and permits unrelat
         { id: 'backup', source: 'nexowatt-backup.0', version: '99.9.9', native: {} }]);
     await x.migration.start();
     assert.equal(x.migration.phase, 'BLOCKED');
-    assert.deepEqual(x.migration.status().issues, [{ id: 'backup', source: 'nexowatt-backup.0', code: 'EOS_MIGRATION_SOURCE_VERSION' }]);
+    assert.deepEqual(x.migration.status().issues, [{ id: 'backup', source: 'nexowatt-backup.0', code: 'EOS_MIGRATION_MODULE_FORMAT_UNVERIFIED' }]);
     assert.equal(x.migration.allowsWrites(), false); assert.equal(x.migration.allowsSupervisorStartup(), true);
     for (const id of ['backup', 'devices']) assert.equal(x.migration.allowsWrites(id), false);
     for (const id of ['ui', 'ems', 'eebus', 'ocpp']) assert.equal(x.migration.allowsWrites(id), true);
@@ -694,4 +696,388 @@ test('a late readiness rejection after intentional shutdown does not begin rollb
     assert.equal(x.migration.allowsWrites(), false);
     assert.equal(x.objects.get('system.adapter.nexowatt-devices.0').common.enabled, false);
     assert.equal(x.mutations.some(row => row.patch?.common?.enabled === true), false);
+});
+
+test('source versions describe the source; accepted Devices semantics decide compatibility across releases', async () => {
+    const devices = require('../modules/devices');
+    const catalog = await devices.getCatalog();
+    const template = catalog.templates.find(row => Array.isArray(row.protocols) && row.protocols.includes('modbusTcp'));
+    assert.ok(template, 'released Modbus profile');
+    const device = { id: 'meter-main', templateId: template.id, protocol: 'modbusTcp', enabled: true };
+    for (const [version, native] of [
+        ['0.5.172', { devices: [], devicesJson: JSON.stringify([device]) }],
+        ['0.5.143', { devices: [device] }],
+        ['37.0.199', { devicesJson: JSON.stringify([device]) }],
+        [undefined, { devices: [device] }]
+    ]) {
+        const f = fixture([{ id: 'devices', source:'nexowatt-devices.0', version, native, enabled:false }]);
+        f.migration.options.factories = { devices };
+        const object = f.objects.get('system.adapter.nexowatt-devices.0');
+        const row = await f.migration.candidate('devices', object, true);
+        const config = f.migration.decode(row.envelope);
+        assert.equal(row.sourceVersion, version ?? null);
+        assert.equal(row.schemaVerified,true);
+        assert.equal(row.enabled,false);
+        assert.equal(row.targetEnabled,true);
+        assert.equal(config.enabled,true);
+        assert.deepEqual(config.devices.map(v=>v.id),['meter-main']);
+        assert.equal(f.objects.get(object._id).common.enabled,false);
+        assert.equal(f.mutations.length,0);
+        if (!version) assert.equal(row.versionCode,'EOS_MIGRATION_VERSION_MISSING');
+    }
+});
+
+test('UI and Devices stopped source migration retains source namespaces with missing, alternate and differing version metadata', async () => {
+    const f=fixture([
+        { id:'ui',source:'nexowatt-ui.0',version:'1.0.35',enabled:false,native:{history:{instance:'influxdb.0'},datapoints:{gridPointPower:'meter.0.w'}} },
+        { id:'devices',source:'nexowatt-devices.0',version:undefined,enabled:false,native:{devices:[],devicesJson:'[]'} }
+    ]);
+    f.migration.options.factories.devices = require('../modules/devices');
+    for (const [name,version] of [['nexowatt-ui','1.0.38'],['nexowatt-devices','0.5.172']]) {
+        const id='system.adapter.'+name;
+        f.objects.set(id,{_id:id,type:'adapter',common:{name,version},native:{}});
+    }
+    await f.migration.start();
+    assert.equal(f.migration.phase,'TRANSFERRED');
+    const sources=f.migration.status().sources;
+    assert.equal(sources.find(s=>s.id==='ui').versionCode,'EOS_MIGRATION_VERSION_DIFFERENT');
+    const ds=sources.find(s=>s.id==='devices');
+    assert.equal(ds.sourceVersion,'0.5.172');assert.equal(ds.instanceVersion,null);
+    assert.equal(f.owner.config.eosUi.history.instance,'influxdb.0');
+    assert.ok(sources.every(s=>s.namespacePreserved));
+    assert.ok(f.mutations.every(ev=>!ev.patch?.common?.enabled));
+    const restarted=new EosLegacyMigration(f.owner,f.migration.options);
+    await restarted.start();assert.equal(restarted.phase,'TRANSFERRED');
+    assert.deepEqual(restarted.status().sources.map(s=>s.sourceVersion),sources.map(s=>s.sourceVersion));
+});
+
+test('a recognizable source version never substitutes for compatible source identity or configuration',async()=>{
+    const scenarios=[
+        ['EOS_MIGRATION_SOURCE_IDENTITY', f=>{f.objects.get('system.adapter.nexowatt-ui.0').common.name='foreign-ui';}],
+        ['EOS_MIGRATION_SOURCE_IDENTITY', f=>{const id='system.adapter.nexowatt-ui';f.objects.set(id,{_id:id,type:'adapter',common:{name:'wrong',version:'1.0.35'},native:{}});}],
+        ['EOS_MIGRATION_UI_CONFIG_SHAPE', f=>{f.objects.get('system.adapter.nexowatt-ui.0').native.datapoints={gridPointPower:{id:'a'}};}],
+        ['EOS_MIGRATION_UI_CONFIG_SHAPE', f=>{f.objects.get('system.adapter.nexowatt-ui.0').native.history={instance: {server:'other'}};}],
+        ['EOS_MIGRATION_DEVICES_CONFIG_SHAPE', f=>{f.objects.get('system.adapter.nexowatt-devices.0').native={hardwareMap:[{}]};}],
+        ['EOS_DEVICES_UNKNOWN_TEMPLATE', f=>{f.objects.get('system.adapter.nexowatt-devices.0').native.devices=[{id:'a',templateId:'nonexistent-qa-profile',protocol:'modbusTcp'}];}],
+    ];
+    for(const [code,alter] of scenarios){
+        const f=fixture([{id:'ui',source:'nexowatt-ui.0',version:'1.0.35',native:{siteName:'Customer'}},
+            {id:'devices',source:'nexowatt-devices.0',version:'0.5.172',native:{devices:[]}}]);
+        f.migration.options.factories.devices=require('../modules/devices');alter(f);
+        await f.migration.start();assert.equal(f.migration.phase,'BLOCKED');
+        assert.equal(f.migration.status().code,code);
+        assert.ok(f.mutations.every(ev=>!ev.id.startsWith('system.adapter.')));
+    }
+});
+
+test('stopped UI 1.0.35 and Devices 0.5.172 keep old Influx history readable over HTTP, restart and rollback', async t => {
+    const { createHarness } = require('../ui/test/unified/http-harness.cjs');
+    const oldUi = 'nexowatt-ui.0', oldDevices = 'nexowatt-devices.0', historian = 'influxdb.1';
+    // UI 1.0.35 uses this exact ID for its historian export and stores the
+    // separately assigned consumption source in native.history.datapoints.
+    const pvId = oldUi + '.historie.core.pv.totalW';
+    const loadId = oldDevices + '.devices.meter1.activePower';
+    const x = fixture([
+        { source: oldUi, version: '1.0.35', enabled: false, native: {
+            siteName: 'Legacy test site', history: { instance: historian, datapoints: { consumptionTotal: loadId } },
+        } },
+        { source: oldDevices, version: '0.5.172', enabled: false,
+            native: { pollIntervalMs: 2500, modbusTimeoutMs: 2000, registerAddressOffset: 0, devicesJson: '[]', devices: [] } },
+    ]);
+    // Production module validation, independent of an active device connection.
+    x.factories.devices = require(path.join(productRoot,'modules/devices'));
+    const from = Math.floor((Date.now() - 86400000) / 600000) * 600000;
+    const oldPointAt = from + 600000;
+    const alias = 'site-historical-house-power';
+    const oldRecord = (id, custom) => ({ _id:id,type:'state',common:{type:'number',role:'value.power',unit:'W',custom:{[historian]:custom}},native:{} });
+    x.objects.set(pvId,oldRecord(pvId,{enabled:true}));
+    x.objects.set(loadId,oldRecord(loadId,{enabled:true,aliasId:alias}));
+    for (const id of [pvId,loadId]) x.states.set(id,{val:null,ack:true,ts:from-1000});
+    const original = [oldUi,oldDevices].map(id => structuredClone(x.objects.get('system.adapter.'+id)));
+    const metadata = [pvId,loadId].map(id => structuredClone(x.objects.get(id)));
+    const archive = new Map([[pvId,[[oldPointAt,1731]]],[alias,[[oldPointAt,642]]],
+        [x.owner.namespace+'.historie.core.pv.totalW',[[oldPointAt,9999]]]]);
+    const realEnabled = !!process.env.EOS_TEST_IOBROKER_INFLUXDB;
+    if (realEnabled) assert.ok(process.env.EOS_TEST_INFLUXD,'an isolated InfluxDB binary is required');
+    const database = realEnabled ? await require('./fixtures/legacy-influx-provider.cjs').realHistorian(t,archive,{[loadId]:alias}) : null;
+    const reads = [];
+    const historyResponse = (instance, command, body, callback) => {
+        assert.equal(instance,historian); assert.equal(command,'getHistory');
+        const key = x.objects.get(body.id)?.common.custom?.[instance]?.aliasId || body.id;
+        reads.push(key);
+        if (database) return database.query(body,callback);
+        const result = (archive.get(key) || []).filter(([ts])=>ts>=body.options.start && ts<=body.options.end)
+            .map(([ts,val])=>({ts,val}));
+        callback({result});
+    };
+    const originalReadings = new Map([...archive].map(([k,v])=>[k,structuredClone(v)]));
+    // Verify original storage, not just the current state's last numeric value.
+    let newPointAt;
+    async function readArchivedHttp(owner, recordNewSample = false) {
+        const retained = owner.config.eosUiMigration;
+        assert.equal(retained?.preserveNamespace,true);
+        const h = await createHarness({legacyNamespace:retained.source});
+        try {
+            Object.assign(h.adapter.config,owner.config.eosUi);
+            for (const [id,obj] of x.objects) h.objects.set(id,obj);
+            for (const [id,state] of x.states) h.states.set(id,state);
+            h.owner.sendTo = historyResponse;
+            assert.equal(h.adapter.namespace,oldUi);
+            const token = await h.login('admin');
+            const response = await h.request('/api/history?from='+from+'&to='+(from+1200000)+'&step=600',{token});
+            assert.equal(response.status,200,response.text);
+            assert.equal(response.data.ok,true,response.text);
+            // ioBroker.influxdb returns the Flux aggregateWindow end timestamp.
+            const bucketAt = database ? oldPointAt+600000 : oldPointAt;
+            assert.ok(response.data.series.pv.values.some(([ts,val])=>ts===bucketAt && val===1731),JSON.stringify(response.data.series.pv));
+            assert.ok(response.data.series.load.values.some(([ts,val])=>ts===bucketAt && val===642),JSON.stringify(response.data.series.load));
+            assert.ok(reads.includes(pvId) && reads.includes(alias));
+            if (recordNewSample) {
+                newPointAt = Date.now();
+                let success, failure;
+                const recorded = new Promise((resolve,reject)=>{success=resolve;failure=reject;});
+                const timeout = setTimeout(()=>failure(new Error('retained PV recorder never received the new sample')),3000);
+                const persist = h.owner.setForeignStateAsync;
+                h.owner.setForeignStateAsync = async (id,state,...args) => {
+                    try {
+                        await persist(id,state,...args);
+                        assert.equal(id,pvId);
+                        assert.equal(state.ack,true);
+                        assert.equal(state.ts,newPointAt);
+                        assert.ok(x.objects.get(id)?.common.custom?.[historian]?.enabled);
+                        if (database) await database.append(id,state.ts,state.val);
+                        archive.get(id).push([state.ts,state.val]);
+                        x.states.set(id,structuredClone(state)); success();
+                    } catch (error) { failure(error); throw error; }
+                };
+                // Real EOS publisher/hosted namespace, fixture ioBroker state-change
+                // delivery, real SDK/database when the acceptance harness is enabled.
+                try {
+                    h.adapter._nwSetHistorieValue('historie.core.pv.totalW',1902,newPointAt,0);
+                    await recorded;
+                } finally { clearTimeout(timeout); }
+            }
+        } finally { await h.close(); }
+    }
+    await x.migration.start();
+    assert.equal(x.migration.phase,'TRANSFERRED',JSON.stringify(x.migration.status()));
+    x.owner.eosHostedRuntime = {status:()=>({emsReady:true,canWrite:true})};
+    await x.migration.verifyRuntime();
+    assert.equal(x.migration.phase,'COMMITTED',JSON.stringify(x.migration.status()));
+    await readArchivedHttp(x.owner);
+    // Replace runtime and config memory while retaining only controller objects
+    // and states. A second start must restore the migrated destination itself.
+    await x.migration.stop();
+    x.owner.config = {eosUi:structuredClone(defaults),eosModules:{}};
+    const restarted = new EosLegacyMigration(x.owner,x.migration.options);
+    t.after(()=>restarted.stop());
+    await restarted.start();
+    assert.equal(restarted.phase,'COMMITTED',JSON.stringify(restarted.status()));
+    await readArchivedHttp(x.owner,true);
+    const mutationsBeforeRepeat = x.mutations.length;
+    await restarted.start();
+    assert.equal(restarted.phase,'COMMITTED');
+    assert.equal(x.mutations.length,mutationsBeforeRepeat,'committed resume must not start another transfer');
+    await restarted.rollback('EOS_MIGRATION_FIXTURE_ROLLBACK',true);
+    assert.equal(restarted.phase,'ROLLED_BACK');
+    for (const [i,id] of [oldUi,oldDevices].entries()) assert.deepEqual(x.objects.get('system.adapter.'+id),original[i]);
+    for (const [i,id] of [pvId,loadId].entries()) {
+        assert.deepEqual(x.objects.get(id),metadata[i]);
+        assert.equal(x.states.get(id).val,id === pvId ? 1902 : null);
+    }
+    assert.ok(newPointAt > oldPointAt);
+    originalReadings.get(pvId).push([newPointAt,1902]);
+    assert.deepEqual(archive,originalReadings,'old archive and exactly one new sample coexist under the retained series');
+    if (database) await database.verify();
+    assert.equal(x.mutations.some(row => row.patch?.common?.enabled === true),false);
+});
+
+test('installer history settings changed to an unsupported form while stopping trigger rollback', async () => {
+    const f=fixture([{id:'ui',source:'nexowatt-ui.0',version:'1.0.35',native:{history:{instance:'influxdb.0'}}}]);
+    const id='nexowatt-ui.0.installer.configJson';
+    f.states.set(id,{val:'{"history":{"instance":"influxdb.0"}}',ack:true});
+    const update=f.owner.extendForeignObjectAsync;
+    f.owner.extendForeignObjectAsync=async (object,patch)=>{
+        await update(object,patch);
+        if(patch.common?.enabled===false) f.states.set(id,{val:'{"history":{"instance":7}}',ack:true});
+    };
+    await f.migration.start();assert.equal(f.migration.phase,'ROLLED_BACK');
+    assert.equal(f.migration.status().code,'EOS_MIGRATION_UI_CONFIG_SHAPE');
+    assert.equal(f.objects.get('system.adapter.nexowatt-ui.0').common.enabled,true);
+    assert.equal(f.states.get(id).val,'{"history":{"instance":7}}');
+    assert.equal(f.owner.config.eosUiMigration,undefined);
+});
+
+test('fallback binding changes after preflight cannot authorize stopping or transferring a different source',async()=>{
+    const f=fixture([{id:'devices',source:'nexowatt-devices.0',version:undefined,native:{devices:[]}}]);
+    const device=f.objects.get('system.adapter.nexowatt-devices.0');
+    const id='system.adapter.nexowatt-devices';
+    f.objects.set(id,{_id:id,type:'adapter',common:{name:'nexowatt-devices',version:'0.5.172'},native:{}});
+    const row=await f.migration.candidate('devices',device);
+    assert.equal(await f.migration.matchesSource(device,row),true);
+    f.objects.get(id).common.version='0.5.173';
+    assert.equal(await f.migration.matchesSource(device,row),false);
+    f.objects.delete(id);
+    assert.equal(await f.migration.matchesSource(device,row),false);
+});
+
+function manualFixture(t, { enabled = false, pauseEms = async () => {}, paused = '' } = {}) {
+    const x = fixture([
+        { source:'nexowatt-ui.0', version:'1.0.35', enabled, native:{siteName:'Kundenanlage',installerConfig:{}} },
+        { source:'nexowatt-devices.0', version:'0.5.172', enabled, native:{devices:[{id:'meter',enabled:false}],pollIntervalMs:2500} },
+    ]);
+    x.migration.options.startTimeoutMs = 5000;
+    x.owner.config.eosAutoMigrate = false;
+    const lifecycle=[];
+    const host = new EosModuleHost(x.owner, { ...x.migration.options,
+        processEnabled:id=>id==='devices' && paused!==id, standbyRequested:()=>false });
+    x.owner.eosModuleHost = host;
+    x.owner.eosRuntimeControl = {isEnabled:id=>paused!==id,dashboardIntent:id=>({enabled:paused!==id,error:''})};
+    x.owner.eosOwnership = { canWrite:id=>x.migration.allowsWrites(id),refresh:async()=>{} };
+    const stopped={active:false,canWrite:false,process:{state:'stopped',pid:null}};
+    x.owner.eosHostedRuntime = {
+        pause:async()=>{lifecycle.push('pause UI');}, pauseEms:async()=>{lifecycle.push('pause EMS');await pauseEms();},
+        resume:async()=>{lifecycle.push('start UI '+x.owner.config.eosUiMigration?.source);},
+        resumeEms:async()=>{lifecycle.push('start EMS '+x.owner.config.eosUiMigration?.source);},
+        status:()=>({ ui:paused==='ui'?stopped:{active:true},
+            ems:paused==='ems'?stopped:{active:true,emsReady:true,canWrite:x.migration.allowsWrites('ems')} }),
+        async stop(){lifecycle.push('stop');},
+    };
+    t.after(async()=>{x.migration.stop();await host.stop();});
+    return { ...x,host,lifecycle };
+}
+
+test('live manual takeover of stopped UI 1.0.35 and Devices 0.5.172 keeps device switches, old identity, and independent writer scopes', async t=>{
+    let release; const barrier=new Promise(resolve=>{release=resolve;});
+    let entered; const holding=new Promise(resolve=>{entered=resolve;});
+    const x=manualFixture(t,{pauseEms:async()=>{entered();await barrier;}});
+    await x.migration.start(); await x.host.start();
+    const original=structuredClone(x.objects.get('system.adapter.nexowatt-devices.0'));
+    const before=x.mutations.length;
+    const preview=await x.migration.manualReview();
+    assert.equal(preview.phase,'DISABLED');
+    assert.deepEqual(preview.sources.map(row=>row.sourceVersion).sort(),['0.5.172','1.0.35']);
+    assert.equal(x.mutations.length,before);
+    const view=x.migration.manualView();
+    assert.equal(view.canActivateDevices,true);
+    assert.throws(()=>x.migration.requestManual(true,'old',async()=>true),{code:'EOS_MIGRATION_REVISION_CONFLICT'});
+    x.migration.requestManual(true,view.revision,async()=>true);
+    try {
+        assert.equal(x.migration.manualView().operation.state,'running');
+        assert.throws(()=>x.migration.requestManual(true,view.revision,async()=>true),{code:'EOS_MIGRATION_BUSY'});
+        await holding;
+        for(const id of ['ui','ems','devices']) assert.equal(x.migration.allowsWrites(id),false,id);
+        for(const id of ['eebus','backup','ocpp']) assert.equal(x.migration.allowsWrites(id),true,id);
+        await assert.rejects(x.migration.saveUi({siteName:'competing UI save'}),{code:'EOS_MIGRATION_BUSY'});
+        assert.equal(x.mutations.slice(before).some(item=>item.id.endsWith('.configuration')),false);
+    } finally {release();}
+    await x.migration.whenManualIdle();
+    assert.deepEqual(x.migration.manualView().operation,{state:'complete',code:''},JSON.stringify(x.logs));
+    assert.equal(x.migration.phase,'COMMITTED');
+    assert.equal(x.migration.manualView().canStart,false);
+    assert.deepEqual(x.lifecycle,['pause UI','pause EMS','start UI nexowatt-ui.0','start EMS nexowatt-ui.0']);
+    assert.equal(x.host.namespace('devices'),'nexowatt-devices.0');
+    assert.equal((await x.host.status('devices')).active,true);
+    assert.equal(x.host.readConfig('devices').enabled,true);
+    assert.equal(x.host.readConfig('devices').devices[0].enabled,false);
+    assert.deepEqual(x.objects.get(original._id),original);
+    assert.equal(x.owner.config.eosUi.siteName,'Kundenanlage');
+    assert.equal(x.mutations.slice(before).some(row=>row.id.startsWith('system.adapter.')),false);
+});
+
+test('manual action honors disabled Devices without opt-in and a deliberately paused EMS on rebind',async t=>{
+    const x=manualFixture(t,{paused:'ems'});
+    await x.migration.start();await x.host.start();await x.migration.manualReview();
+    x.migration.requestManual(false,x.migration.manualView().revision,async()=>true);
+    await x.migration.whenManualIdle();
+    assert.deepEqual(x.migration.manualView().operation,{state:'complete',code:''},JSON.stringify(x.logs));
+    assert.equal(x.host.readConfig('devices').enabled,false);
+    assert.equal((await x.host.status('devices')).active,false);
+    assert.equal(x.lifecycle.includes('start EMS nexowatt-ui.0'),false);
+});
+
+test('changed inventory or withdrawn administrator authority cannot start a stale manual takeover',async t=>{
+    const x=manualFixture(t);
+    await x.migration.start();await x.host.start();await x.migration.manualReview();
+    x.objects.get('system.adapter.nexowatt-devices.0').native.pollIntervalMs=4000;
+    const base=x.mutations.length;
+    x.migration.requestManual(true,x.migration.manualView().revision,async()=>true);
+    await x.migration.whenManualIdle();
+    assert.equal(x.migration.manualView().operation.code,'EOS_MIGRATION_INVENTORY_CHANGED');
+    await x.migration.manualReview();
+    x.migration.requestManual(true,x.migration.manualView().revision,async()=>false);
+    await x.migration.whenManualIdle();
+    assert.equal(x.migration.manualView().operation.code,'EOS_MIGRATION_AUTHORIZATION_CHANGED');
+    assert.deepEqual(x.lifecycle,[]);
+    assert.equal(x.mutations.length,base);
+});
+
+test('live migration checks the second authorization after stopping target processes and refuses an unconfirmed stop',async t=>{
+    for(const failure of ['authorization','stop']){
+        const x=manualFixture(t,{pauseEms:async()=>{if(failure==='stop')throw new Error('test stop failed');}});
+        await x.migration.start();await x.host.start();await x.migration.manualReview();
+        const base=x.mutations.length;
+        let permits=0;
+        x.migration.requestManual(true,x.migration.manualView().revision,async()=>++permits===1);
+        await x.migration.whenManualIdle();
+        const code=failure==='stop'?'EOS_MIGRATION_STOP_UNCONFIRMED':'EOS_MIGRATION_AUTHORIZATION_CHANGED';
+        assert.equal(x.migration.manualView().operation.code,code);
+        assert.equal(x.migration.phase,'BLOCKED');
+        assert.equal(x.mutations.length,base);
+        assert.equal(x.migration.allowsWrites('eebus'),true);
+        assert.equal(x.migration.allowsWrites('devices'),false);
+        assert.equal(x.migration.allowsWrites('ems'),false);
+    }
+});
+
+test('source namespace handover preserves existing customer settings and active historian targets, including late target changes', async () => {
+    for (const mode of ['installer','historian','empty','default','late']) {
+        const f=fixture([{id:'ui',source:'nexowatt-ui.0',version:'1.0.35',native:{history:{instance:'influxdb.0'}}}]);
+        const prefix=f.owner.namespace, key=prefix+'.installer.configJson';
+        const patch={datapoints:{gridPointPower:'target.0.existing-grid'},history:{instance:'influxdb.5'}};
+        const putPatch=p=>f.states.set(key,{val:JSON.stringify(p),ack:true});
+        f.objects.set(key,{_id:key,type:'state',common:{type:'string'},native:{}});
+        putPatch(mode==='installer'?patch:mode==='default'?{history:defaults.history}:{});
+        const historian=prefix+'.historie';
+        f.objects.set(historian,{_id:historian,type:'channel',common:{name:'Historie (Influx)'},native:{},from:'system.adapter.'+prefix});
+        const counter=historian+'.core.pv.totalW';
+        f.objects.set(counter,{_id:counter,type:'state',common:{type:'number',custom:mode==='historian'?{'influxdb.5':{enabled:true}}:{}},native:{}});
+        if(mode==='late') {
+            const update=f.owner.extendForeignObjectAsync;
+            f.owner.extendForeignObjectAsync=async (id,p)=>{
+                await update(id,p);if(p.common?.enabled===false)putPatch(patch);
+            };
+        }
+        await f.migration.start();
+        if(mode==='empty'||mode==='default') assert.equal(f.migration.phase,'TRANSFERRED',mode);
+        else {
+            assert.equal(f.migration.phase,mode==='late'?'ROLLED_BACK':'BLOCKED',mode);
+            assert.equal(f.migration.status().code,'EOS_MIGRATION_DESTINATION_STATES');
+            assert.equal(f.objects.get('system.adapter.nexowatt-ui.0').common.enabled,true);
+            assert.equal(f.owner.config.eosUiMigration,undefined);
+            if(mode!=='historian') assert.deepEqual(JSON.parse(f.states.get(key).val),patch);
+        }
+    }
+});
+
+
+test('only exact controller-attributed EOS provisioning can leave an empty root channel available to migration',async()=>{
+    const cases=[
+        ['historie','Historie (Influx)','self',true], ['historie','EOS Historie','self',true],
+        ['smarthome','SmartHome','self',true], ['ems','EMS (intern)','self',true],
+        ['energyFlow','local commissioning','self',false], ['chargepoints','Ladestationen','self',false],
+        ['smarthome','SmartHome','system.adapter.admin.0',false], ['ems','EMS',undefined,false],
+        ['historie','Customer archive','self',false], ['smarthome','Other site','self',false],
+    ];
+    for(const [branch,name,from,permitted] of cases){
+        const f=fixture([{id:'ui',source:'nexowatt-ui.0',version:'1.0.35',native:{siteName:'Customer'}}]);
+        const key=f.owner.namespace+'.'+branch;
+        f.objects.set(key,{_id:key,type:'channel',common:{name},native:{},from:from==='self'?'system.adapter.'+f.owner.namespace:from});
+        await f.migration.start();
+        if(permitted) assert.equal(f.migration.phase,'TRANSFERRED',key);
+        else{
+            assert.equal(f.migration.status().code,'EOS_MIGRATION_DESTINATION_STATES',key);
+            assert.equal(f.mutations.some(ev=>ev.patch?.common?.enabled===false),false);
+        }
+    }
 });

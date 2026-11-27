@@ -1,0 +1,11 @@
+{
+  "software": "9.0.35",
+  "fixture": "Browser renderers loaded from published JavaScript, synthetic measurements",
+  "farmRequested": "Entladen 636 W",
+  "farmAccepted": "Entladen 636 W",
+  "farmMeasured": "Entladen 576 W",
+  "farmSummary": "Schreibauftrag übergeben; tatsächliche Leistung separat prüfen · farm",
+  "storageController": "Speicherregelung: Status unbekannt · EMS-Soll: Entladen 636 W · Quelle: unbekannt · Grund: Eigenverbrauch: NVP-Balancing entladen (636 W, Ist 576 W, Banddifferenz 60 W)",
+  "dashboardWithoutCanonicalNvp": "Betriebsstatus prüfen",
+  "dashboardWithCanonicalNvp": "Alle Systeme normal"
+}

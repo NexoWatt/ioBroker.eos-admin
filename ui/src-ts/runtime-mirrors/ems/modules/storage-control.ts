@@ -24,7 +24,7 @@
  * - Der nächste Schritt ist pro Modul echte Typisierung statt pauschalem No-Check.
  * - Fachliche Kommentare markieren die Abschnitte, die später einzeln migriert werden.
  *
- * Original-Hash: ffeab35451e89bc5c3ec83a453e8b11c5d4e86571c82d97224c3e51a90654cc8
+ * Original-Hash: ae3cf2137888b00c49203df590eb6901886751e59273b0c91f232e4e0a7beba6
  */
 
 /**
@@ -45,7 +45,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/modules/storage-control.ts
- * Quell-Hash: sha256:e485ef1fdbbbf90d33adf49bdd1a17e97e7f216a39072dc3a0e6437e294d9397
+ * Quell-Hash: sha256:b9fac4a7bc07981e3690b175bab60290201fa8c6d4c8bdcdd016577f455c22ea
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -112,6 +112,7 @@
 'use strict';
 
 const { BaseModule } = require('./base');
+const { readFlowMeasurement } = require('../../lib/flow-measurement');
 const { dynamicGridHasControl } = require('../services/dynamic-grid-ownership');
 const { evaluateArbitrageRequest, selectConfiguredArbitrageRequest, configuredArbitrageFallbackProfile } = require('../services/arbitrage-control');
 const { withActuatorShadowContext } = require('../services/actuator-shadow-arbiter');
@@ -1067,13 +1068,17 @@ function resolveStorageAntiExportTarget(input = {}) {
     // einen zuvor akzeptierten Entladebefehl, darf kein neuer Entladevorgang
     // gestartet werden. Das ist kein Abbruch einer laufenden Regelung, sondern
     // verhindert einen neuen, physikalisch nicht begruendbaren Exportbefehl.
-    if (belowTarget && !physicalBaseKnown) {
+    // An old self-consumption command cannot prove current battery discharge
+    // once its configured meter is unavailable and the NVP is exporting.
+    const stopWithoutFeedback = input.dischargeFeedbackLost === true && nvpW < -deadbandW;
+    if (belowTarget && (!physicalBaseKnown || stopWithoutFeedback)) {
         return {
             active: true,
             requestedW,
             targetW: 0,
-            status: 'block-new-discharge-without-anchor',
-            reason: `NVP-Anti-Export: keine neue Entladung ohne Ist-/Kommandoanker bei NVP ${Math.round(nvpW)} W`,
+            status: stopWithoutFeedback ? 'stop-export-without-feedback' : 'block-new-discharge-without-anchor',
+            reason: stopWithoutFeedback ? 'NVP-Anti-Export: Entladung gestoppt, konfigurierte Batterie-Istmessung fehlt'
+                : `NVP-Anti-Export: keine neue Entladung ohne Ist-/Kommandoanker bei NVP ${Math.round(nvpW)} W`,
             nvpW,
             targetNvpW,
             nvpErrorW,
@@ -1081,7 +1086,7 @@ function resolveStorageAntiExportTarget(input = {}) {
             graceMs,
             exportActive,
             belowTarget: true,
-            explicitStop: false,
+            explicitStop: stopWithoutFeedback,
             capped: true,
             capW: 0,
             proportionalTargetW: 0,
@@ -1794,7 +1799,7 @@ class SpeicherRegelungModule extends BaseModule {
             await this._setIfChanged('speicher.regelung.requestW', null);
             await this._setIfChanged('speicher.regelung.requestQuelle', 'aus');
             await this._setIfChanged('speicher.regelung.requestGrund', 'Deaktiviert');
-            await this._setIfChanged('speicher.regelung.dispatcherJson', JSON.stringify({ ts: Date.now(), disabled: true, reason: 'Deaktiviert' }));
+            await this._setIfChanged('speicher.regelung.dispatcherJson', JSON.stringify({ ts: Date.now(), active: enabled, disabled: true, src: 'aus', reason: 'Deaktiviert' }));
             await this._setStorageNvpBalanceDiag(null);
             await this._setIfChanged('speicher.regelung.batteryPowerBalanceTrusted', false);
             await this._setIfChanged('speicher.regelung.batteryPowerFeedbackMode', 'inactive');
@@ -2015,6 +2020,7 @@ class SpeicherRegelungModule extends BaseModule {
             await this._setIfChanged('speicher.regelung.schreibStatus', 'fenecon-config-invalid');
             await this._setIfChanged('speicher.regelung.dispatcherJson', JSON.stringify({
                 ts: Date.now(),
+                active: enabled,
                 reqW: null,
                 reason: invalidReason,
                 src: 'fenecon-invalid',
@@ -2028,7 +2034,7 @@ class SpeicherRegelungModule extends BaseModule {
             await this._setIfChanged('speicher.regelung.requestW', 0);
             await this._setIfChanged('speicher.regelung.requestQuelle', 'aus');
             await this._setIfChanged('speicher.regelung.requestGrund', unsupportedReason);
-            await this._setIfChanged('speicher.regelung.dispatcherJson', JSON.stringify({ ts: Date.now(), reqW: 0, reason: unsupportedReason, src: 'aus' }));
+            await this._setIfChanged('speicher.regelung.dispatcherJson', JSON.stringify({ ts: Date.now(), active: enabled, reqW: 0, reason: unsupportedReason, src: 'aus' }));
             await this._applyTargetW(0, unsupportedReason, 'aus');
             return;
         }
@@ -2042,7 +2048,7 @@ class SpeicherRegelungModule extends BaseModule {
             await this._setIfChanged('speicher.regelung.requestW', 0);
             await this._setIfChanged('speicher.regelung.requestQuelle', 'aus');
             await this._setIfChanged('speicher.regelung.requestGrund', missingTargetReason);
-            await this._setIfChanged('speicher.regelung.dispatcherJson', JSON.stringify({ ts: Date.now(), reqW: 0, reason: missingTargetReason, src: 'aus' }));
+            await this._setIfChanged('speicher.regelung.dispatcherJson', JSON.stringify({ ts: Date.now(), active: enabled, reqW: 0, reason: missingTargetReason, src: 'aus' }));
             await this._applyTargetW(0, missingTargetReason, 'aus');
             return;
         }
@@ -2272,8 +2278,10 @@ class SpeicherRegelungModule extends BaseModule {
         // bleiben weiterhin hart am NVP und an den Speichergrenzen begrenzt.
         const storageCoupling = String(cfg.coupling || 'ac').trim().toLowerCase() === 'dc' ? 'dc' : 'ac';
         const dcPvMapped = storageCoupling === 'dc' && !!String(cfg.dcPvPowerObjectId || '').trim();
-        const dcPvPowerW = (dcPvMapped && this.dp) ? this.dp.getNumberFresh('st.dcPvPowerW', staleMs, null) : null;
-        const dcPvPowerAge = (dcPvMapped && this.dp && this.dp.getEntry('st.dcPvPowerW')) ? this.dp.getAgeMs('st.dcPvPowerW') : null;
+        const dcPvSampleTs = dcPvMapped ? this.dp?.getVerifiedMeasurementTimestampMs?.('st.dcPvPowerW', now) : null;
+        const dcPvPowerAge = Number.isFinite(dcPvSampleTs) ? now - dcPvSampleTs : null;
+        const dcPvPowerW = dcPvPowerAge !== null && dcPvPowerAge >= 0 && dcPvPowerAge <= staleMs
+            ? this.dp.getNumber('st.dcPvPowerW', null) : null;
         await this._setIfChanged('speicher.regelung.speicherKopplung', storageCoupling);
         await this._setIfChanged('speicher.regelung.dcPvPowerW', (typeof dcPvPowerW === 'number' && Number.isFinite(dcPvPowerW)) ? Math.round(dcPvPowerW) : 0);
         await this._setIfChanged('speicher.regelung.dcPvPowerAlterMs', (typeof dcPvPowerAge === 'number' && Number.isFinite(dcPvPowerAge)) ? Math.round(dcPvPowerAge) : null);
@@ -2404,6 +2412,7 @@ class SpeicherRegelungModule extends BaseModule {
                     await this._setIfChanged('speicher.regelung.requestGrund', heldReason);
                     await this._setIfChanged('speicher.regelung.dispatcherJson', JSON.stringify({
                         ts: now,
+                        active: enabled,
                         reqW: Math.round(heldW),
                         reason: heldReason,
                         src: heldSource,
@@ -2460,7 +2469,7 @@ class SpeicherRegelungModule extends BaseModule {
             await this._setIfChanged('speicher.regelung.requestW', 0);
             await this._setIfChanged('speicher.regelung.requestQuelle', 'aus');
             await this._setIfChanged('speicher.regelung.requestGrund', 'Netzleistung fehlt oder zu alt');
-            await this._setIfChanged('speicher.regelung.dispatcherJson', JSON.stringify({ ts: now, reqW: 0, reason: 'Netzleistung fehlt oder zu alt', src: 'aus' }));
+            await this._setIfChanged('speicher.regelung.dispatcherJson', JSON.stringify({ ts: now, active: enabled, reqW: 0, reason: 'Netzleistung fehlt oder zu alt', src: 'aus' }));
 
             // Ein fehlender/veralteter NVP ist ein echter Sicherheitsfall. Auch beim
             // FENECON-/OpenEMS-Profil muss deshalb ein sicherer 0-W-Sollwert ueber den
@@ -2931,8 +2940,10 @@ class SpeicherRegelungModule extends BaseModule {
             }
             try {
                 const rec = this.adapter && this.adapter.stateCache ? this.adapter.stateCache[sid] : null;
-                const n = Number(rec && rec.value);
-                if (Number.isFinite(n)) return n;
+                // Unbekannte abgeleitete Last bleibt unbekannt. Number(null)
+                // würde hier eine falsche gemessene Null vor den Fallback setzen.
+                const n = strictFiniteNumber(rec && rec.value, null);
+                if (n !== null) return n;
             } catch {
                 // ignore
             }
@@ -5824,7 +5835,15 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
             const antiExportCommandAnchorW = lastAcceptedDischargeW > 0
                 ? lastAcceptedDischargeW
                 : heldDischargeAnchorW;
+            const signedFeedbackConfigured = !farmEnabled && source === 'eigenverbrauch'
+                && this._getStorageVendorProfile(cfg) === 'generic' && !!this.dp?.getEntry?.('st.batteryPowerW');
+            const directTimestamp = signedFeedbackConfigured && battPowerFeedbackSource === 'single-storage'
+                && typeof this.dp?.getVerifiedMeasurementTimestampMs === 'function'
+                ? this.dp.getVerifiedMeasurementTimestampMs('st.batteryPowerW', now) : battPowerSampleTs;
+            const dischargeFeedbackLost = signedFeedbackConfigured && (!battPowerTrusted || !Number.isFinite(directTimestamp)
+                || directTimestamp <= 0 || directTimestamp > now || now - directTimestamp > staleMs);
             storageAntiExportDiag = resolveStorageAntiExportTarget({
+                dischargeFeedbackLost,
                 requestedTargetW: targetBeforeAntiExportW,
                 commandAnchorW: antiExportCommandAnchorW,
                 storageActualW: antiExportStorageActualW,
@@ -6769,6 +6788,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
 
         const _diag = {
             ts: now,
+            active: enabled,
             reqW: Number.isFinite(Number(_reqW)) ? Math.round(Number(_reqW)) : 0,
             clampW: Number.isFinite(Number(_clampW)) ? Math.round(Number(_clampW)) : 0,
             stepW: Number.isFinite(Number(_stepW)) ? Math.round(Number(_stepW)) : 0,
@@ -7515,7 +7535,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
  * Die produktive Logik liegt aktuell noch in der JS-Datei. Dieser TS-Spiegel zeigt,
  * welcher konkrete Code-Abschnitt später typisiert, getestet und übernommen werden muss.
  */
-        const finite = (v) => v !== null && v !== undefined && v !== '' && Number.isFinite(Number(v));
+        const finite = (v) => strictFiniteNumber(v, null) !== null;
         const now = finite(ctx.nowMs) ? Number(ctx.nowMs) : Date.now();
         const staleMs = Math.max(1000, finite(ctx.staleMs) ? Number(ctx.staleMs) : 15000);
         const maxSkewMs = Math.max(0, finite(ctx.maxSkewMs) ? Number(ctx.maxSkewMs) : 15000);
@@ -7544,6 +7564,18 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
             }
         };
 /**
+ * Code-Teil: getCacheSample
+ *
+ * Zweck:
+ * Automatisch markierter Arrow-Funktion-Abschnitt aus der ursprünglichen JavaScript-Datei.
+ * Dieser Kommentar dient als Orientierung für die schrittweise TypeScript-Migration.
+ *
+ * Zusammenhang:
+ * Die produktive Logik liegt aktuell noch in der JS-Datei. Dieser TS-Spiegel zeigt,
+ * welcher konkrete Code-Abschnitt später typisiert, getestet und übernommen werden muss.
+ */
+        const getCacheSample = (key) => readFlowMeasurement(adapter.stateCache, key, now, staleMs);
+/**
  * Code-Teil: getCacheAgeMs
  *
  * Zweck:
@@ -7555,17 +7587,8 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
  * welcher konkrete Code-Abschnitt später typisiert, getestet und übernommen werden muss.
  */
         const getCacheAgeMs = (key) => {
-            try {
-                if (adapter && typeof adapter._nwGetCacheAgeMs === 'function') {
-                    const age = adapter._nwGetCacheAgeMs(key, now);
-                    return finite(age) ? Math.max(0, Number(age)) : null;
-                }
-            } catch {
-                // Fallback auf den lokalen State-Cache.
-            }
-            const rec = getCacheRecord(key);
-            const ts = Number(rec && rec.ts);
-            return Number.isFinite(ts) && ts > 0 ? Math.max(0, now - ts) : null;
+            const sample = getCacheSample(key);
+            return sample ? now - sample.ts : null;
         };
 /**
  * Code-Teil: getCacheValue
@@ -7578,22 +7601,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
  * Die produktive Logik liegt aktuell noch in der JS-Datei. Dieser TS-Spiegel zeigt,
  * welcher konkrete Code-Abschnitt später typisiert, getestet und übernommen werden muss.
  */
-        const getCacheValue = (key, fallback = null) => {
-            try {
-                if (adapter && typeof adapter._nwGetNumberFromCacheFresh === 'function') {
-                    const value = adapter._nwGetNumberFromCacheFresh(key, staleMs, fallback, now);
-                    return finite(value) ? Number(value) : fallback;
-                }
-            } catch {
-                // Fallback auf den lokalen State-Cache.
-            }
-            const rec = getCacheRecord(key);
-            const value = Number(rec && rec.value);
-            const age = getCacheAgeMs(key);
-            if (!Number.isFinite(value)) return fallback;
-            if (age !== null && age > staleMs) return fallback;
-            return value;
-        };
+        const getCacheValue = (key, fallback = null) => getCacheSample(key)?.value ?? fallback;
 /**
  * Code-Teil: getCacheString
  *
@@ -7702,8 +7710,8 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
  */
         const pushPv = (value, source, ageMs, priority = 0) => {
             if (!finite(value) || Number(value) < 0) return;
-            const age = finite(ageMs) ? Math.max(0, Number(ageMs)) : null;
-            if (age !== null && age > staleMs) return;
+            const age = strictFiniteNumber(ageMs, null);
+            if (age === null || age < 0 || age > staleMs) return;
             pvCandidates.push({ w: Math.max(0, Number(value)), source, ageMs: age, priority });
         };
 
@@ -7721,7 +7729,8 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
                 pushPv(
                     this.dp.getNumberFresh('ps.pvW', staleMs, null),
                     'ps.pvW',
-                    typeof this.dp.getAgeMs === 'function' ? this.dp.getAgeMs('ps.pvW') : null,
+                    typeof this.dp.getVerifiedMeasurementTimestampMs === 'function'
+                        ? now - (this.dp.getVerifiedMeasurementTimestampMs('ps.pvW', now) ?? -Infinity) : null,
                     70,
                 );
             }
@@ -7737,7 +7746,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
 
         const ages = [loadAgeMs, pvAgeMs, nvpAgeMs].filter((v) => finite(v)).map(Number);
         const measurementSkewMs = ages.length >= 2 ? Math.max(...ages) - Math.min(...ages) : 0;
-        const nvpFresh = rawNvpW !== null && (nvpAgeMs === null || nvpAgeMs <= staleMs);
+        const nvpFresh = rawNvpW !== null && nvpAgeMs !== null && nvpAgeMs >= 0 && nvpAgeMs <= staleMs;
         const loadFresh = loadW !== null && (loadAgeMs === null || loadAgeMs <= staleMs);
         const pvFresh = pvW !== null && (pvAgeMs === null || pvAgeMs <= staleMs);
         const aligned = measurementSkewMs <= maxSkewMs;
@@ -8501,9 +8510,10 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
             const appsRoot = (rootCfg.emsApps && typeof rootCfg.emsApps === 'object') ? rootCfg.emsApps : {};
             const apps = (appsRoot.apps && typeof appsRoot.apps === 'object') ? appsRoot.apps : {};
             const singleApp = (apps.storage && typeof apps.storage === 'object') ? apps.storage : null;
-            const singleAppActive = singleApp
+            const deviceAssignmentDisabled = rootCfg.storage?._eosDevice?.v === 1 && rootCfg.storage?.enabled === false;
+            const singleAppActive = !deviceAssignmentDisabled && (singleApp
                 ? (singleApp.installed === true && singleApp.enabled === true)
-                : (rootCfg.enableStorageControl === true);
+                : (rootCfg.enableStorageControl === true));
 
             const farm = (this.adapter && typeof this.adapter._nwGetStorageFarmRuntimeInfo === 'function')
                 ? this.adapter._nwGetStorageFarmRuntimeInfo()
@@ -8593,7 +8603,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
                 ? (app.installed === true && app.enabled === true)
                 : (rootCfg.enableStorageFarm === true);
 
-            return !!(enabledByConfig && configuredCount >= 2);
+            return !!(enabledByConfig && configuredCount >= 1);
         } catch {
             return false;
         }
@@ -9299,6 +9309,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
      * ausdruecklich kein Schreibzugriff auf signed-, Split-, Run- oder Farm-DPs.
      */
     async _setHoldNoWriteTargetDiag(targetW, reason, source, status) {
+        this.adapter?._sfInvalidatePowerTracking?.();
         const requestedW = Number.isFinite(Number(targetW)) ? Math.round(Number(targetW)) : 0;
         const lastSuccessfulW = Number.isFinite(Number(this._lastTargetW)) ? Math.round(Number(this._lastTargetW)) : 0;
         const visibleW = requestedW !== 0 ? requestedW : lastSuccessfulW;
@@ -9342,6 +9353,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
      * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
      */
     async _setNoWriteTargetDiag(targetW, reason, source, status) {
+        this.adapter?._sfInvalidatePowerTracking?.();
         const w = Number.isFinite(Number(targetW)) ? Math.round(Number(targetW)) : 0;
         try {
             const e = (this.dp && this.dp.getEntry) ? this.dp.getEntry('st.targetPowerW') : null;
@@ -9439,7 +9451,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
         ], { familyChanged: true });
         this._feneconGridReleasedDirectTarget = release.ok === true;
         await this._setIfChanged('speicher.regelung.feneconGridReleaseStatus', release.ok
-            ? ('direkte Sollwerte neutralisiert' + (reason ? ': ' + String(reason) : ''))
+            ? ((release.pending ? 'Nullvorgaben angefordert; Treiberquittierung ausstehend' : 'Nullvorgaben vom Treiber bestätigt') + (reason ? ': ' + String(reason) : ''))
             : ('Freigabe fehlgeschlagen' + (reason ? ': ' + String(reason) : '')));
         return release;
     }
@@ -9468,7 +9480,9 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
         const verify = await this._verifyStorageCommandDatapoints([
             { key: 'st.feneconGridSetpointW', entry, type: 'number', value: valueW, role: 'fenecon-fems-grid-target' },
         ], { attempts: 3, delayMs: 30 });
-        const ok = writeResult !== false && (!verify.supported || verify.ok === true);
+        const ok = writeResult !== false && (!verify.supported || verify.ok === true || verify.pending === true);
+        const confirmationStatus = verify.pending ? 'pending-ack'
+            : (verify.ok && verify.supported ? 'driver-acknowledged' : 'submitted-unverified');
         if (ok) {
             // Ein idempotent übersprungener Write (`null`) bestätigt den aktuellen
             // DP-Wert, startet den FEMS-API-Watchdog aber nicht neu. Nur ein real
@@ -9487,7 +9501,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
         await this._setIfChanged('speicher.regelung.feneconGridSchreibOk', ok);
         await this._setIfChanged(
             'speicher.regelung.feneconGridSchreibStatus',
-            ok ? (writeResult === true ? 'confirmed' : 'confirmed-unchanged') : (verify && verify.status ? String(verify.status) : 'write-failed'),
+            ok ? confirmationStatus : (verify && verify.status ? String(verify.status) : 'write-failed'),
         );
         await this._setIfChanged('speicher.regelung.feneconGridTargetObjId', objectId);
         await this._setIfChanged('speicher.regelung.feneconGridLastWriteRaw', valueW);
@@ -9495,7 +9509,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
             ok,
             wrote: writeResult === true,
             skipped: writeResult === null,
-            status: ok ? (writeResult === true ? 'confirmed' : 'confirmed-unchanged') : 'write-failed',
+            status: ok ? confirmationStatus : 'write-failed',
             objectId,
             valueW,
             verify,
@@ -9582,6 +9596,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
                     reason: '',
                     ts: Number.isFinite(Number(state.ts)) ? Number(state.ts) : null,
                     ack: typeof state.ack === 'boolean' ? state.ack : null,
+                    q: state.q,
                 };
             } catch (error) {
                 return {
@@ -9643,7 +9658,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
                 } else {
                     const actualNumber = typeof actual === 'number'
                         ? actual
-                        : Number(String(actual === null || actual === undefined ? '' : actual).trim().replace(',', '.'));
+                        : (typeof actual === 'string' && actual.trim() ? Number(actual.trim().replace(',', '.')) : Number.NaN);
                     const expectedNumber = Number(expected.raw);
                     const tolerance = Math.max(0.000001, Math.abs(expectedNumber) * 0.000001);
                     ok = Number.isFinite(actualNumber) && Number.isFinite(expectedNumber)
@@ -9652,6 +9667,19 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
                     actual = Number.isFinite(actualNumber) ? actualNumber : current.raw;
                 }
 
+                const matches = ok;
+                // Record dispatch start, not the registry's completion time:
+                // a real driver ack may arrive before writeNumber resolves.
+                const previousWrite = this._storageCommandRequests instanceof Map
+                    ? this._storageCommandRequests.get(String(item.key)) : null;
+                const notBeforeTs = previousWrite && previousWrite.objectId === item.objectId && Number.isFinite(previousWrite.ts) ? previousWrite.ts : 0;
+                const qualityOk = current.q === undefined || current.q === 0;
+                const currentAck = Number.isFinite(current.ts) && current.ts > 0
+                    && current.ts >= notBeforeTs && current.ts <= Date.now() + 1000;
+                ok = matches && qualityOk && current.ack === true && currentAck;
+                const pending = matches && qualityOk && !ok;
+                if (matches && !qualityOk) reason = 'quality-invalid';
+                else if (pending) reason = current.ack === true ? 'ack-not-current' : 'ack-not-received';
                 finalRows.push({
                     key: String(item.key || ''),
                     objectId: item.objectId,
@@ -9662,22 +9690,28 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
                     actualRaw: actual,
                     supported: current.supported === true,
                     ok,
+                    pending,
+                    confirmationLevel: ok ? 'driver-acknowledged' : (pending ? 'requested' : 'none'),
                     reason,
                     ts: current.ts || null,
                     ack: current.ack,
+                    q: current.q === undefined ? null : current.q,
                 });
             }
 
             const supportedRows = finalRows.filter((row) => row.supported);
             const supportedMismatches = supportedRows.filter((row) => !row.ok);
-            if (!supportedMismatches.length) {
+            if (!supportedMismatches.length || supportedMismatches.every(row => row.pending === true)) {
                 const unsupportedRows = finalRows.filter((row) => !row.supported);
+                const pending = supportedMismatches.length > 0 || (supportedRows.length > 0 && unsupportedRows.length > 0);
                 return {
                     supported: supportedRows.length > 0,
-                    ok: true,
+                    ok: !pending,
+                    pending,
+                    confirmationLevel: pending ? 'requested' : (supportedRows.length ? 'driver-acknowledged' : 'none'),
                     status: supportedRows.length === 0
                         ? 'unavailable'
-                        : (unsupportedRows.length ? 'partial-confirmed' : 'confirmed'),
+                        : (pending ? 'pending-ack' : (unsupportedRows.length ? 'partial-driver-acknowledged' : 'driver-acknowledged')),
                     rows: finalRows,
                     attempts: attempt,
                 };
@@ -9690,6 +9724,8 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
         return {
             supported: supportedRows.length > 0,
             ok: supportedRows.every((row) => row.ok),
+            pending: false,
+            confirmationLevel: 'none',
             status: unsupportedRows.length ? 'partial-mismatch' : 'mismatch',
             rows: finalRows,
             attempts,
@@ -9709,9 +9745,17 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
             this._clearStorageCommandWriteCache(entry);
         } else {
             const pre = await this._verifyStorageCommandDatapoints([{ key, entry, type: 'number', value }], { attempts: 1, delayMs: 0 });
-            if (pre.supported && !pre.ok) this._clearStorageCommandWriteCache(entry);
+            if (pre.supported && !pre.ok && !pre.pending) this._clearStorageCommandWriteCache(entry);
         }
-        return this.dp.writeNumber(key, value, false);
+        const startedAt = Date.now();
+        const result = await this.dp.writeNumber(key, value, false);
+        if (result === true) {
+            if (!(this._storageCommandRequests instanceof Map)) this._storageCommandRequests = new Map();
+            // Keys are the fixed storage command roles, not an accumulating
+            // history of object IDs across mapping/configuration changes.
+            this._storageCommandRequests.set(String(key), { objectId: String(entry.objectId), ts: startedAt });
+        }
+        return result;
     }
 
     async _writeStorageCommandBoolean(key, value, options = {}) {
@@ -9721,9 +9765,15 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
             this._clearStorageCommandWriteCache(entry);
         } else {
             const pre = await this._verifyStorageCommandDatapoints([{ key, entry, type: 'boolean', value }], { attempts: 1, delayMs: 0 });
-            if (pre.supported && !pre.ok) this._clearStorageCommandWriteCache(entry);
+            if (pre.supported && !pre.ok && !pre.pending) this._clearStorageCommandWriteCache(entry);
         }
-        return this.dp.writeBoolean(key, value, false);
+        const startedAt = Date.now();
+        const result = await this.dp.writeBoolean(key, value, false);
+        if (result === true) {
+            if (!(this._storageCommandRequests instanceof Map)) this._storageCommandRequests = new Map();
+            this._storageCommandRequests.set(String(key), { objectId: String(entry.objectId), ts: startedAt });
+        }
+        return result;
     }
 
     async _ensureStorageAlternativeTargetsNeutral(entries = [], options = {}) {
@@ -9743,8 +9793,8 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
         for (const item of items) {
             const expectation = { key: item.key, entry: item.entry, type: 'number', value: 0 };
             const before = await this._verifyStorageCommandDatapoints([expectation], { attempts: 1, delayMs: 0 });
-            if (before.supported && before.ok) {
-                rows.push({ key: item.key, objectId: item.entry.objectId, action: 'already-neutral', readback: before });
+            if (before.supported && (before.ok || before.pending)) {
+                rows.push({ key: item.key, objectId: item.entry.objectId, action: before.pending ? 'neutral-requested' : 'already-neutral', readback: before });
                 continue;
             }
             if (!before.supported && !familyChanged) {
@@ -9759,7 +9809,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
                 writeResult = false;
             }
             const after = await this._verifyStorageCommandDatapoints([expectation], { attempts: 2, delayMs: 20 });
-            const rowOk = writeResult !== false && (!after.supported || after.ok);
+            const rowOk = writeResult !== false && (!after.supported || after.ok || after.pending);
             if (!rowOk) ok = false;
             rows.push({
                 key: item.key,
@@ -9770,7 +9820,8 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
                 readback: after,
             });
         }
-        return { ok, status: ok ? 'neutral' : 'release-failed', rows };
+        const pending = rows.some(row => row.readback && row.readback.pending === true);
+        return { ok, pending, status: ok ? (pending ? 'neutral-requested' : 'neutral') : 'release-failed', rows };
     }
 
     /**
@@ -10424,6 +10475,8 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
             commandReadback = {
                 supported: farmReadbackSupported,
                 ok: farmReadbackOk,
+                pending: !!(farmDispatchResult && farmDispatchResult.commandDpReadbackPending),
+                confirmationLevel: String((farmDispatchResult && farmDispatchResult.commandConfirmationLevel) || 'none'),
                 status: String((farmDispatchResult && farmDispatchResult.commandDpReadbackStatus) || (farmReadbackSupported ? (farmReadbackOk ? 'confirmed' : 'mismatch') : 'farm-dispatch')),
                 rows: farmDispatchResult && Array.isArray(farmDispatchResult.commandDpReadbackRows)
                     ? farmDispatchResult.commandDpReadbackRows
@@ -10808,7 +10861,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
             }
 
             commandReadback = await this._verifyStorageCommandDatapoints(commandExpectations, { attempts: 3, delayMs: 30 });
-            if (commandReadback.supported && !commandReadback.ok) {
+            if (commandReadback.supported && !commandReadback.ok && !commandReadback.pending) {
                 const rawStatus = commandReadback.status;
                 commandFailureStatus = classifyCommandReadbackFailure(commandReadback.rows);
                 commandReadback = { ...commandReadback, rawStatus, status: commandFailureStatus };
@@ -11092,7 +11145,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
         await mk('speicher.regelung.dispatcherJson', 'Dispatcher Details (JSON)', 'string', 'text', '');
 
         await mk('speicher.regelung.sollW', 'Angeforderte Sollleistung Speicher (W)', 'number', 'value.power', 0);
-        await mk('speicher.regelung.acceptedSollW', 'Von Hardware akzeptierte Speicher-Sollleistung (W)', 'number', 'value.power', 0);
+        await mk('speicher.regelung.acceptedSollW', 'An Schreibpfad übergebene Speicher-Sollleistung (W)', 'number', 'value.power', 0);
         await mk('speicher.regelung.commandEffective', 'Mindestens ein wirksamer Speicherbefehl akzeptiert', 'boolean', 'indicator', false);
         await mk('speicher.regelung.safetyRequestedW', 'Sollwert vor finaler SafetyEnvelope-Prüfung', 'number', 'value.power', 0);
         await mk('speicher.regelung.safetyAllowedW', 'Final durch SafetyEnvelope freigegebener Sollwert', 'number', 'value.power', 0);

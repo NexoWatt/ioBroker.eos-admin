@@ -1,18 +1,18 @@
 {
-  "version": "9.0.36",
+  "version": "9.0.38",
   "channel": "next",
   "baseFrontend": "Rebuilt from official Admin 8.3.5 sources plus reviewed EOS integration using React 19 and Vite; see source-bound frontend manifest.",
   "runtimeEntry": "vite-manifest",
-  "releaseType": "unified-migration-recovery",
-  "release": "unified-migration-recovery",
-  "label": "v9-0-36",
+  "releaseType": "unified-legacy-migration-history",
+  "release": "unified-legacy-migration-history",
+  "label": "v9-0-38",
   "notes": [
-    "Confirmed disabled legacy UI configurations are migrated automatically.",
-    "The release report documents module startup diagnosis and recovery tests."
+    "Administrators can start or recheck migration. EOS checks the configuration and history connection even when the legacy adapters have already stopped.",
+    "See the release report for tested upgrade paths and on-site validation scope."
   ],
   "changes": [
-    "Automatically migrate a verified disabled legacy UI",
-    "Improve module startup diagnostics and recovery"
+    "Start or recheck legacy migration from Administration",
+    "Verify saved configuration and InfluxDB history binding during migration of stopped legacy adapters"
   ],
   "brandingCacheVersion": 7110,
   "shellCacheVersion": 7110,
@@ -26,7 +26,7 @@
     "commit": "6f77eedf525813a7a61d79188d1ff05dffd05086"
   },
   "product": "NexoWatt EOS",
-  "status": "9.0.36 controlled test release. See docs/reports/unified-9.0.36 for test results and field validation scope.",
+  "status": "9.0.38 controlled test release. See docs/reports/unified-9.0.38 for test results and field validation scope.",
   "sourceComponents": {
     "admin": "8.0.2",
     "ui": "1.0.38",
@@ -36,5 +36,5 @@
     "backup": "1.0.10",
     "ocpp": "0.4.4 integrated hosted module, based on iobroker.ocpp21 0.4.3"
   },
-  "repositoryEntry": "nexowatt-eos-admin-repository-entry-v9-0-36.json"
+  "repositoryEntry": "nexowatt-eos-admin-repository-entry-v9-0-38.json"
 }

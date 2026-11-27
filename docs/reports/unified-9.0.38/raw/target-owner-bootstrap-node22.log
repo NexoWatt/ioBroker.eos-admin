@@ -1,0 +1,509 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: late license activation cannot start defaults before a new complete legacy preflight
+ok 1 - late license activation cannot start defaults before a new complete legacy preflight
+  ---
+  duration_ms: 20.761443
+  type: 'test'
+  ...
+# Subtest: unlicensed fresh installation remains fenced until licensed startup checks an empty inventory
+ok 2 - unlicensed fresh installation remains fenced until licensed startup checks an empty inventory
+  ---
+  duration_ms: 2.496142
+  type: 'test'
+  ...
+# Subtest: standard Backitup instances are not legacy EOS backup migration sources
+ok 3 - standard Backitup instances are not legacy EOS backup migration sources
+  ---
+  duration_ms: 1.900702
+  type: 'test'
+  ...
+# Subtest: legacy Devices cutover preserves standard Backitup configuration, ACL, history and running state
+ok 4 - legacy Devices cutover preserves standard Backitup configuration, ACL, history and running state
+  ---
+  duration_ms: 4.530107
+  type: 'test'
+  ...
+# Subtest: automatic handover preserves namespace, custom/history objects and settings including credentials
+ok 5 - automatic handover preserves namespace, custom/history objects and settings including credentials
+  ---
+  duration_ms: 18.148615
+  type: 'test'
+  ...
+# Subtest: preflight ambiguity, incompatible device shape, remote host, missing license and existing destination never stop a source
+ok 6 - preflight ambiguity, incompatible device shape, remote host, missing license and existing destination never stop a source
+  ---
+  duration_ms: 13.555118
+  type: 'test'
+  ...
+# Subtest: failed target persistence restores confirmed legacy runtime; journal prevents repeated interruption
+ok 7 - failed target persistence restores confirmed legacy runtime; journal prevents repeated interruption
+  ---
+  duration_ms: 5.176554
+  type: 'test'
+  ...
+# Subtest: crash while stopping is rolled back before new runtime gains write ownership
+ok 8 - crash while stopping is rolled back before new runtime gains write ownership
+  ---
+  duration_ms: 1.914159
+  type: 'test'
+  ...
+# Subtest: failed new runtime with uncertain transport stop never re-enables legacy writer
+ok 9 - failed new runtime with uncertain transport stop never re-enables legacy writer
+  ---
+  duration_ms: 3.857493
+  type: 'test'
+  ...
+# Subtest: encrypted native credentials decrypt exactly once; missing protected fields block all source changes
+ok 10 - encrypted native credentials decrypt exactly once; missing protected fields block all source changes
+  ---
+  duration_ms: 4.143423
+  type: 'test'
+  ...
+# Subtest: UI native settings move to protected config; two successive saves read current values and preserve old source
+ok 11 - UI native settings move to protected config; two successive saves read current values and preserve old source
+  ---
+  duration_ms: 7.385403
+  type: 'test'
+  ...
+# Subtest: SmartHome migration preserves explicit enabled setting and existing customer configuration states
+ok 12 - SmartHome migration preserves explicit enabled setting and existing customer configuration states
+  ---
+  duration_ms: 5.557167
+  type: 'test'
+  ...
+# Subtest: SmartHome migration preserves explicit disabled setting and existing customer configuration states
+ok 13 - SmartHome migration preserves explicit disabled setting and existing customer configuration states
+  ---
+  duration_ms: 5.659335
+  type: 'test'
+  ...
+# Subtest: UI preflight blocks corrupt or unreadable existing customer states before stopping the old writer
+ok 14 - UI preflight blocks corrupt or unreadable existing customer states before stopping the old writer
+  ---
+  duration_ms: 11.073126
+  type: 'test'
+  ...
+# Subtest: UI state lost between preflight and stopped cutover causes rollback instead of default activation
+ok 15 - UI state lost between preflight and stopped cutover causes rollback instead of default activation
+  ---
+  duration_ms: 3.513076
+  type: 'test'
+  ...
+# Subtest: known old-instance RPC consumers block cutover while full datapoint references stay valid
+ok 16 - known old-instance RPC consumers block cutover while full datapoint references stay valid
+  ---
+  duration_ms: 2.711367
+  type: 'test'
+  ...
+# Subtest: changed source host/version during preflight never resumes an unreviewed original adapter
+ok 17 - changed source host/version during preflight never resumes an unreviewed original adapter
+  ---
+  duration_ms: 2.044313
+  type: 'test'
+  ...
+# Subtest: a bounded database read cannot hold startup or stop legacy writers indefinitely
+ok 18 - a bounded database read cannot hold startup or stop legacy writers indefinitely
+  ---
+  duration_ms: 21.794529
+  type: 'test'
+  ...
+# Subtest: another active EOS instance blocks automatic takeover before disabling old sources
+ok 19 - another active EOS instance blocks automatic takeover before disabling old sources
+  ---
+  duration_ms: 0.740715
+  type: 'test'
+  ...
+# Subtest: transferred module destination must persist with its original namespace binding on restart
+ok 20 - transferred module destination must persist with its original namespace binding on restart
+  ---
+  duration_ms: 8.572719
+  type: 'test'
+  ...
+# Subtest: committed UI accepts legitimate later configuration edits on a fresh process restart
+ok 21 - committed UI accepts legitimate later configuration edits on a fresh process restart
+  ---
+  duration_ms: 3.811187
+  type: 'test'
+  ...
+# Subtest: TLS or listener failure before any hosted runtime exists restores old sources and fences late startup
+ok 22 - TLS or listener failure before any hosted runtime exists restores old sources and fences late startup
+  ---
+  duration_ms: 2.594122
+  type: 'test'
+  ...
+# Subtest: early verification times out even when the web constructor is never reached
+ok 23 - early verification times out even when the web constructor is never reached
+  ---
+  duration_ms: 5.24809
+  type: 'test'
+  ...
+# Subtest: active module with a pending start cannot commit until RUNNING is confirmed
+ok 24 - active module with a pending start cannot commit until RUNNING is confirmed
+  ---
+  duration_ms: 270.549216
+  type: 'test'
+  ...
+# Subtest: concurrent startup failure has one recovery and never restores old writers before all stop promises settle
+ok 25 - concurrent startup failure has one recovery and never restores old writers before all stop promises settle
+  ---
+  duration_ms: 13.097976
+  type: 'test'
+  ...
+# Subtest: a pending stop timeout remains fenced even if that stop settles later
+ok 26 - a pending stop timeout remains fenced even if that stop settles later
+  ---
+  duration_ms: 13.262444
+  type: 'test'
+  ...
+# Subtest: rejected runtime stop and sticky module stop failure never reactivate old sources
+ok 27 - rejected runtime stop and sticky module stop failure never reactivate old sources
+  ---
+  duration_ms: 7.871472
+  type: 'test'
+  ...
+# Subtest: source identity is checked again immediately before rollback re-enable
+ok 28 - source identity is checked again immediately before rollback re-enable
+  ---
+  duration_ms: 3.124388
+  type: 'test'
+  ...
+# Subtest: rejected commit persistence recovers without leaving a false COMMITTED state
+ok 29 - rejected commit persistence recovers without leaving a false COMMITTED state
+  ---
+  duration_ms: 4.137631
+  type: 'test'
+  ...
+# Subtest: concurrent commit persistence cannot overwrite a later startup recovery decision
+ok 30 - concurrent commit persistence cannot overwrite a later startup recovery decision
+  ---
+  duration_ms: 3.485814
+  type: 'test'
+  ...
+# Subtest: intentional shutdown fences monitoring; the transferred journal is verified on next startup
+ok 31 - intentional shutdown fences monitoring; the transferred journal is verified on next startup
+  ---
+  duration_ms: 8.792838
+  type: 'test'
+  ...
+# Subtest: confirmed stopped UI transfers unchanged with no source enable write and waits for both split processes
+ok 32 - confirmed stopped UI transfers unchanged with no source enable write and waits for both split processes
+  ---
+  duration_ms: 256.895338
+  type: 'test'
+  ...
+# Subtest: restoring after failed cutover never enables an originally disabled UI
+ok 33 - restoring after failed cutover never enables an originally disabled UI
+  ---
+  duration_ms: 4.245477
+  type: 'test'
+  ...
+# Subtest: explicit target pause requires loaded saved intent and a stopped EMS
+ok 34 - explicit target pause requires loaded saved intent and a stopped EMS
+  ---
+  duration_ms: 2.88035
+  type: 'test'
+  ...
+# Subtest: unrelated failed EMS and initial module status never cause premature rollback of Devices
+ok 35 - unrelated failed EMS and initial module status never cause premature rollback of Devices
+  ---
+  duration_ms: 2.657464
+  type: 'test'
+  ...
+# Subtest: unconfirmed source stop only fences that process family and can retry after correction
+ok 36 - unconfirmed source stop only fences that process family and can retry after correction
+  ---
+  duration_ms: 3.401279
+  type: 'test'
+  ...
+# Subtest: older confirmed stop is accepted only with same local controller lifecycle order on a noncompact UI
+ok 37 - older confirmed stop is accepted only with same local controller lifecycle order on a noncompact UI
+  ---
+  duration_ms: 0.576719
+  type: 'test'
+  ...
+# Subtest: atomic mixed group leaves retained legacy devices live and permits unrelated EOS modules
+ok 38 - atomic mixed group leaves retained legacy devices live and permits unrelated EOS modules
+  ---
+  duration_ms: 2.187303
+  type: 'test'
+  ...
+# Subtest: uncertain stop remains ROLLBACK_REQUIRED across restart without automatically re-enabling sources
+ok 39 - uncertain stop remains ROLLBACK_REQUIRED across restart without automatically re-enabling sources
+  ---
+  duration_ms: 2.056899
+  type: 'test'
+  ...
+# Subtest: interrupted ROLLING_BACK needs persisted completed-stop proof; absent or false proof stays fenced
+ok 40 - interrupted ROLLING_BACK needs persisted completed-stop proof; absent or false proof stays fenced
+  ---
+  duration_ms: 8.603454
+  type: 'test'
+  ...
+# Subtest: revoked license, ownership or runtime readiness during source verification cannot commit
+ok 41 - revoked license, ownership or runtime readiness during source verification cannot commit
+  ---
+  duration_ms: 68.116636
+  type: 'test'
+  ...
+# Subtest: the early monitor deadline also covers an unresolved asynchronous readiness observation
+ok 42 - the early monitor deadline also covers an unresolved asynchronous readiness observation
+  ---
+  duration_ms: 11.790565
+  type: 'test'
+  ...
+# Subtest: a late readiness rejection after intentional shutdown does not begin rollback or re-enable old writers
+ok 43 - a late readiness rejection after intentional shutdown does not begin rollback or re-enable old writers
+  ---
+  duration_ms: 2.287833
+  type: 'test'
+  ...
+# Subtest: source versions describe the source; accepted Devices semantics decide compatibility across releases
+ok 44 - source versions describe the source; accepted Devices semantics decide compatibility across releases
+  ---
+  duration_ms: 48.766513
+  type: 'test'
+  ...
+# Subtest: UI and Devices stopped source migration retains source namespaces with missing, alternate and differing version metadata
+ok 45 - UI and Devices stopped source migration retains source namespaces with missing, alternate and differing version metadata
+  ---
+  duration_ms: 6.272164
+  type: 'test'
+  ...
+# Subtest: a recognizable source version never substitutes for compatible source identity or configuration
+ok 46 - a recognizable source version never substitutes for compatible source identity or configuration
+  ---
+  duration_ms: 9.335132
+  type: 'test'
+  ...
+# Subtest: stopped UI 1.0.35 and Devices 0.5.172 keep old Influx history readable over HTTP, restart and rollback
+ok 47 - stopped UI 1.0.35 and Devices 0.5.172 keep old Influx history readable over HTTP, restart and rollback
+  ---
+  duration_ms: 352.764342
+  type: 'test'
+  ...
+# Subtest: installer history settings changed to an unsupported form while stopping trigger rollback
+ok 48 - installer history settings changed to an unsupported form while stopping trigger rollback
+  ---
+  duration_ms: 6.806615
+  type: 'test'
+  ...
+# Subtest: fallback binding changes after preflight cannot authorize stopping or transferring a different source
+ok 49 - fallback binding changes after preflight cannot authorize stopping or transferring a different source
+  ---
+  duration_ms: 2.027009
+  type: 'test'
+  ...
+# Subtest: live manual takeover of stopped UI 1.0.35 and Devices 0.5.172 keeps device switches, old identity, and independent writer scopes
+ok 50 - live manual takeover of stopped UI 1.0.35 and Devices 0.5.172 keeps device switches, old identity, and independent writer scopes
+  ---
+  duration_ms: 56.959133
+  type: 'test'
+  ...
+# Subtest: manual action honors disabled Devices without opt-in and a deliberately paused EMS on rebind
+ok 51 - manual action honors disabled Devices without opt-in and a deliberately paused EMS on rebind
+  ---
+  duration_ms: 7.626816
+  type: 'test'
+  ...
+# Subtest: changed inventory or withdrawn administrator authority cannot start a stale manual takeover
+ok 52 - changed inventory or withdrawn administrator authority cannot start a stale manual takeover
+  ---
+  duration_ms: 4.112132
+  type: 'test'
+  ...
+# Subtest: live migration checks the second authorization after stopping target processes and refuses an unconfirmed stop
+ok 53 - live migration checks the second authorization after stopping target processes and refuses an unconfirmed stop
+  ---
+  duration_ms: 7.734029
+  type: 'test'
+  ...
+# Subtest: source namespace handover preserves existing customer settings and active historian targets, including late target changes
+ok 54 - source namespace handover preserves existing customer settings and active historian targets, including late target changes
+  ---
+  duration_ms: 10.536815
+  type: 'test'
+  ...
+# Subtest: only exact controller-attributed EOS provisioning can leave an empty root channel available to migration
+ok 55 - only exact controller-attributed EOS provisioning can leave an empty root channel available to migration
+  ---
+  duration_ms: 14.140964
+  type: 'test'
+  ...
+# (node:24) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: slow Devices metadata progress commits at 60 seconds without the old 45-second rollback
+ok 56 - slow Devices metadata progress commits at 60 seconds without the old 45-second rollback
+  ---
+  duration_ms: 23.560428
+  type: 'test'
+  ...
+# Subtest: confirmed progress has a fixed 165-second migration ceiling even if a faulty host never completes
+ok 57 - confirmed progress has a fixed 165-second migration ceiling even if a faulty host never completes
+  ---
+  duration_ms: 19.60608
+  type: 'test'
+  ...
+# Subtest: no progress cannot extend the ordinary 45-second limit
+ok 58 - no progress cannot extend the ordinary 45-second limit
+  ---
+  duration_ms: 12.539777
+  type: 'test'
+  ...
+# Subtest: READY transport status cannot extend the ordinary 45-second limit
+ok 59 - READY transport status cannot extend the ordinary 45-second limit
+  ---
+  duration_ms: 7.682957
+  type: 'test'
+  ...
+# Subtest: unconfirmed metadata counter cannot extend the ordinary 45-second limit
+ok 60 - unconfirmed metadata counter cannot extend the ordinary 45-second limit
+  ---
+  duration_ms: 6.268125
+  type: 'test'
+  ...
+# Subtest: constant historical count cannot extend the ordinary 45-second limit
+ok 61 - constant historical count cannot extend the ordinary 45-second limit
+  ---
+  duration_ms: 4.849898
+  type: 'test'
+  ...
+# Subtest: invalid counter cannot extend the ordinary 45-second limit
+ok 62 - invalid counter cannot extend the ordinary 45-second limit
+  ---
+  duration_ms: 10.490865
+  type: 'test'
+  ...
+# Subtest: progress does not conceal a module failure or defer confirmed rollback
+ok 63 - progress does not conceal a module failure or defer confirmed rollback
+  ---
+  duration_ms: 2.909279
+  type: 'test'
+  ...
+# Subtest: intentional stop during extended startup does not resurrect old writers
+ok 64 - intentional stop during extended startup does not resurrect old writers
+  ---
+  duration_ms: 4.644469
+  type: 'test'
+  ...
+# (node:32) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: configured Devices remain startable with unsupported external OCPP version and no prior migration journal
+ok 65 - configured Devices remain startable with unsupported external OCPP version and no prior migration journal
+  ---
+  duration_ms: 11.053488
+  type: 'test'
+  ...
+# Subtest: configured Devices remain startable with supported external OCPP version and no prior migration journal
+ok 66 - configured Devices remain startable with supported external OCPP version and no prior migration journal
+  ---
+  duration_ms: 5.612766
+  type: 'test'
+  ...
+# Subtest: configured Devices remain startable with multiple external OCPP instances and no prior migration journal
+ok 67 - configured Devices remain startable with multiple external OCPP instances and no prior migration journal
+  ---
+  duration_ms: 3.720031
+  type: 'test'
+  ...
+# Subtest: configured Devices remain startable with external OCPP outside embedded module grant and no prior migration journal
+ok 68 - configured Devices remain startable with external OCPP outside embedded module grant and no prior migration journal
+  ---
+  duration_ms: 3.097346
+  type: 'test'
+  ...
+# Subtest: previously blocked optional OCPP inventory recovers on startup and actual Devices child runs
+ok 69 - previously blocked optional OCPP inventory recovers on startup and actual Devices child runs
+  ---
+  duration_ms: 194.31606
+  type: 'test'
+  ...
+# Subtest: optional OCPP handling does not bypass the core license gate
+ok 70 - optional OCPP handling does not bypass the core license gate
+  ---
+  duration_ms: 4.146339
+  type: 'test'
+  ...
+# Subtest: a configured Devices target and an incompatible source cannot overwrite an unrelated external OCPP
+ok 71 - a configured Devices target and an incompatible source cannot overwrite an unrelated external OCPP
+  ---
+  duration_ms: 5.357968
+  type: 'test'
+  ...
+# (node:62) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: a customer-confirmed stopped legacy UI and an active Devices instance cut over exactly once through the actual Web listener
+ok 72 - a customer-confirmed stopped legacy UI and an active Devices instance cut over exactly once through the actual Web listener
+  ---
+  duration_ms: 2700.575151
+  type: 'test'
+  ...
+# {"version":"9.0.38","phase":"COMMITTED","originalWriterRestarts":0,"reads":2,"postRestartWatts":1562,"distinctChildPids":3,"historyLink":"influxdb.0","provider":"tibber"}
+# Subtest: a fully active compatible legacy installation retains mappings when both writers hand over
+ok 73 - a fully active compatible legacy installation retains mappings when both writers hand over
+  ---
+  duration_ms: 1538.537305
+  type: 'test'
+  ...
+# Subtest: missing stop evidence and an independent target mapping leave both original configurations intact
+    # Subtest: unknownStop
+    ok 1 - unknownStop
+      ---
+      duration_ms: 451.462129
+      type: 'test'
+      ...
+    # Subtest: target
+    ok 2 - target
+      ---
+      duration_ms: 330.849385
+      type: 'test'
+      ...
+    # Subtest: destinationChannel
+    ok 3 - destinationChannel
+      ---
+      duration_ms: 325.817522
+      type: 'test'
+      ...
+    # Subtest: invalidConfig
+    ok 4 - invalidConfig
+      ---
+      duration_ms: 319.677686
+      type: 'test'
+      ...
+    1..4
+ok 74 - missing stop evidence and an independent target mapping leave both original configurations intact
+  ---
+  duration_ms: 1429.456674
+  type: 'test'
+  ...
+# Subtest: new installation remains reachable without license and starts from its saved process choices after activation and restart
+ok 75 - new installation remains reachable without license and starts from its saved process choices after activation and restart
+  ---
+  duration_ms: 1050.693231
+  type: 'test'
+  ...
+# Subtest: licensed workers stay alive during two external ownership conflicts while field I/O and the OCPP socket stay fenced
+ok 76 - licensed workers stay alive during two external ownership conflicts while field I/O and the OCPP socket stay fenced
+  ---
+  duration_ms: 2513.846114
+  type: 'test'
+  ...
+# {"workerPids":6,"heartbeatRounds":2,"conflictingOwners":["devices","ocpp"],"meterConnections":0,"meterWrites":0,"ocppPortClosedDuringConflict":true,"ocppConnectedAfterConfirmedRelease":true}
+# Subtest: occupied EOS listener rolls back only the previously active legacy writer
+ok 77 - occupied EOS listener rolls back only the previously active legacy writer
+  ---
+  duration_ms: 407.70718
+  type: 'test'
+  ...
+1..77
+# tests 81
+# suites 0
+# pass 81
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 11727.456048

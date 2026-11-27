@@ -11,7 +11,7 @@ const { resolveNvpDisplay } = require('../ui/ems/services/measurement-freshness'
 const { physicalPvSourceKey: nwPhysicalPvSourceKey, applyPvCapacityPlausibility: nwApplyPvCapacityPlausibility } = require('../ui/ems/services/pv-source-identity');
 const source = fs.readFileSync(path.join(__dirname, '../ui/main.js'), 'utf8');
 const parsed = ts.createSourceFile('main.js', source, ts.ScriptTarget.ES2022, true);
-const names = new Set(['updateDerivedFlowStates', 'scheduleDerivedFlowUpdate', 'updateValue', '_nwPublishEvcsInputBinding',
+const names = new Set(['updateDerivedFlowStates', 'scheduleDerivedFlowUpdate', 'updateValue', '_nwScheduleSseFlush', '_nwPublishEvcsInputBinding',
     '_nwMissingTemplatePvSource', '_nwLiveInputMaxAgeMs', '_nwIsBatterySignInverted', '_nwResolveGridImportExportFromCache', '_nwResolveBatteryFlowFromCache', '_nwResolveStorageFarmMetricsFromCache', '_nwMergeStorageFarmPvWithBase']);
 const methods = [];
 function visit(node) {

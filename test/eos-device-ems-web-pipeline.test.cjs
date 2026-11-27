@@ -247,6 +247,19 @@ test('production Web mount starts separate UI and EMS children and reconciles a 
   assert.equal(health.data.processes.find(row => row.id === 'ui')?.pid, ui.pid);
   assert.equal(health.data.processes.find(row => row.id === 'ems')?.pid, ems.pid);
   const live = await x.request('/api/state'); assert.equal(live.status, 200, live.text);
+  // The split EMS child publishes measurements; REST must preserve the actual
+  // confirmation even when this fixture has no configured grid meter.
+  for (const key of ['ems.gridMeasurementFresh', 'ems.core.schedulerAlive', 'ems.core.schedulerHeartbeatAt']) {
+    let row;
+    for (let attempt = 0; attempt < 40; attempt++) {
+      row = (await x.request('/api/state')).data[key];
+      if (row?.ack === true && row.ts > 0) break;
+      await sleep(100);
+    }
+    assert.equal(row?.ack, true, key);
+    assert.ok(row.ts > 0, key);
+    if (key === 'ems.gridMeasurementFresh') assert.equal(row.value, false);
+  }
   const answer = await x.request('/api/eos/modules/devices', 'PUT', { config: wallboxConfig() });
   assert.equal(answer.status, 200, answer.text);
   const ready = await waitForView(x, view => view?.status?.active === true
@@ -467,6 +480,9 @@ test('legacy in-process business pipeline: production Web bridge and actual host
   assert.equal(saved.datapoints.gridPointPower, 'eos-admin.0.devices.grid.sma.aliases.v1.r.power');
   await waitForState(x, 'ems.gridMeasurementFresh', true);
   await waitForState(x, 'ems.gridPowerRawW', 1230);
+  const publicGrid = async () => (await x.request('/api/state')).data['ems.gridMeasurementFresh'];
+  assert.equal((await publicGrid())?.value, true, 'confirmed meter must reach the dashboard');
+  assert.equal((await publicGrid())?.ack, true);
   const importing = x.runtime()._nwResolveGridImportExportFromCache();
   assert.equal(importing.gridBuyW, 1230);
   assert.equal(importing.gridSellW, 0);
@@ -478,6 +494,7 @@ test('legacy in-process business pipeline: production Web bridge and actual host
   disconnected = true;
   await waitForState(x, 'devices.grid.sma.aliases.v1.comm.connected', false);
   await waitForState(x, 'ems.gridMeasurementFresh', false);
+  assert.equal((await publicGrid())?.value, false, 'disconnection must reach the same dashboard');
   assert.equal(x.writes.some(row => row.id.includes('.devices.') && row.state.ack === false), false);
 });
 

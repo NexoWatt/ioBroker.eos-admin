@@ -1,6 +1,8 @@
 # Entwicklungsabhängigkeiten und Grenzen des Scans
 
-Stand: 22.11.2026, npm 11.19.1, Node 24.22.3.
+Für 9.0.38 weist der [Auditbericht der Laufzeitabhängigkeiten](../reports/unified-9.0.38/raw/npm-runtime-audit.json) zwei moderate Einträge aus der Kette ocpp-rpc/ajv aus.
+
+Historischer Entwicklungsstand vom 22.11.2026 mit npm 11.19.1 und Node 24.22.3.
 
 Die aus dem tatsächlich installierten Baum erzeugten npm-audit-Berichte liegen unter
 `reports/unified/root/`. Laufzeitbaum: 0 bekannte Befunde; Admin-Frontend und Installer:

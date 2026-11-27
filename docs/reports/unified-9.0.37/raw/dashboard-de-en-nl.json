@@ -1,0 +1,1059 @@
+{
+  "ok": true,
+  "legacy": false,
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "appSha256": "52d7c02b7fb0ce28bb5ab50a3c7e47e7f2819e7c036cb8f5d9fe849aa89ef99e",
+  "scope": "Shipped dashboard, simulated HTTP/SSE backend and physical telemetry, real browser frames and DOM mutations.",
+  "results": [
+    {
+      "language": "de",
+      "steadyPollCount": 1,
+      "cases": {
+        "startup": {
+          "status": "Verbinde…",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Verbindung unterbrochen",
+          "grid": "Messstatus unbekannt",
+          "lp": "Keine aktiven Ladepunkte"
+        },
+        "stable": {
+          "status": "Alle Systeme normal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "lp": "Ladepunkte bereit"
+        },
+        "meterWithoutEmsConfirmation": {
+          "status": "NVP-Bestätigung fehlt",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Aktiv",
+          "grid": "Messwert vorhanden · Bestätigung fehlt",
+          "lp": "Ladepunkte bereit"
+        },
+        "gridConfirmationRestored": {
+          "status": "Alle Systeme normal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "lp": "Ladepunkte bereit"
+        },
+        "storageDeviation60": {
+          "status": "Alle Systeme normal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "lp": "Ladepunkte bereit"
+        },
+        "storageDeviation201": {
+          "status": "Speicherabweichung: Speicher West · 201 W",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "lp": "Ladepunkte bereit"
+        },
+        "storageDeviation200": {
+          "status": "Alle Systeme normal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "lp": "Ladepunkte bereit"
+        },
+        "confirmedGridLoss": {
+          "status": "Netzmessung fehlt oder ist veraltet",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Aktiv",
+          "grid": "Messung fehlt / veraltet",
+          "lp": "Ladepunkte bereit"
+        },
+        "disconnect": {
+          "status": "Verbindung unterbrochen",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Verbindung unterbrochen",
+          "grid": "Messstatus unbekannt",
+          "lp": "Ladepunkte bereit"
+        },
+        "reconnectedWithoutSnapshot": {
+          "status": "Verbindung unterbrochen",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Verbindung unterbrochen",
+          "grid": "Messstatus unbekannt",
+          "lp": "Ladepunkte bereit"
+        },
+        "staleInit": {
+          "status": "EMS-Herzschlag veraltet",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "EMS-Herzschlag veraltet",
+          "grid": "NVP-Bestätigung ungültig",
+          "lp": "Ladepunkte bereit"
+        },
+        "incomplete": {
+          "status": "EMS-Herzschlag fehlt",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "EMS-Herzschlag fehlt",
+          "grid": "NVP-Bestätigung fehlt",
+          "lp": "Ladepunkte bereit"
+        },
+        "stopped": {
+          "status": "EMS gestoppt",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Gestoppt",
+          "grid": "Messung aktuell",
+          "lp": "Ladepunkte bereit"
+        },
+        "lpFault": {
+          "status": "1 Ladepunkt mit Fehler",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "lp": "1 Ladepunkt mit Fehler"
+        },
+        "lpWarning": {
+          "status": "1 Ladepunkt begrenzt oder wartend",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "lp": "1 Ladepunkt begrenzt oder wartend"
+        },
+        "recovery": {
+          "status": "Alle Systeme normal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "lp": "Ladepunkte bereit"
+        }
+      },
+      "writes": [
+        {
+          "phase": "meterWithoutEmsConfirmation",
+          "text": "NVP-Bestätigung fehlt",
+          "timeMs": 12665
+        },
+        {
+          "phase": "gridConfirmationRestored",
+          "text": "Alle Systeme normal",
+          "timeMs": 12718
+        },
+        {
+          "phase": "storageDeviation201",
+          "text": "Speicherabweichung: Speicher West · 201 W",
+          "timeMs": 12911
+        },
+        {
+          "phase": "storageDeviation200",
+          "text": "Alle Systeme normal",
+          "timeMs": 12964
+        },
+        {
+          "phase": "confirmedGridLoss",
+          "text": "Netzmessung fehlt oder ist veraltet",
+          "timeMs": 13026
+        },
+        {
+          "phase": "confirmedGridLoss",
+          "text": "Alle Systeme normal",
+          "timeMs": 13037
+        },
+        {
+          "phase": "disconnect",
+          "text": "Verbindung unterbrochen",
+          "timeMs": 13064
+        },
+        {
+          "phase": "staleInit",
+          "text": "EMS-Herzschlag veraltet",
+          "timeMs": 16280
+        },
+        {
+          "phase": "incomplete",
+          "text": "EMS-Herzschlag fehlt",
+          "timeMs": 16688
+        },
+        {
+          "phase": "stopped",
+          "text": "EMS gestoppt",
+          "timeMs": 17092
+        },
+        {
+          "phase": "lpFault",
+          "text": "1 Ladepunkt mit Fehler",
+          "timeMs": 17466
+        },
+        {
+          "phase": "lpWarning",
+          "text": "1 Ladepunkt begrenzt oder wartend",
+          "timeMs": 26347
+        },
+        {
+          "phase": "recovery",
+          "text": "Alle Systeme normal",
+          "timeMs": 36328
+        }
+      ],
+      "paints": [
+        {
+          "phase": "healthy",
+          "text": "Alle Systeme normal",
+          "timeMs": 843
+        },
+        {
+          "phase": "repeatInit",
+          "text": "Alle Systeme normal",
+          "timeMs": 12294
+        },
+        {
+          "phase": "meterWithoutEmsConfirmation",
+          "text": "NVP-Bestätigung fehlt",
+          "timeMs": 12680
+        },
+        {
+          "phase": "gridConfirmationRestored",
+          "text": "Alle Systeme normal",
+          "timeMs": 12754
+        },
+        {
+          "phase": "storageDeviation60",
+          "text": "Alle Systeme normal",
+          "timeMs": 12802
+        },
+        {
+          "phase": "storageDeviation201",
+          "text": "Speicherabweichung: Speicher West · 201 W",
+          "timeMs": 12912
+        },
+        {
+          "phase": "storageDeviation200",
+          "text": "Alle Systeme normal",
+          "timeMs": 12990
+        },
+        {
+          "phase": "confirmedGridLoss",
+          "text": "Alle Systeme normal",
+          "timeMs": 13017
+        },
+        {
+          "phase": "disconnect",
+          "text": "Verbindung unterbrochen",
+          "timeMs": 13130
+        },
+        {
+          "phase": "staleInit",
+          "text": "EMS-Herzschlag veraltet",
+          "timeMs": 16288
+        },
+        {
+          "phase": "incomplete",
+          "text": "EMS-Herzschlag fehlt",
+          "timeMs": 16695
+        },
+        {
+          "phase": "stopped",
+          "text": "EMS-Herzschlag fehlt",
+          "timeMs": 17082
+        },
+        {
+          "phase": "stopped",
+          "text": "EMS gestoppt",
+          "timeMs": 17105
+        },
+        {
+          "phase": "lpFault",
+          "text": "1 Ladepunkt mit Fehler",
+          "timeMs": 17482
+        },
+        {
+          "phase": "lpWarning",
+          "text": "1 Ladepunkt mit Fehler",
+          "timeMs": 26331
+        },
+        {
+          "phase": "lpWarning",
+          "text": "1 Ladepunkt begrenzt oder wartend",
+          "timeMs": 26389
+        },
+        {
+          "phase": "recovery",
+          "text": "Alle Systeme normal",
+          "timeMs": 36344
+        }
+      ],
+      "phase": "recovery"
+    },
+    {
+      "language": "en",
+      "steadyPollCount": 1,
+      "cases": {
+        "startup": {
+          "status": "Verbinde…",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Verbindung unterbrochen",
+          "grid": "Messstatus unbekannt",
+          "lp": "Keine aktiven Ladepunkte"
+        },
+        "stable": {
+          "status": "All systems normal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Aktiv",
+          "grid": "Measurement current",
+          "lp": "Charging points ready"
+        },
+        "meterWithoutEmsConfirmation": {
+          "status": "Grid measurement confirmation missing",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Aktiv",
+          "grid": "Measurement available · confirmation missing",
+          "lp": "Charging points ready"
+        },
+        "gridConfirmationRestored": {
+          "status": "All systems normal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Aktiv",
+          "grid": "Measurement current",
+          "lp": "Charging points ready"
+        },
+        "storageDeviation60": {
+          "status": "All systems normal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Aktiv",
+          "grid": "Measurement current",
+          "lp": "Charging points ready"
+        },
+        "storageDeviation201": {
+          "status": "Storage deviation: Speicher West · 201 W",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Aktiv",
+          "grid": "Measurement current",
+          "lp": "Charging points ready"
+        },
+        "storageDeviation200": {
+          "status": "All systems normal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Aktiv",
+          "grid": "Measurement current",
+          "lp": "Charging points ready"
+        },
+        "confirmedGridLoss": {
+          "status": "Grid measurement missing or stale",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Aktiv",
+          "grid": "Measurement missing / stale",
+          "lp": "Charging points ready"
+        },
+        "disconnect": {
+          "status": "Connection lost",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Connection lost",
+          "grid": "Measurement status unknown",
+          "lp": "Charging points ready"
+        },
+        "reconnectedWithoutSnapshot": {
+          "status": "Connection lost",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Connection lost",
+          "grid": "Measurement status unknown",
+          "lp": "Charging points ready"
+        },
+        "staleInit": {
+          "status": "EMS heartbeat stale",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "EMS heartbeat stale",
+          "grid": "Grid measurement confirmation invalid",
+          "lp": "Charging points ready"
+        },
+        "incomplete": {
+          "status": "EMS heartbeat missing",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "EMS heartbeat missing",
+          "grid": "Grid measurement confirmation missing",
+          "lp": "Charging points ready"
+        },
+        "stopped": {
+          "status": "EMS stopped",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Stopped",
+          "grid": "Measurement current",
+          "lp": "Charging points ready"
+        },
+        "lpFault": {
+          "status": "1 charging point with error",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Aktiv",
+          "grid": "Measurement current",
+          "lp": "1 charging point with error"
+        },
+        "lpWarning": {
+          "status": "1 charging point limited or waiting",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Aktiv",
+          "grid": "Measurement current",
+          "lp": "1 charging point limited or waiting"
+        },
+        "recovery": {
+          "status": "All systems normal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Aktiv",
+          "grid": "Measurement current",
+          "lp": "Charging points ready"
+        }
+      },
+      "writes": [
+        {
+          "phase": "meterWithoutEmsConfirmation",
+          "text": "Grid measurement confirmation missing",
+          "timeMs": 12858
+        },
+        {
+          "phase": "gridConfirmationRestored",
+          "text": "All systems normal",
+          "timeMs": 12956
+        },
+        {
+          "phase": "storageDeviation201",
+          "text": "Storage deviation: Speicher West · 201 W",
+          "timeMs": 13095
+        },
+        {
+          "phase": "storageDeviation200",
+          "text": "All systems normal",
+          "timeMs": 13143
+        },
+        {
+          "phase": "confirmedGridLoss",
+          "text": "Grid measurement missing or stale",
+          "timeMs": 13204
+        },
+        {
+          "phase": "confirmedGridLoss",
+          "text": "All systems normal",
+          "timeMs": 13231
+        },
+        {
+          "phase": "disconnect",
+          "text": "Connection lost",
+          "timeMs": 13253
+        },
+        {
+          "phase": "staleInit",
+          "text": "EMS heartbeat stale",
+          "timeMs": 16447
+        },
+        {
+          "phase": "incomplete",
+          "text": "EMS heartbeat missing",
+          "timeMs": 16850
+        },
+        {
+          "phase": "stopped",
+          "text": "EMS stopped",
+          "timeMs": 17256
+        },
+        {
+          "phase": "lpFault",
+          "text": "1 charging point with error",
+          "timeMs": 17710
+        },
+        {
+          "phase": "lpWarning",
+          "text": "1 charging point limited or waiting",
+          "timeMs": 26523
+        },
+        {
+          "phase": "recovery",
+          "text": "All systems normal",
+          "timeMs": 36491
+        }
+      ],
+      "paints": [
+        {
+          "phase": "healthy",
+          "text": "All systems normal",
+          "timeMs": 1031
+        },
+        {
+          "phase": "repeatInit",
+          "text": "All systems normal",
+          "timeMs": 12505
+        },
+        {
+          "phase": "meterWithoutEmsConfirmation",
+          "text": "Grid measurement confirmation missing",
+          "timeMs": 12878
+        },
+        {
+          "phase": "gridConfirmationRestored",
+          "text": "Grid measurement confirmation missing",
+          "timeMs": 12949
+        },
+        {
+          "phase": "storageDeviation60",
+          "text": "All systems normal",
+          "timeMs": 13015
+        },
+        {
+          "phase": "storageDeviation201",
+          "text": "Storage deviation: Speicher West · 201 W",
+          "timeMs": 13099
+        },
+        {
+          "phase": "storageDeviation200",
+          "text": "All systems normal",
+          "timeMs": 13182
+        },
+        {
+          "phase": "confirmedGridLoss",
+          "text": "Grid measurement missing or stale",
+          "timeMs": 13217
+        },
+        {
+          "phase": "disconnect",
+          "text": "Connection lost",
+          "timeMs": 13289
+        },
+        {
+          "phase": "staleInit",
+          "text": "EMS heartbeat stale",
+          "timeMs": 16447
+        },
+        {
+          "phase": "incomplete",
+          "text": "EMS heartbeat missing",
+          "timeMs": 16851
+        },
+        {
+          "phase": "stopped",
+          "text": "EMS heartbeat missing",
+          "timeMs": 17254
+        },
+        {
+          "phase": "stopped",
+          "text": "EMS stopped",
+          "timeMs": 17277
+        },
+        {
+          "phase": "lpFault",
+          "text": "EMS stopped",
+          "timeMs": 17706
+        },
+        {
+          "phase": "lpFault",
+          "text": "1 charging point with error",
+          "timeMs": 17733
+        },
+        {
+          "phase": "lpWarning",
+          "text": "1 charging point limited or waiting",
+          "timeMs": 26567
+        },
+        {
+          "phase": "recovery",
+          "text": "1 charging point limited or waiting",
+          "timeMs": 36490
+        },
+        {
+          "phase": "recovery",
+          "text": "All systems normal",
+          "timeMs": 36531
+        }
+      ],
+      "phase": "recovery"
+    },
+    {
+      "language": "nl",
+      "steadyPollCount": 1,
+      "cases": {
+        "startup": {
+          "status": "Verbinde…",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Verbindung unterbrochen",
+          "grid": "Messstatus unbekannt",
+          "lp": "Keine aktiven Ladepunkte"
+        },
+        "stable": {
+          "status": "Alle systemen werken normaal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Actief",
+          "grid": "Meting actueel",
+          "lp": "Laadpunten gereed"
+        },
+        "meterWithoutEmsConfirmation": {
+          "status": "Bevestiging netmeting ontbreekt",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Actief",
+          "grid": "Meetwaarde beschikbaar · bevestiging ontbreekt",
+          "lp": "Laadpunten gereed"
+        },
+        "gridConfirmationRestored": {
+          "status": "Alle systemen werken normaal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Actief",
+          "grid": "Meting actueel",
+          "lp": "Laadpunten gereed"
+        },
+        "storageDeviation60": {
+          "status": "Alle systemen werken normaal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Actief",
+          "grid": "Meting actueel",
+          "lp": "Laadpunten gereed"
+        },
+        "storageDeviation201": {
+          "status": "Opslagafwijking: Speicher West · 201 W",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Actief",
+          "grid": "Meting actueel",
+          "lp": "Laadpunten gereed"
+        },
+        "storageDeviation200": {
+          "status": "Alle systemen werken normaal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Actief",
+          "grid": "Meting actueel",
+          "lp": "Laadpunten gereed"
+        },
+        "confirmedGridLoss": {
+          "status": "Netmeting ontbreekt of is verouderd",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Actief",
+          "grid": "Meting ontbreekt / verouderd",
+          "lp": "Laadpunten gereed"
+        },
+        "disconnect": {
+          "status": "Verbinding verbroken",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Verbinding verbroken",
+          "grid": "Meetstatus onbekend",
+          "lp": "Laadpunten gereed"
+        },
+        "reconnectedWithoutSnapshot": {
+          "status": "Verbinding verbroken",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Verbinding verbroken",
+          "grid": "Meetstatus onbekend",
+          "lp": "Laadpunten gereed"
+        },
+        "staleInit": {
+          "status": "EMS-heartbeat verouderd",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "EMS-heartbeat verouderd",
+          "grid": "Bevestiging netmeting ongeldig",
+          "lp": "Laadpunten gereed"
+        },
+        "incomplete": {
+          "status": "EMS-heartbeat ontbreekt",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "EMS-heartbeat ontbreekt",
+          "grid": "Bevestiging netmeting ontbreekt",
+          "lp": "Laadpunten gereed"
+        },
+        "stopped": {
+          "status": "EMS gestopt",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Gestopt",
+          "grid": "Meting actueel",
+          "lp": "Laadpunten gereed"
+        },
+        "lpFault": {
+          "status": "1 laadpunt met fout",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Actief",
+          "grid": "Meting actueel",
+          "lp": "1 laadpunt met fout"
+        },
+        "lpWarning": {
+          "status": "1 laadpunt begrensd of wachtend",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Actief",
+          "grid": "Meting actueel",
+          "lp": "1 laadpunt begrensd of wachtend"
+        },
+        "recovery": {
+          "status": "Alle systemen werken normaal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Actief",
+          "grid": "Meting actueel",
+          "lp": "Laadpunten gereed"
+        }
+      },
+      "writes": [
+        {
+          "phase": "meterWithoutEmsConfirmation",
+          "text": "Bevestiging netmeting ontbreekt",
+          "timeMs": 13014
+        },
+        {
+          "phase": "gridConfirmationRestored",
+          "text": "Alle systemen werken normaal",
+          "timeMs": 13083
+        },
+        {
+          "phase": "storageDeviation201",
+          "text": "Opslagafwijking: Speicher West · 201 W",
+          "timeMs": 13190
+        },
+        {
+          "phase": "storageDeviation200",
+          "text": "Alle systemen werken normaal",
+          "timeMs": 13248
+        },
+        {
+          "phase": "confirmedGridLoss",
+          "text": "Netmeting ontbreekt of is verouderd",
+          "timeMs": 13275
+        },
+        {
+          "phase": "confirmedGridLoss",
+          "text": "Alle systemen werken normaal",
+          "timeMs": 13286
+        },
+        {
+          "phase": "disconnect",
+          "text": "Verbinding verbroken",
+          "timeMs": 13318
+        },
+        {
+          "phase": "staleInit",
+          "text": "EMS-heartbeat verouderd",
+          "timeMs": 16503
+        },
+        {
+          "phase": "incomplete",
+          "text": "EMS-heartbeat ontbreekt",
+          "timeMs": 16903
+        },
+        {
+          "phase": "stopped",
+          "text": "EMS gestopt",
+          "timeMs": 17285
+        },
+        {
+          "phase": "lpFault",
+          "text": "1 laadpunt met fout",
+          "timeMs": 17665
+        },
+        {
+          "phase": "lpWarning",
+          "text": "1 laadpunt begrensd of wachtend",
+          "timeMs": 26550
+        },
+        {
+          "phase": "recovery",
+          "text": "Alle systemen werken normaal",
+          "timeMs": 36543
+        }
+      ],
+      "paints": [
+        {
+          "phase": "healthy",
+          "text": "Alle systemen werken normaal",
+          "timeMs": 1196
+        },
+        {
+          "phase": "repeatInit",
+          "text": "Alle systemen werken normaal",
+          "timeMs": 12637
+        },
+        {
+          "phase": "meterWithoutEmsConfirmation",
+          "text": "Bevestiging netmeting ontbreekt",
+          "timeMs": 13043
+        },
+        {
+          "phase": "gridConfirmationRestored",
+          "text": "Alle systemen werken normaal",
+          "timeMs": 13085
+        },
+        {
+          "phase": "storageDeviation201",
+          "text": "Opslagafwijking: Speicher West · 201 W",
+          "timeMs": 13203
+        },
+        {
+          "phase": "storageDeviation200",
+          "text": "Alle systemen werken normaal",
+          "timeMs": 13261
+        },
+        {
+          "phase": "confirmedGridLoss",
+          "text": "Alle systemen werken normaal",
+          "timeMs": 13308
+        },
+        {
+          "phase": "disconnect",
+          "text": "Verbinding verbroken",
+          "timeMs": 13356
+        },
+        {
+          "phase": "staleInit",
+          "text": "EMS-heartbeat verouderd",
+          "timeMs": 16503
+        },
+        {
+          "phase": "incomplete",
+          "text": "EMS-heartbeat verouderd",
+          "timeMs": 16891
+        },
+        {
+          "phase": "incomplete",
+          "text": "EMS-heartbeat ontbreekt",
+          "timeMs": 16914
+        },
+        {
+          "phase": "stopped",
+          "text": "EMS gestopt",
+          "timeMs": 17288
+        },
+        {
+          "phase": "lpFault",
+          "text": "1 laadpunt met fout",
+          "timeMs": 17672
+        },
+        {
+          "phase": "lpWarning",
+          "text": "1 laadpunt begrensd of wachtend",
+          "timeMs": 26552
+        },
+        {
+          "phase": "recovery",
+          "text": "Alle systemen werken normaal",
+          "timeMs": 36569
+        }
+      ],
+      "phase": "recovery"
+    }
+  ],
+  "processResults": [
+    {
+      "language": "de",
+      "results": {
+        "supervisorUnavailable": {
+          "text": "Prozessstatus unbekannt",
+          "discoveryPolls": 1
+        },
+        "runningStandby": {
+          "text": "Wartet auf Übernahme · Geräte",
+          "discoveryPolls": 2
+        },
+        "healthy": {
+          "text": "Alle Systeme normal",
+          "discoveryPolls": 3
+        },
+        "failedDevice": {
+          "text": "Prozess gestört · Geräte",
+          "discoveryPolls": 4
+        },
+        "multipleModules": {
+          "text": "Prozess gestört · Geräte, EEBus, OCPP",
+          "discoveryPolls": 5
+        },
+        "offlineWithModuleNames": {
+          "text": "Live-Verbindung unterbrochen · Prozess gestört: Geräte, EEBus, OCPP",
+          "discoveryPolls": 5
+        },
+        "newEmsFaultWhileStreamUnavailable": {
+          "text": "Live-Verbindung unterbrochen · Prozess gestört: EMS, EEBus, OCPP",
+          "discoveryPolls": 6
+        },
+        "streamRestoredButModulesStillDown": {
+          "text": "Prozess gestört · EMS, EEBus, OCPP",
+          "discoveryPolls": 6
+        },
+        "disabledModulesExpected": {
+          "text": "Alle Systeme normal",
+          "discoveryPolls": 7
+        },
+        "singlePhysicalDeviceDown": {
+          "text": "Geräte offline · Netzzähler Nord",
+          "discoveryPolls": 8
+        },
+        "twoPhysicalDevicesDown": {
+          "text": "Geräte offline · Netzzähler Nord, PV-Dach Süd",
+          "discoveryPolls": 9
+        },
+        "processAndDevicesDown": {
+          "text": "Prozess gestört · EEBus · Geräte offline · Netzzähler Nord, PV-Dach Süd",
+          "discoveryPolls": 10
+        },
+        "severalDevicesSummarized": {
+          "text": "Geräte offline · Netzzähler Nord, PV-Dach Süd (+4)",
+          "discoveryPolls": 11,
+          "title": "Geräte offline · Netzzähler Nord, PV-Dach Süd, Keller links, Halle Süd, Lüftung West, Pumpe Ost"
+        },
+        "deviceStateUnknown": {
+          "text": "Gerätestatus unbekannt",
+          "discoveryPolls": 12
+        },
+        "physicalDeviceRecovery": {
+          "text": "Alle Systeme normal",
+          "discoveryPolls": 13
+        },
+        "emsPaused": {
+          "text": "EMS pausiert",
+          "discoveryPolls": 14
+        },
+        "staleSupervisorObservation": {
+          "text": "Prozessstatus unbekannt",
+          "discoveryPolls": 16
+        },
+        "allRecovered": {
+          "text": "Alle Systeme normal",
+          "discoveryPolls": 17
+        }
+      }
+    },
+    {
+      "language": "en",
+      "results": {
+        "supervisorUnavailable": {
+          "text": "Process status unknown",
+          "discoveryPolls": 1
+        },
+        "runningStandby": {
+          "text": "Awaiting handover · Devices",
+          "discoveryPolls": 2
+        },
+        "healthy": {
+          "text": "All systems normal",
+          "discoveryPolls": 3
+        },
+        "failedDevice": {
+          "text": "Process fault · Devices",
+          "discoveryPolls": 4
+        },
+        "multipleModules": {
+          "text": "Process fault · Devices, EEBus, OCPP",
+          "discoveryPolls": 5
+        },
+        "offlineWithModuleNames": {
+          "text": "Live connection lost · Process fault: Devices, EEBus, OCPP",
+          "discoveryPolls": 5
+        },
+        "newEmsFaultWhileStreamUnavailable": {
+          "text": "Live connection lost · Process fault: EMS, EEBus, OCPP",
+          "discoveryPolls": 6
+        },
+        "streamRestoredButModulesStillDown": {
+          "text": "Process fault · EMS, EEBus, OCPP",
+          "discoveryPolls": 6
+        },
+        "disabledModulesExpected": {
+          "text": "All systems normal",
+          "discoveryPolls": 7
+        },
+        "singlePhysicalDeviceDown": {
+          "text": "Devices offline · Netzzähler Nord",
+          "discoveryPolls": 8
+        },
+        "twoPhysicalDevicesDown": {
+          "text": "Devices offline · Netzzähler Nord, PV-Dach Süd",
+          "discoveryPolls": 9
+        },
+        "processAndDevicesDown": {
+          "text": "Process fault · EEBus · Devices offline · Netzzähler Nord, PV-Dach Süd",
+          "discoveryPolls": 10
+        },
+        "severalDevicesSummarized": {
+          "text": "Devices offline · Netzzähler Nord, PV-Dach Süd (+4)",
+          "discoveryPolls": 11,
+          "title": "Devices offline · Netzzähler Nord, PV-Dach Süd, Keller links, Halle Süd, Lüftung West, Pumpe Ost"
+        },
+        "deviceStateUnknown": {
+          "text": "Device status unknown",
+          "discoveryPolls": 12
+        },
+        "physicalDeviceRecovery": {
+          "text": "All systems normal",
+          "discoveryPolls": 13
+        },
+        "emsPaused": {
+          "text": "EMS paused",
+          "discoveryPolls": 14
+        },
+        "staleSupervisorObservation": {
+          "text": "Process status unknown",
+          "discoveryPolls": 16
+        },
+        "allRecovered": {
+          "text": "All systems normal",
+          "discoveryPolls": 17
+        }
+      }
+    },
+    {
+      "language": "nl",
+      "results": {
+        "supervisorUnavailable": {
+          "text": "Processtatus onbekend",
+          "discoveryPolls": 1
+        },
+        "runningStandby": {
+          "text": "Wacht op overname · Apparaten",
+          "discoveryPolls": 2
+        },
+        "healthy": {
+          "text": "Alle systemen werken normaal",
+          "discoveryPolls": 3
+        },
+        "failedDevice": {
+          "text": "Processtoring · Apparaten",
+          "discoveryPolls": 4
+        },
+        "multipleModules": {
+          "text": "Processtoring · Apparaten, EEBus, OCPP",
+          "discoveryPolls": 5
+        },
+        "offlineWithModuleNames": {
+          "text": "Liveverbinding verbroken · Processtoring: Apparaten, EEBus, OCPP",
+          "discoveryPolls": 5
+        },
+        "newEmsFaultWhileStreamUnavailable": {
+          "text": "Liveverbinding verbroken · Processtoring: EMS, EEBus, OCPP",
+          "discoveryPolls": 6
+        },
+        "streamRestoredButModulesStillDown": {
+          "text": "Processtoring · EMS, EEBus, OCPP",
+          "discoveryPolls": 6
+        },
+        "disabledModulesExpected": {
+          "text": "Alle systemen werken normaal",
+          "discoveryPolls": 7
+        },
+        "singlePhysicalDeviceDown": {
+          "text": "Apparaten offline · Netzzähler Nord",
+          "discoveryPolls": 8
+        },
+        "twoPhysicalDevicesDown": {
+          "text": "Apparaten offline · Netzzähler Nord, PV-Dach Süd",
+          "discoveryPolls": 9
+        },
+        "processAndDevicesDown": {
+          "text": "Processtoring · EEBus · Apparaten offline · Netzzähler Nord, PV-Dach Süd",
+          "discoveryPolls": 10
+        },
+        "severalDevicesSummarized": {
+          "text": "Apparaten offline · Netzzähler Nord, PV-Dach Süd (+4)",
+          "discoveryPolls": 11,
+          "title": "Apparaten offline · Netzzähler Nord, PV-Dach Süd, Keller links, Halle Süd, Lüftung West, Pumpe Ost"
+        },
+        "deviceStateUnknown": {
+          "text": "Apparaatstatus onbekend",
+          "discoveryPolls": 12
+        },
+        "physicalDeviceRecovery": {
+          "text": "Alle systemen werken normaal",
+          "discoveryPolls": 13
+        },
+        "emsPaused": {
+          "text": "EMS gepauzeerd",
+          "discoveryPolls": 14
+        },
+        "staleSupervisorObservation": {
+          "text": "Processtatus onbekend",
+          "discoveryPolls": 16
+        },
+        "allRecovered": {
+          "text": "Alle systemen werken normaal",
+          "discoveryPolls": 17
+        }
+      }
+    }
+  ]
+}

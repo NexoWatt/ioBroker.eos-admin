@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "eos-admin",
-    "version": "9.0.36",
+    "version": "9.0.38",
     "titleLang": {
       "en": "NexoWatt EOS",
       "de": "NexoWatt EOS",
@@ -18,6 +18,14 @@
     "connectionType": "local",
     "dataSource": "push",
     "news": {
+      "9.0.38": {
+        "de": "Die Bestandsübernahme lässt sich im Admin starten oder erneut prüfen. Auch bei bereits beendeten Altadaptern prüft EOS Konfiguration und Historienanbindung.",
+        "en": "Administrators can start or recheck migration. EOS checks the configuration and history connection even when the legacy adapters have already stopped."
+      },
+      "9.0.37": {
+        "de": "Das Dashboard benennt offene Betriebszustände. Die Speicherfarm zeigt die aktuelle Reglerentscheidung und meldet Leistungsabweichungen über 200 W je beauftragtem Speicher.",
+        "en": "The dashboard identifies pending operating states. The storage farm shows the current control decision and reports power deviations above 200 W per dispatched storage unit."
+      },
       "9.0.36": {
         "de": "EOS übernimmt eine bestätigte, bereits deaktivierte Alt-UI automatisch. Die Startdiagnose und der Wiederanlauf der Module wurden überarbeitet.",
         "en": "EOS automatically migrates a verified legacy UI that was already disabled. Module startup diagnostics and recovery have been revised."
@@ -89,14 +97,6 @@
       "9.0.19": {
         "en": "Fix device-to-EMS commissioning, fresh unchanged measurements and energy flow; preserve existing customer settings.",
         "de": "Geräteübergabe ins EMS, Aktualität unveränderter Messwerte und Energiefluss korrigiert; bestehende Kundeneinstellungen erhalten."
-      },
-      "9.0.18": {
-        "en": "Automatic supported-device assignment through shared Alias V1 roles; customer tariff connection; preserved mappings and data points. New control targets require commissioning.",
-        "de": "Automatische Gerätezuordnung über gemeinsame Alias-V1-Rollen und Tarifanbindung in Kundeneinstellungen. Vorhandene Zuordnungen und Datenpunkte bleiben erhalten; neue Regelziele benötigen eine Inbetriebnahme."
-      },
-      "9.0.17": {
-        "de": "EOS-Sitzungen vom ioBroker Admin getrennt; automatische Änderungen fremder Rechte und Metadaten entfernt; Parallelbetrieb mit Standard-Backitup abgesichert.",
-        "en": "Isolate EOS sessions from ioBroker Admin; remove automatic foreign permission and metadata changes; preserve standard Backitup coexistence."
       }
     },
     "desc": {
@@ -134,7 +134,7 @@
     "icon": "admin.svg",
     "messagebox": true,
     "enabled": true,
-    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.36/admin/admin.svg",
+    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.38/admin/admin.svg",
     "keywords": [
       "NexoWatt",
       "EOS",
@@ -145,7 +145,7 @@
       "licensed"
     ],
     "compact": false,
-    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.36/README.md",
+    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.38/README.md",
     "authors": [
       "NexoWatt"
     ],
@@ -157,7 +157,7 @@
     "type": "general",
     "licenseInformation": {
       "type": "paid",
-      "link": "https://unpkg.com/iobroker.eos-admin@9.0.36/LICENSE"
+      "link": "https://unpkg.com/iobroker.eos-admin@9.0.38/LICENSE"
     },
     "logTransporter": true,
     "stopBeforeUpdate": true,

@@ -1,0 +1,10 @@
+✔ UI 1.0.35 and Devices 0.5.172 retain the field mapping from both stopped sources through restart (5003.407599ms)
+ℹ {"release":"9.0.38","blocked936Reproduced":true,"sourceUi":"1.0.35","sourceDevices":"0.5.172","originalSourcesStillStopped":true,"originalHistoryLink":["influxdb.0"],"meterAfterRestartW":1386}
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5142.448214

@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/live-display.ts
- * Quell-Hash: sha256:8526f2adf4071d0d91a5962fbcf786d215ed1dc893783e5408a283e22bf96acc
+ * Quell-Hash: sha256:ce0c757ad7a26ec5347cf1954a8b7949be4c5af625c09f3c6158f1987ba95a53
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -21,13 +21,6 @@
  * 3. npm run test:runtime-executables prüfen.
  */
 "use strict";
-/**
- * NexoWatt Quellcode-Erklärung (DE)
- * Aufgabe: Validiert ausschließlich sichtbare LIVE-Messwerte und Betriebsstatus.
- * Daten und Wirkung: Liest lokale Snapshot-Werte ohne API-/Schreibwirkung. Fehlend,
- * veraltet und offline bleiben unbekannt; die echte Zahl 0 bleibt eine Messung.
- * Bei Änderungen: Null, konstant bestätigte Werte, Zukunftszeit und Ausfälle prüfen.
- */
 (() => {
     const record = (value) => !!value && typeof value === 'object' && !Array.isArray(value);
     function entry(snapshot, key) {
@@ -131,31 +124,148 @@
             return missing;
         }
     }
+    const farmPowerWarningLimitW = 200;
+    const finite = (value) => typeof value === 'number' && Number.isFinite(value);
+    const stamp = (value) => finite(value) && Number.isSafeInteger(value) && value > 0;
+    /** Diagnose eines einzelnen, zeitlich belegten Batterieauftrags. Positiv bedeutet Entladen. */
+    function compareFarmPower(targetW, measuredW, commandAt, sampledAt, validUntil, now, domain) {
+        if (domain !== undefined && domain !== 'ess-ac')
+            return null;
+        if (!finite(targetW) || !finite(measuredW) || !finite(commandAt) || !finite(sampledAt) || !finite(validUntil) || !finite(now))
+            return null;
+        const expiry = Math.min(validUntil, sampledAt + 30000);
+        if (commandAt <= 0 || sampledAt <= commandAt || sampledAt > now || now > expiry)
+            return null;
+        const differenceW = Math.abs(targetW - measuredW);
+        if (!finite(differenceW))
+            return null;
+        return { v: 1, ...(domain ? { domain } : {}), targetW, measuredW, differenceW, commandAt, sampledAt, validUntil: expiry, warning: differenceW > farmPowerWarningLimitW };
+    }
+    function farmKey(row) {
+        return record(row) && typeof row.dispatchKey === 'string' && row.dispatchKey.length <= 512 ? row.dispatchKey.trim() : '';
+    }
+    // The EMS owns command acceptance, sign and warning threshold. The same reader
+    // validates its timed evidence for the dashboard, farm page and mail service.
+    function farmPowerComparison(row, now) {
+        if (!record(row) || row.online !== true || !farmKey(row) || !finite(now))
+            return null;
+        const report = row.powerComparison;
+        if (!record(report) || report.v !== 1 || typeof report.warning !== 'boolean')
+            return null;
+        const { targetW, measuredW, differenceW, commandAt, sampledAt, validUntil, domain } = report;
+        if (domain !== undefined && domain !== 'ess-ac')
+            return null;
+        if (!finite(targetW) || !finite(measuredW) || !finite(differenceW) || differenceW !== Math.abs(targetW - measuredW)
+            || report.warning !== (differenceW > farmPowerWarningLimitW)
+            || !stamp(sampledAt) || !stamp(commandAt) || !stamp(validUntil) || commandAt >= sampledAt
+            || sampledAt > now || now > validUntil || validUntil - sampledAt > 30000)
+            return null;
+        return { v: 1, targetW, measuredW, differenceW, commandAt, sampledAt, validUntil, warning: report.warning,
+            ...(domain === 'ess-ac' ? { domain } : {}) };
+    }
+    // The atomic farm payload is immutable between SSE updates. Retain only small
+    // warning candidates; duplicate device keys never produce an attributable alarm.
+    const farmCandidates = new WeakMap();
+    function farmWarnings(state, now) {
+        if (!record(state) || !stamp(state.ts) || state.ts > now || !confirmed(state, now, 30000)
+            || typeof state.value !== 'string' || state.value.length > 262144)
+            return [];
+        let candidates = farmCandidates.get(state);
+        if (!candidates) {
+            candidates = [];
+            try {
+                const rows = JSON.parse(state.value);
+                if (Array.isArray(rows) && rows.length <= 128) {
+                    const seen = new Set(), duplicates = new Set();
+                    for (const row of rows) {
+                        const key = farmKey(row);
+                        if (!key)
+                            continue;
+                        if (seen.has(key))
+                            duplicates.add(key);
+                        seen.add(key);
+                        if (record(row) && record(row.powerComparison) && row.powerComparison.warning === true) {
+                            candidates.push({ dispatchKey: key, name: row.name, online: row.online, powerComparison: row.powerComparison });
+                        }
+                    }
+                    candidates = candidates.filter(row => !duplicates.has(farmKey(row)));
+                }
+            }
+            catch { /* Incomplete or malformed evidence cannot establish a deviation. */ }
+            farmCandidates.set(state, candidates);
+        }
+        const result = [];
+        for (const row of candidates) {
+            const report = farmPowerComparison(row, now);
+            if (report?.warning)
+                result.push({ key: farmKey(row), name: typeof row.name === 'string' ? row.name.trim().slice(0, 64) : '', differenceW: report.differenceW });
+        }
+        return result;
+    }
+    // Ordinary power updates belong to the ten-second display frame. A change
+    // of affected storage units gets an immediate diagnostic refresh.
+    function farmWarningChanged(before, after, now) {
+        const a = farmWarnings(before, now), b = farmWarnings(after, now);
+        return a.length !== b.length || a.some((warning, i) => warning.key !== b[i]?.key);
+    }
     const processIds = ['ui', 'ems', 'devices', 'eebus', 'backup', 'ocpp'];
     // Older snapshots omit ack. An explicit unconfirmed value cannot establish operational health.
     function confirmed(row, now, maxAge) {
         return current(row, now, maxAge, true) && (row?.ack === undefined || row.ack === true);
+    }
+    const aliveIssue = { missing: 'EMS-Betriebsmeldung fehlt', invalid: 'EMS-Betriebsmeldung ungültig', stale: 'EMS-Betriebsmeldung veraltet' };
+    const beatIssue = { missing: 'EMS-Herzschlag fehlt', invalid: 'EMS-Herzschlag ungültig', stale: 'EMS-Herzschlag veraltet' };
+    const gridIssue = { missing: 'NVP-Bestätigung fehlt', invalid: 'NVP-Bestätigung ungültig', stale: 'NVP-Bestätigung veraltet' };
+    function reportIssue(row, now, isHeartbeat) {
+        if (row === null || row === undefined)
+            return 'missing';
+        if (!record(row) || (row.ack !== undefined && row.ack !== true) || (row.q !== undefined && row.q !== 0))
+            return 'invalid';
+        const ts = number(row.ts);
+        if (ts === null || ts <= 0 || ts > now + 5000)
+            return 'invalid';
+        let observedAt = ts;
+        if (isHeartbeat) {
+            const beat = number(row.value);
+            if (beat === null || beat <= 0 || beat > now + 5000)
+                return 'invalid';
+            observedAt = Math.min(ts, beat);
+        }
+        else if (typeof row.value !== 'boolean')
+            return 'invalid';
+        return now - observedAt > 30000 ? 'stale' : null;
+    }
+    // An ordinary heartbeat advances the timestamp without changing what the operator sees.
+    function reportChanged(previous, next, now, isHeartbeat) {
+        const before = reportIssue(previous, now, isHeartbeat), after = reportIssue(next, now, isHeartbeat);
+        return before !== after || (!after && !isHeartbeat && record(previous) && record(next) && previous.value !== next.value);
     }
     function status(snapshot, online, now, gridMaxAge = 30000) {
         if (!online)
             return { ems: 'Verbindung unterbrochen', grid: 'Messstatus unbekannt', summary: 'Verbindung unterbrochen', phase: 'offline' };
         const alive = entry(snapshot, 'ems.core.schedulerAlive');
         const beat = entry(snapshot, 'ems.core.schedulerHeartbeatAt');
-        const heartbeat = confirmed(beat, now, 30000) ? number(beat?.value) : null;
-        const aliveKnown = confirmed(alive, now, 30000);
-        const running = aliveKnown && alive?.value === true && heartbeat !== null && heartbeat > 0 && heartbeat <= now + 5000 && now - heartbeat <= 30000;
-        const stopped = aliveKnown && alive?.value === false;
         const nvp = entry(snapshot, 'ems.gridMeasurementFresh');
-        const gridKnown = confirmed(nvp, now, 30000) && typeof nvp?.value === 'boolean';
-        const gridFresh = gridKnown && nvp?.value === true;
-        const grid = entry(snapshot, 'derived.core.grid.netW');
-        const legacyGrid = record(snapshot) && !Object.hasOwn(snapshot, 'ems.gridMeasurementFresh');
-        const gridObserved = legacyGrid && confirmed(grid, now, gridMaxAge) && number(grid?.value) !== null;
-        const phase = stopped ? 'stopped' : gridKnown && !gridFresh ? 'grid-unavailable'
-            : running && gridFresh ? 'healthy' : 'unknown';
-        return { ems: running ? 'Aktiv' : stopped ? 'Gestoppt' : 'Status unbekannt',
-            grid: gridFresh || gridObserved ? 'Messung aktuell' : gridKnown ? 'Messung fehlt / veraltet' : 'Messstatus unbekannt',
-            summary: running && gridFresh ? 'EMS aktiv · NVP-Messung aktuell' : stopped ? 'EMS gestoppt' : 'Betriebsstatus prüfen', phase };
+        const aliveProblem = reportIssue(alive, now, false), beatProblem = reportIssue(beat, now, true);
+        const gridProblem = reportIssue(nvp, now, false);
+        const stopped = !aliveProblem && alive?.value === false;
+        const emsProblem = aliveProblem ? aliveIssue[aliveProblem] : beatProblem ? beatIssue[beatProblem] : '';
+        const gridUnavailable = !gridProblem && nvp?.value === false;
+        const gridDiagnosis = gridProblem ? gridIssue[gridProblem] : '';
+        let grid = gridUnavailable ? 'Messung fehlt / veraltet' : gridDiagnosis || 'Messung aktuell';
+        if (gridProblem === 'missing' && record(snapshot) && !Object.hasOwn(snapshot, 'ems.gridMeasurementFresh')) {
+            const measurement = entry(snapshot, 'derived.core.grid.netW');
+            if (confirmed(measurement, now, gridMaxAge) && number(measurement?.value) !== null)
+                grid = 'Messwert vorhanden · Bestätigung fehlt';
+        }
+        const ems = stopped ? 'Gestoppt' : emsProblem || 'Aktiv';
+        if (stopped)
+            return { ems, grid, summary: 'EMS gestoppt', phase: 'stopped' };
+        if (gridUnavailable)
+            return { ems, grid, summary: 'Netzmessung fehlt oder ist veraltet', phase: 'grid-unavailable' };
+        if (emsProblem || gridDiagnosis)
+            return { ems, grid, summary: emsProblem || gridDiagnosis, phase: 'unknown' };
+        return { ems, grid, summary: 'EMS aktiv · NVP-Messung aktuell', phase: 'healthy' };
     }
     function validIds(value) {
         return Array.isArray(value) && value.length <= processIds.length &&
@@ -206,20 +316,20 @@
             return { text: 'Netzmessung fehlt oder ist veraltet', level: 'warn' };
         if (processes?.waiting.length)
             return { text: 'Wartet auf Übernahme · {names}', level: 'warn', processIds: processes.waiting };
-        if (!emsPaused && health?.phase !== 'healthy')
-            return { text: 'Betriebsstatus prüfen', level: 'warn' };
         if (p14Fallback)
             return { text: '§14a-Kommunikationsfallback aktiv', level: 'warn' };
         if (chargeModel && chargeModel.total > 0 && chargeModel.overallLevel === 'warn') {
             return { text: chargeModel.systemText, level: 'warn' };
         }
+        if (!emsPaused && health?.phase !== 'healthy')
+            return { text: health?.summary || 'Betriebsdiagnose nicht verfügbar', level: 'warn' };
         if (processes?.state !== 'ok')
             return { text: 'Prozessstatus unbekannt', level: 'warn' };
         if (emsPaused)
             return { text: 'EMS pausiert', level: 'info' };
         return { text: 'Alle Systeme normal', level: 'ok' };
     }
-    function dashboardStatus(health, connection, chargeModel, safetyStop, p14Fallback, processSnapshot, now = Date.now()) {
+    function dashboardStatus(health, connection, chargeModel, safetyStop, p14Fallback, processSnapshot, now = Date.now(), farmState) {
         const processes = processHealth(processSnapshot, now);
         const primary = operatingStatus(health, connection, chargeModel, safetyStop, p14Fallback, processes);
         const devices = processes && record(processSnapshot) ? processSnapshot.deviceHealth : null;
@@ -241,8 +351,16 @@
             devices.totalOffline === 0 && Array.isArray(devices.offline) && devices.offline.length === 0)) {
             return { text: 'Gerätestatus unbekannt', level: 'warn' };
         }
+        if (primary.level === 'ok') {
+            const storageWarnings = farmWarnings(farmState, now);
+            if (storageWarnings.length)
+                return { text: 'Speicherabweichung: {name} · {watts} W', level: 'warn', storageWarnings };
+        }
         return primary;
     }
-    const host = window;
-    host.NexoWattLiveDisplay = Object.freeze({ read, farm, status, dashboardStatus, buildingQuality });
+    const view = Object.freeze({ read, farm, status, dashboardStatus, reportChanged, buildingQuality, farmPowerComparison, farmWarningChanged });
+    if (typeof window !== 'undefined')
+        window.NexoWattLiveDisplay = view;
+    if (typeof module !== 'undefined' && module.exports)
+        module.exports = { compareFarmPower, farmPowerComparison, farmPowerWarningLimitW };
 })();

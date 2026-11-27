@@ -8,6 +8,12 @@ beschreibt Scope, Maßnahmen und zu erbringende Nachweise. Testergebnisse werden
 abschließenden Release-Prüfbericht geführt. Hier wird keine bestandene Normprüfung,
 CE-/CRA-Konformität oder Produktionsfreigabe erklärt.
 
+## Ergänzung zur Bestandsübernahme in 9.0.38
+
+Die Administration startet einen erneuten Übernahmeversuch über eine separate Schreiboperation. Die Route prüft Administratorsitzung, anfragenden Ursprung, CSRF-Schutz und die Revision des angezeigten Bestands. Gleichzeitige Anforderungen dürfen dieselben Quellen nicht mehrfach übernehmen. Die normale Statusabfrage verändert die Anlage nicht. Der Migrationskoordinator prüft die Identität und die gespeicherte Konfiguration der Quellen und wartet auf den vom Controller bestätigten Stillstand, bevor er Schreibrechte an die integrierten Prozesse übergibt.
+
+Die Übernahme bleibt lokal. Der Zugriff auf historische Daten verwendet die eingerichtete Historikerinstanz und deren bisherige Datenpunktnamen. Die Admin-Statusseite gibt Quellnamen, Versionen und Diagnosecodes aus. Messreihen und Zugangsdaten gehören nicht zur Statusantwort. [Änderungsprüfung und Grenzen](../reports/unified-9.0.38/PRUEFBERICHT.md)
+
 ## Schutzgüter und Angreifer
 
 Schutzgüter: Anlagenlimits und Stellbefehle, Konten/Rechte, Lizenz- und Updateintegrität,

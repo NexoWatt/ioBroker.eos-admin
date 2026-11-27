@@ -1,0 +1,13 @@
+✔ unified metadata validates against the unchanged upstream schema (154.570707ms)
+✔ ioBroker JSON configuration remains valid (659.259474ms)
+✔ release version synchronization preserves the ioBroker schema and news limit (258.255358ms)
+✔ own instance states have meaningful roles without changing existing state types (0.442123ms)
+✔ one installable adapter and a retained Express4 UI runtime (1.202532ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1283.317341

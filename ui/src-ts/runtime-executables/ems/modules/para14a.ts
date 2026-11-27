@@ -510,6 +510,7 @@ class Para14aModule extends BaseModule {
      */
     async _setupAuditHistory() {
         let historyInstance = '';
+        let providerReady = true;
         let dedicatedHistory = false;
         let autoProvisioned = false;
         let provisionState = '';
@@ -520,6 +521,7 @@ class Para14aModule extends BaseModule {
                 const historyInfo = await this.adapter._nwEnsurePara14aInfluxInstance();
                 if (historyInfo && typeof historyInfo === 'object') {
                     historyInstance = String(historyInfo.instance || '').trim();
+                    providerReady = historyInfo.ready !== false;
                     dedicatedHistory = historyInfo.dedicated === true;
                     autoProvisioned = historyInfo.autoProvisioned === true;
                     provisionState = String(historyInfo.provisionState || '').trim();
@@ -535,14 +537,17 @@ class Para14aModule extends BaseModule {
             try {
                 if (this.adapter && typeof this.adapter._nwDetectInfluxInstance === 'function') {
                     historyInstance = String((await this.adapter._nwDetectInfluxInstance()) || '').trim();
-                    if (historyInstance && !provisionState) provisionState = 'fallback_existing';
+                    if (historyInstance) {
+                        providerReady = true;
+                        if (!provisionState) provisionState = 'fallback_existing';
+                    }
                 }
             } catch {
                 historyInstance = '';
             }
         }
 
-        const historyReady = !!historyInstance && !!(this.adapter && typeof this.adapter._nwEnsureInfluxCustom === 'function');
+        const historyReady = providerReady && !!historyInstance && !!(this.adapter && typeof this.adapter._nwEnsureInfluxCustom === 'function');
         this._audit.historyInstance = historyInstance;
         this._audit.historyReady = historyReady;
 

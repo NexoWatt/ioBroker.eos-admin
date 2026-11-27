@@ -1,0 +1,44 @@
+{
+  "legacyArchives": {
+    "iobroker.influxdb-5.5.1.tgz": "ffa9b34d7cf6fb33e4695d667a1d4ea1814daa54e50b2f84d15ba756e38938bd",
+    "iobroker.nexowatt-devices-0.5.172.tgz": "95aa9569c4336092844bd5c387ae1de382db9431713b145a3f9817d9b5baf471",
+    "iobroker.nexowatt-ui-1.0.35.tgz": "ceb7b80e301079aa2e1cf3b54a90292556a2e506bcbb32236d85af35cedbf83b"
+  },
+  "oldUi": {
+    "version": "1.0.35",
+    "canonicalPv": "nexowatt-ui.0.historie.core.pv.totalW",
+    "stateDefinitionLine": 28473,
+    "recordingLine": 31542,
+    "readMappingLine": 32233,
+    "historianInstanceDefault": "influxdb.0"
+  },
+  "oldDevices": {
+    "version": "0.5.172"
+  },
+  "acceptance": {
+    "customerData": false,
+    "siteSourceEnabled": false,
+    "influxAdapterFixtureVersion": "5.5.1",
+    "instance": "influxdb.1",
+    "pvBeforeW": 1731,
+    "houseBeforeW": 642,
+    "pvAfterW": 1902,
+    "hostTransport": "isolated ioBroker controller stub",
+    "server": "InfluxDB v2.7.12 (git ec9dcde5d6)",
+    "observer": "stock adapter getHistoryV2, SDK writePoint, EOS API, independent raw Flux query",
+    "recovery": "original point timestamps and archived alias values verified after restart, repeated start and explicit rollback",
+    "databaseBackupRestore": false,
+    "stageResults": {
+      "originalSourceFormat": "verified against npm release archives listed above",
+      "historicalHttp": "both values returned before any new measurements",
+      "postRestartHistoricalHttp": "both values returned by a new EOS runtime and real historian RPC",
+      "continuation": "after restart, real EOS historian publisher wrote one new PV sample to the retained ID; controller event delivery simulated; stock Influx SDK persisted 1902 W",
+      "postRollbackRaw": "exact measurements and original timestamps for each old row and one new PV row verified independently via raw Flux; both previous instances remain disabled",
+      "sourceAndLocalBuild": [
+        "legacy-history-real-influx.log",
+        "legacy-history-built-influx.log"
+      ],
+      "normalMigrationSuite": "53/53 passed"
+    }
+  }
+}

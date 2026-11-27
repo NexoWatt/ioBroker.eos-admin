@@ -1,0 +1,639 @@
+(node:7922) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:7929) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: parent redacts telemetry, rejects bad reports and never turns a lost owner into physical failures/recoveries
+ok 1 - parent redacts telemetry, rejects bad reports and never turns a lost owner into physical failures/recoveries
+  ---
+  duration_ms: 8.140067
+  type: 'test'
+  ...
+# Subtest: aggregates active owners without name-based deduplication, caps names and ignores vehicles/optional unavailable modules
+ok 2 - aggregates active owners without name-based deduplication, caps names and ignores vehicles/optional unavailable modules
+  ---
+  duration_ms: 1.435211
+  type: 'test'
+  ...
+# Subtest: before a device’s first packet, wait for the configured interval; transport failure and data return are independent of actuator state
+ok 3 - before a device’s first packet, wait for the configured interval; transport failure and data return are independent of actuator state
+  ---
+  duration_ms: 18.05386
+  type: 'test'
+  ...
+# Subtest: real Devices worker reports HTTP meter offline then online, skips a disabled transport and drops evidence on stop
+ok 4 - real Devices worker reports HTTP meter offline then online, skips a disabled transport and drops evidence on stop
+  ---
+  duration_ms: 4458.912942
+  type: 'test'
+  ...
+# (node:7930) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: same per-member >200 W evidence and normal system-mail policy, across sign, restart, unresolved samples and stable recovery
+ok 5 - same per-member >200 W evidence and normal system-mail policy, across sign, restart, unresolved samples and stable recovery
+  ---
+  duration_ms: 13.938182
+  type: 'test'
+  ...
+# Subtest: hardware fault or offline takes precedence; deliberate disable, removed member and withdrawn system consent retire silently
+ok 6 - hardware fault or offline takes precedence; deliberate disable, removed member and withdrawn system consent retire silently
+  ---
+  duration_ms: 4.559424
+  type: 'test'
+  ...
+# Subtest: upgrading a uniquely identifiable existing hardware incident preserves its last delivery
+ok 7 - upgrading a uniquely identifiable existing hardware incident preserves its last delivery
+  ---
+  duration_ms: 2.070248
+  type: 'test'
+  ...
+# (node:7933) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: startup reads retain EMS quality and timestamp; deletion during a read wins including in a preserved namespace
+ok 8 - startup reads retain EMS quality and timestamp; deletion during a read wins including in a preserved namespace
+  ---
+  duration_ms: 11.007332
+  type: 'test'
+  ...
+# Subtest: SSE coalesces steady measurements, sends quality, failures and recovery, and ignores normalized admin refreshes
+ok 9 - SSE coalesces steady measurements, sends quality, failures and recovery, and ignores normalized admin refreshes
+  ---
+  duration_ms: 2.513791
+  type: 'test'
+  ...
+# Subtest: separate UI receives the original farm diagnostic state and a concurrent deletion wins over the startup read
+ok 10 - separate UI receives the original farm diagnostic state and a concurrent deletion wins over the startup read
+  ---
+  duration_ms: 5.498405
+  type: 'test'
+  ...
+# (node:7937) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: only an initialized visible LIVE dashboard polls, once per ten seconds across tabs/pageshow, on the same authenticated origin and proxy prefix
+ok 11 - only an initialized visible LIVE dashboard polls, once per ten seconds across tabs/pageshow, on the same authenticated origin and proxy prefix
+  ---
+  duration_ms: 11.44189
+  type: 'test'
+  ...
+# Subtest: pagehide, hidden tab and timeout abort requests and discard late headers or bodies, also after BFCache resume
+ok 12 - pagehide, hidden tab and timeout abort requests and discard late headers or bodies, also after BFCache resume
+  ---
+  duration_ms: 4.471521
+  type: 'test'
+  ...
+# Subtest: original observation age bounds health across repeated samples, bad replies and server/client clock differences
+ok 13 - original observation age bounds health across repeated samples, bad replies and server/client clock differences
+  ---
+  duration_ms: 3.581403
+  type: 'test'
+  ...
+# Subtest: malformed device details do not discard a process fault; unchanged, invalid, reversed and unauthorized observations cannot falsely clear it
+ok 14 - malformed device details do not discard a process fault; unchanged, invalid, reversed and unauthorized observations cannot falsely clear it
+  ---
+  duration_ms: 3.39521
+  type: 'test'
+  ...
+# (node:7943) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: uses only live supervisor evidence and returns the six approved process IDs in stable order
+ok 15 - uses only live supervisor evidence and returns the six approved process IDs in stable order
+  ---
+  duration_ms: 2.855471
+  type: 'test'
+  ...
+# Subtest: manual pauses, optional disabled modules and unavailable optional licenses are distinct from faults
+ok 16 - manual pauses, optional disabled modules and unavailable optional licenses are distinct from faults
+  ---
+  duration_ms: 0.66273
+  type: 'test'
+  ...
+# Subtest: configured processes with expired heartbeats identify individual failures at the supervisor limits
+ok 17 - configured processes with expired heartbeats identify individual failures at the supervisor limits
+  ---
+  duration_ms: 0.298932
+  type: 'test'
+  ...
+# Subtest: a missing, impossible or provisional observation never marks all subsystems operational
+ok 18 - a missing, impossible or provisional observation never marks all subsystems operational
+  ---
+  duration_ms: 1.003169
+  type: 'test'
+  ...
+# Subtest: reads operational EMS readiness from its own worker and treats the initial shell separately
+ok 19 - reads operational EMS readiness from its own worker and treats the initial shell separately
+  ---
+  duration_ms: 0.29457
+  type: 'test'
+  ...
+# Subtest: confirmed configuration, ownership and authority failures remain visible before a PID exists
+ok 20 - confirmed configuration, ownership and authority failures remain visible before a PID exists
+  ---
+  duration_ms: 0.213183
+  type: 'test'
+  ...
+# Subtest: a fresh passive worker waits for handover; a missing heartbeat still identifies a process failure
+ok 21 - a fresh passive worker waits for handover; a missing heartbeat still identifies a process failure
+  ---
+  duration_ms: 0.695313
+  type: 'test'
+  ...
+# (node:7949) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: only current, confirmed engine and NVP data establish a normal status
+ok 22 - only current, confirmed engine and NVP data establish a normal status
+  ---
+  duration_ms: 3.501397
+  type: 'test'
+  ...
+# Subtest: legacy grid measurements can inform the grid row but cannot clear an EMS status
+ok 23 - legacy grid measurements can inform the grid row but cannot clear an EMS status
+  ---
+  duration_ms: 0.547329
+  type: 'test'
+  ...
+# Subtest: an offline or connecting dashboard cannot be marked healthy by old engine and charging data
+ok 24 - an offline or connecting dashboard cannot be marked healthy by old engine and charging data
+  ---
+  duration_ms: 0.305546
+  type: 'test'
+  ...
+# Subtest: emergency and stopped EMS take precedence over charging messages; localized point faults remain visible
+ok 25 - emergency and stopped EMS take precedence over charging messages; localized point faults remain visible
+  ---
+  duration_ms: 0.411594
+  type: 'test'
+  ...
+# Subtest: fresh supervisor fault identifies specific internal processes even when the SSE stream has stopped
+ok 26 - fresh supervisor fault identifies specific internal processes even when the SSE stream has stopped
+  ---
+  duration_ms: 1.912708
+  type: 'test'
+  ...
+# Subtest: an unverified, expired or inconsistent supervisor cannot clear the dashboard or hide a concrete alert
+ok 27 - an unverified, expired or inconsistent supervisor cannot clear the dashboard or hide a concrete alert
+  ---
+  duration_ms: 0.869265
+  type: 'test'
+  ...
+# Subtest: intentionally paused modules are distinguished from outages and allow other active faults to surface
+ok 28 - intentionally paused modules are distinguished from outages and allow other active faults to surface
+  ---
+  duration_ms: 0.747226
+  type: 'test'
+  ...
+# Subtest: handover identifies a running standby worker without suppressing an unrelated active stop
+ok 29 - handover identifies a running standby worker without suppressing an unrelated active stop
+  ---
+  duration_ms: 0.364344
+  type: 'test'
+  ...
+# Subtest: dashboard and mail validate the same signed and time-coherent member report
+ok 30 - dashboard and mail validate the same signed and time-coherent member report
+  ---
+  duration_ms: 3.608361
+  type: 'test'
+  ...
+# Subtest: member warnings use unique IDs, stay behind existing alarms and survive a cancelling farm total
+ok 31 - member warnings use unique IDs, stay behind existing alarms and survive a cancelling farm total
+  ---
+  duration_ms: 2.4983
+  type: 'test'
+  ...
+# (node:7955) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual flow keeps measured zero during export and never invents 100 W or indefinitely holds a previous load
+ok 32 - actual flow keeps measured zero during export and never invents 100 W or indefinitely holds a previous load
+  ---
+  duration_ms: 38.609921
+  type: 'test'
+  ...
+# Subtest: actual flow differentiates null, missing, bool and zero SoC and does not suppress valid raw PV behind null derived PV
+ok 33 - actual flow differentiates null, missing, bool and zero SoC and does not suppress valid raw PV behind null derived PV
+  ---
+  duration_ms: 11.162948
+  type: 'test'
+  ...
+# Subtest: stale, future, absent or offline measurements stay unknown in the same flow and sidebar; fresh unchanged zero recovers
+ok 34 - stale, future, absent or offline measurements stay unknown in the same flow and sidebar; fresh unchanged zero recovers
+  ---
+  duration_ms: 10.556112
+  type: 'test'
+  ...
+# Subtest: no measurement/engine data never claims active engine, stable grid or healthy system
+ok 35 - no measurement/engine data never claims active engine, stable grid or healthy system
+  ---
+  duration_ms: 9.255319
+  type: 'test'
+  ...
+# Subtest: a status-only refresh keeps headline and rows synchronized between power frames
+ok 36 - a status-only refresh keeps headline and rows synchronized between power frames
+  ---
+  duration_ms: 10.744113
+  type: 'test'
+  ...
+# Subtest: canonical NVP-invalid signal prevents a stale fallback from appearing as import/export or 100 percent self-sufficiency
+ok 37 - canonical NVP-invalid signal prevents a stale fallback from appearing as import/export or 100 percent self-sufficiency
+  ---
+  duration_ms: 10.061456
+  type: 'test'
+  ...
+# Subtest: farm flow uses complete atomic gross sums and arithmetic SoC; partial and stale overview do not revive old aggregate values
+ok 38 - farm flow uses complete atomic gross sums and arithmetic SoC; partial and stale overview do not revive old aggregate values
+  ---
+  duration_ms: 10.118173
+  type: 'test'
+  ...
+# Subtest: strict read rejects malformed values, absent timestamps and future samples but accepts newly confirmed constant zero
+ok 39 - strict read rejects malformed values, absent timestamps and future samples but accepts newly confirmed constant zero
+  ---
+  duration_ms: 11.566975
+  type: 'test'
+  ...
+# Subtest: both shipped entry pages load the strict live helper before the actual dashboard renderer
+ok 40 - both shipped entry pages load the strict live helper before the actual dashboard renderer
+  ---
+  duration_ms: 1.002789
+  type: 'test'
+  ...
+# Subtest: missing split-meter sides and missing NVP cannot manufacture a complete flow or a balance-derived battery
+ok 41 - missing split-meter sides and missing NVP cannot manufacture a complete flow or a balance-derived battery
+  ---
+  duration_ms: 13.768837
+  type: 'test'
+  ...
+# Subtest: extra producer and consumer nodes never display command power or missing measurements as measured zero
+ok 42 - extra producer and consumer nodes never display command power or missing measurements as measured zero
+  ---
+  duration_ms: 11.911229
+  type: 'test'
+  ...
+# Subtest: visible dashboard ages measurements even without a new SSE event; hidden and non-dashboard pages do not rerender
+ok 43 - visible dashboard ages measurements even without a new SSE event; hidden and non-dashboard pages do not rerender
+  ---
+  duration_ms: 7.860307
+  type: 'test'
+  ...
+# Subtest: real flow does not suppress 80 W or retain separately smoothed previous powers
+ok 44 - real flow does not suppress 80 W or retain separately smoothed previous powers
+  ---
+  duration_ms: 7.709782
+  type: 'test'
+  ...
+# Subtest: EV freshness, offline, bad-quality and future timestamp use the same measured-data contract as the rest of the flow
+ok 45 - EV freshness, offline, bad-quality and future timestamp use the same measured-data contract as the rest of the flow
+  ---
+  duration_ms: 9.014936
+  type: 'test'
+  ...
+# Subtest: consumer greater than total is reported as inconsistent, and fresh balance can recover stale total without fabricating zero
+ok 46 - consumer greater than total is reported as inconsistent, and fresh balance can recover stale total without fabricating zero
+  ---
+  duration_ms: 7.158511
+  type: 'test'
+  ...
+# Subtest: signed split flows retain conservation for simultaneous import/export and battery charge/discharge
+ok 47 - signed split flows retain conservation for simultaneous import/export and battery charge/discharge
+  ---
+  duration_ms: 6.625654
+  type: 'test'
+  ...
+# Subtest: second field screenshot rejects impossible negative building remainder instead of clamping it to 0 W
+ok 48 - second field screenshot rejects impossible negative building remainder instead of clamping it to 0 W
+  ---
+  duration_ms: 8.653415
+  type: 'test'
+  ...
+# Subtest: negative load and out-of-range state of charge cannot masquerade as measured zero or valid percent
+ok 49 - negative load and out-of-range state of charge cannot masquerade as measured zero or valid percent
+  ---
+  duration_ms: 17.222466
+  type: 'test'
+  ...
+# Subtest: backend deduplicated extra production is authoritative and invalid published totals cannot be revived by browser sums
+ok 50 - backend deduplicated extra production is authoritative and invalid published totals cannot be revived by browser sums
+  ---
+  duration_ms: 6.747293
+  type: 'test'
+  ...
+# Subtest: complete farm gross readings survive the presence of a canonical net observation
+ok 51 - complete farm gross readings survive the presence of a canonical net observation
+  ---
+  duration_ms: 7.001822
+  type: 'test'
+  ...
+# Subtest: canonical missing single-battery observation permits only an explicitly calculated display from fresh independent inputs
+ok 52 - canonical missing single-battery observation permits only an explicitly calculated display from fresh independent inputs
+  ---
+  duration_ms: 7.35594
+  type: 'test'
+  ...
+# Subtest: a new direct house meter sample between flow frames shows immediately, without reviving an unmapped mirror
+ok 53 - a new direct house meter sample between flow frames shows immediately, without reviving an unmapped mirror
+  ---
+  duration_ms: 9.299853
+  type: 'test'
+  ...
+# Subtest: newer bad-quality direct sample invalidates a preceding frame from that meter without discarding an independent balance
+ok 54 - newer bad-quality direct sample invalidates a preceding frame from that meter without discarding an independent balance
+  ---
+  duration_ms: 6.691708
+  type: 'test'
+  ...
+# Subtest: expired observations, loss of connection, and initial synchronization each show their own reason
+ok 55 - expired observations, loss of connection, and initial synchronization each show their own reason
+  ---
+  duration_ms: 6.970229
+  type: 'test'
+  ...
+# Subtest: the dashboard timestamp uses a confirmed measurement even when its value is constant and never uses UI activity or wall time
+ok 56 - the dashboard timestamp uses a confirmed measurement even when its value is constant and never uses UI activity or wall time
+  ---
+  duration_ms: 5.469152
+  type: 'test'
+  ...
+# Subtest: actual SSE reconnect waits for a full snapshot, rejects degraded/incomplete sessions and preserves source ordering
+ok 57 - actual SSE reconnect waits for a full snapshot, rejects degraded/incomplete sessions and preserves source ordering
+  ---
+  duration_ms: 22.249509
+  type: 'test'
+  ...
+# Subtest: the reported 1.2 kW PV case shows the battery direction and distinguishes a negative balance from a valid 2.5 kW load
+ok 58 - the reported 1.2 kW PV case shows the battery direction and distinguishes a negative balance from a valid 2.5 kW load
+  ---
+  duration_ms: 5.918463
+  type: 'test'
+  ...
+# Subtest: the missing source diagnostic identifies absent, expired and invalid grid observations
+ok 59 - the missing source diagnostic identifies absent, expired and invalid grid observations
+  ---
+  duration_ms: 7.227271
+  type: 'test'
+  ...
+# Subtest: real dashboard keeps routine farm samples in the power frame and announces a specific affected member
+ok 60 - real dashboard keeps routine farm samples in the power frame and announces a specific affected member
+  ---
+  duration_ms: 19.931866
+  type: 'test'
+  ...
+# (node:7956) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: 1%/98% pool dispatch preserves redistribution and explains only the actual per-member floor exclusion
+    # Subtest: 1/98
+    ok 1 - 1/98
+      ---
+      duration_ms: 98.457872
+      type: 'test'
+      ...
+    # Subtest: 98/1
+    ok 2 - 98/1
+      ---
+      duration_ms: 24.788157
+      type: 'test'
+      ...
+    1..2
+ok 61 - 1%/98% pool dispatch preserves redistribution and explains only the actual per-member floor exclusion
+  ---
+  duration_ms: 124.69337
+  type: 'test'
+  ...
+# Subtest: missing member SoC remains unknown in diagnostics and does not block the other member
+ok 62 - missing member SoC remains unknown in diagnostics and does not block the other member
+  ---
+  duration_ms: 21.215458
+  type: 'test'
+  ...
+# Subtest: explicit zero limit and discharge prohibition remain blocking and are not relabelled as a SoC error
+    # Subtest: discharge_limit_zero
+    ok 1 - discharge_limit_zero
+      ---
+      duration_ms: 21.495966
+      type: 'test'
+      ...
+    # Subtest: discharge_not_allowed
+    ok 2 - discharge_not_allowed
+      ---
+      duration_ms: 19.03716
+      type: 'test'
+      ...
+    1..2
+ok 63 - explicit zero limit and discharge prohibition remain blocking and are not relabelled as a SoC error
+  ---
+  duration_ms: 41.176195
+  type: 'test'
+  ...
+# Subtest: idle and charge reports do not pretend that a discharge floor was applied to the current request
+ok 64 - idle and charge reports do not pretend that a discharge floor was applied to the current request
+  ---
+  duration_ms: 25.877897
+  type: 'test'
+  ...
+# Subtest: member tracking keeps the original reading and unchanged command phase, expires, and resets on reversal
+ok 65 - member tracking keeps the original reading and unchanged command phase, expires, and resets on reversal
+  ---
+  duration_ms: 82.979512
+  type: 'test'
+  ...
+# Subtest: member comparison excludes invalid, stale, aliased, partial and wrong-scope feedback
+ok 66 - member comparison excludes invalid, stale, aliased, partial and wrong-scope feedback
+  ---
+  duration_ms: 83.865187
+  type: 'test'
+  ...
+# Subtest: stable direct commands remain monitored after 100 seconds and a later physical drift
+ok 67 - stable direct commands remain monitored after 100 seconds and a later physical drift
+  ---
+  duration_ms: 77.291585
+  type: 'test'
+  ...
+# Subtest: verified FENECON Home direct 706/604 compares AC power independently from the battery and PV
+ok 68 - verified FENECON Home direct 706/604 compares AC power independently from the battery and PV
+  ---
+  duration_ms: 30.34532
+  type: 'test'
+  ...
+# Subtest: No-Write immediately withdraws the comparison until a new complete physical command phase
+ok 69 - No-Write immediately withdraws the comparison until a new complete physical command phase
+  ---
+  duration_ms: 46.226773
+  type: 'test'
+  ...
+# Subtest: aliases of the same physical terminal cannot report a command echo or claim another member meter
+ok 70 - aliases of the same physical terminal cannot report a command echo or claim another member meter
+  ---
+  duration_ms: 16.308265
+  type: 'test'
+  ...
+# (node:7993) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual diagnostic DOM separates requested, accepted command and measured farm output
+ok 71 - actual diagnostic DOM separates requested, accepted command and measured farm output
+  ---
+  duration_ms: 31.113173
+  type: 'test'
+  ...
+# Subtest: same-name members are joined by dispatchKey despite reversed result order, and floor/caps describe only that request
+ok 72 - same-name members are joined by dispatchKey despite reversed result order, and floor/caps describe only that request
+  ---
+  duration_ms: 3.416787
+  type: 'test'
+  ...
+# Subtest: a missing, limited or blocked command is never presented as an explicit zero request or healthy standby
+ok 73 - a missing, limited or blocked command is never presented as an explicit zero request or healthy standby
+  ---
+  duration_ms: 4.300435
+  type: 'test'
+  ...
+# Subtest: both source JSON age and state timestamp must be current; offline or future data is unknown
+ok 74 - both source JSON age and state timestamp must be current; offline or future data is unknown
+  ---
+  duration_ms: 3.109344
+  type: 'test'
+  ...
+# Subtest: ambiguous legacy names, conflicting keys and duplicate member keys never receive another storage command
+ok 75 - ambiguous legacy names, conflicting keys and duplicate member keys never receive another storage command
+  ---
+  duration_ms: 4.470464
+  type: 'test'
+  ...
+# Subtest: unknown caps, boolean/null power, missing reasons and changed EMS target stay explicit instead of being fabricated
+ok 76 - unknown caps, boolean/null power, missing reasons and changed EMS target stay explicit instead of being fabricated
+  ---
+  duration_ms: 4.410652
+  type: 'test'
+  ...
+# Subtest: diagnostic reason/name payload is rendered as text only and malformed JSON cannot create a false available state
+ok 77 - diagnostic reason/name payload is rendered as text only and malformed JSON cannot create a false available state
+  ---
+  duration_ms: 2.430602
+  type: 'test'
+  ...
+# Subtest: shipped farm page loads strict diagnostic renderer before page logic and exposes all three actual DOM cards
+ok 78 - shipped farm page loads strict diagnostic renderer before page logic and exposes all three actual DOM cards
+  ---
+  duration_ms: 0.621077
+  type: 'test'
+  ...
+# Subtest: own command-DP echo never confirms the driver or device, even when old JSON says confirmed
+ok 79 - own command-DP echo never confirms the driver or device, even when old JSON says confirmed
+  ---
+  duration_ms: 8.350216
+  type: 'test'
+  ...
+# Subtest: configured limit, device allowance and effective request limit remain distinct across current and legacy snapshots
+ok 80 - configured limit, device allowance and effective request limit remain distinct across current and legacy snapshots
+  ---
+  duration_ms: 5.856117
+  type: 'test'
+  ...
+# Subtest: a fresh storage decision describes an unchanged writer while both farm members retain their independent evidence
+ok 81 - a fresh storage decision describes an unchanged writer while both farm members retain their independent evidence
+  ---
+  duration_ms: 4.269594
+  type: 'test'
+  ...
+# Subtest: stale, invalid, unacknowledged, or unproven storage decisions cannot confirm operation
+ok 82 - stale, invalid, unacknowledged, or unproven storage decisions cannot confirm operation
+  ---
+  duration_ms: 5.857401
+  type: 'test'
+  ...
+# Subtest: public initial snapshot and SSE patch expose only the typed fields used for the storage decision
+ok 83 - public initial snapshot and SSE patch expose only the typed fields used for the storage decision
+  ---
+  duration_ms: 11.308361
+  type: 'test'
+  ...
+# Subtest: warning threshold uses comparable signed power for one confirmed command and handles exact boundaries
+ok 84 - warning threshold uses comparable signed power for one confirmed command and handles exact boundaries
+  ---
+  duration_ms: 1.586508
+  type: 'test'
+  ...
+# Subtest: farm shows a specific member warning and preserves independent write failure, even when farm totals cancel
+ok 85 - farm shows a specific member warning and preserves independent write failure, even when farm totals cancel
+  ---
+  duration_ms: 3.831843
+  type: 'test'
+  ...
+# Subtest: direct ESS comparison labels the AC actuator boundary independently of battery power and sign
+ok 86 - direct ESS comparison labels the AC actuator boundary independently of battery power and sign
+  ---
+  duration_ms: 2.821111
+  type: 'test'
+  ...
+# (node:8005) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:8005) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# Subtest: parent sends distinct device and process incidents from a preserved namespace, survives restart and only reports confirmed recovery
+ok 87 - parent sends distinct device and process incidents from a preserved namespace, survives restart and only reports confirmed recovery
+  ---
+  duration_ms: 87.806597
+  type: 'test'
+  ...
+# Subtest: system and communications switches independently control mail and a planned stop clears an old incident silently
+ok 88 - system and communications switches independently control mail and a planned stop clears an old incident silently
+  ---
+  duration_ms: 44.605091
+  type: 'test'
+  ...
+# Subtest: 256 active devices and a new EMS process failure all retain their delivery records
+ok 89 - 256 active devices and a new EMS process failure all retain their delivery records
+  ---
+  duration_ms: 88.183218
+  type: 'test'
+  ...
+# Subtest: an interrupted five-minute recovery window restarts with a fresh physical observation
+ok 90 - an interrupted five-minute recovery window restarts with a fresh physical observation
+  ---
+  duration_ms: 48.306691
+  type: 'test'
+  ...
+# Subtest: an already reported legacy inverter and its monitored native device share delivery history across namespaces
+ok 91 - an already reported legacy inverter and its monitored native device share delivery history across namespaces
+  ---
+  duration_ms: 67.449798
+  type: 'test'
+  ...
+# Subtest: a changed recipient or withdrawn communications consent discards a stale EMS collection before committing the ledger
+ok 92 - a changed recipient or withdrawn communications consent discards a stale EMS collection before committing the ledger
+  ---
+  duration_ms: 12.248216
+  type: 'test'
+  ...
+# Subtest: rolling back a migrated UI namespace relinquishes its ledger and cannot send from its settings
+ok 93 - rolling back a migrated UI namespace relinquishes its ledger and cannot send from its settings
+  ---
+  duration_ms: 9.157099
+  type: 'test'
+  ...
+# Subtest: a rollback during SMTP preserves the ledger written by the restored standalone owner
+ok 94 - a rollback during SMTP preserves the ledger written by the restored standalone owner
+  ---
+  duration_ms: 10.218816
+  type: 'test'
+  ...
+# Subtest: an independent process cannot block the local sender or bypass the shared SMTP test quota
+ok 95 - an independent process cannot block the local sender or bypass the shared SMTP test quota
+  ---
+  duration_ms: 170.733885
+  type: 'test'
+  ...
+# (node:8007) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:8007) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# [1.0.7 notifications] OK: immediate/30min/daily, escalation, durable dedup, recovery, categories, real loopback SMTP, rejection/backoff, encryption, TLS options, module/AC/DC fault monitoring.
+# Subtest: ui/scripts/verify-stable-1.0.7-notifications.cjs
+ok 11 - ui/scripts/verify-stable-1.0.7-notifications.cjs
+  ---
+  duration_ms: 332.5298
+  type: 'test'
+  ...
+1..96
+# tests 100
+# suites 0
+# pass 100
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4611.228101

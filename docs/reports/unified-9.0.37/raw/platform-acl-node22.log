@@ -1,0 +1,98 @@
+(node:7) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: explicit runtime scope accepts normal 0775/2775 parents and preserves private storage across restart
+ok 1 - explicit runtime scope accepts normal 0775/2775 parents and preserves private storage across restart
+  ---
+  duration_ms: 307.196247
+  type: 'test'
+  ...
+# Subtest: omitting the explicit root retains strict group-write rejection without creating a leaf
+ok 2 - omitting the explicit root retains strict group-write rejection without creating a leaf
+  ---
+  duration_ms: 16.520365
+  type: 'test'
+  ...
+# Subtest: trusted runtime root must be absolute, canonical and narrower than the filesystem root
+ok 3 - trusted runtime root must be absolute, canonical and narrower than the filesystem root
+  ---
+  duration_ms: 11.626969
+  type: 'test'
+  ...
+# Subtest: parents above the trusted runtime and unrelated or prefix-sibling trees remain strict
+ok 4 - parents above the trusted runtime and unrelated or prefix-sibling trees remain strict
+  ---
+  duration_ms: 7.989874
+  type: 'test'
+  ...
+# Subtest: group-writable runtime ancestors require the service UID and exact primary GID
+ok 5 - group-writable runtime ancestors require the service UID and exact primary GID
+  ---
+  duration_ms: 30.613532
+  type: 'test'
+  ...
+# Subtest: trusted runtime scope does not admit non-sticky world-writable ancestors
+ok 6 - trusted runtime scope does not admit non-sticky world-writable ancestors
+  ---
+  duration_ms: 9.088682
+  type: 'test'
+  ...
+# Subtest: existing sticky temporary ancestors remain compatible without broadening the private leaf
+ok 7 - existing sticky temporary ancestors remain compatible without broadening the private leaf
+  ---
+  duration_ms: 27.882629
+  type: 'test'
+  ...
+# Subtest: runtime root, intermediate and leaf symlinks are rejected without touching their targets
+ok 8 - runtime root, intermediate and leaf symlinks are rejected without touching their targets
+  ---
+  duration_ms: 20.684755
+  type: 'test'
+  ...
+# Subtest: the compatibility option never relaxes leaf, storage-key or encrypted-file modes
+ok 9 - the compatibility option never relaxes leaf, storage-key or encrypted-file modes
+  ---
+  duration_ms: 63.17407
+  type: 'test'
+  ...
+# Subtest: inherited ioBroker group ACLs keep newly created license leaf and files private
+ok 10 - inherited ioBroker group ACLs keep newly created license leaf and files private
+  ---
+  duration_ms: 54.461266
+  type: 'test'
+  ...
+# Subtest: fixed public trust storage is bounded, private, serialized and survives restart independently of a license
+ok 11 - fixed public trust storage is bounded, private, serialized and survives restart independently of a license
+  ---
+  duration_ms: 120.63998
+  type: 'test'
+  ...
+# Subtest: public trust writes accept only a bounded Buffer and never mutate an existing record on invalid input
+ok 12 - public trust writes accept only a bounded Buffer and never mutate an existing record on invalid input
+  ---
+  duration_ms: 27.916249
+  type: 'test'
+  ...
+# Subtest: public trust rejects unsafe modes, symlinks, hardlinks and oversized existing records
+ok 13 - public trust rejects unsafe modes, symlinks, hardlinks and oversized existing records
+  ---
+  duration_ms: 48.466332
+  type: 'test'
+  ...
+# Subtest: a failed atomic public trust replacement preserves the old record and removes its private temporary file
+ok 14 - a failed atomic public trust replacement preserves the old record and removes its private temporary file
+  ---
+  duration_ms: 47.442993
+  type: 'test'
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1103.338082

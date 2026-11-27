@@ -1867,19 +1867,42 @@ function nwLatestStateTimestamp(keys) {
 }
 // The shared headline has one owner. A repeated SSE snapshot can confirm the
 // existing connection without resetting an already established operating status.
-function nwRenderDashboardStatus(connection, health = null, chargeModel = null, safetyStop = false, fallback = false) {
+function nwRenderDashboardStatus(connection, health = null, chargeModel = null, safetyStop = false, fallback = false, read = () => undefined, now = Date.now()) {
   const label = document.getElementById('sideStatusText');
   if (!label) return;
   const processHealth = window.NexoWattDashboardProcesses?.current();
-  const headline = window.NexoWattLiveDisplay?.dashboardStatus(health, connection, chargeModel, safetyStop, fallback, processHealth);
+  const farmState = (window.latestState || state || {})['storageFarm.storagesStatusJson'];
+  const headline = window.NexoWattLiveDisplay?.dashboardStatus(health, connection, chargeModel, safetyStop, fallback, processHealth, now, farmState);
   const translate = text => window.NexoWattI18n?.translateText(text) || text;
-  const source = headline ? headline.text : (connection === 'disconnected' ? 'Verbindung unterbrochen' : 'Betriebsstatus prüfen');
+  const connected = connection === 'snapshot' || connection === 'ready';
+  const p14 = connected && (read('ems.core.para14aActive') || read('para14a.active'));
+  const peak = connected && String(read('peakShaving.control.status') || '').trim() === 'active';
+  const ems = connection === 'disconnected' ? 'Verbindung unterbrochen' : safetyStop ? 'Safety aktiv' : health?.ems || 'Status unbekannt';
+  const grid = connected && fallback ? '§14a Fallback' : p14 ? '§14a aktiv' : peak ? 'Peak aktiv' : health?.grid || 'Messstatus unbekannt';
+  for (const [id, text] of [['sideEms', ems], ['sideGridStatus', grid]]) {
+    const cell = document.getElementById(id);
+    const translated = translate(text);
+    if (cell && cell.textContent !== translated) cell.textContent = translated;
+  }
+  const source = headline ? headline.text : (connection === 'disconnected' ? 'Verbindung unterbrochen' : 'Betriebsdiagnose nicht verfügbar');
   let message = translate(source);
   if (headline?.processIds?.length) {
     const labels = { ui: 'Oberfläche', ems: 'EMS', devices: 'Geräte', eebus: 'EEBus', backup: 'Sicherung', ocpp: 'OCPP' };
     message = message.replace('{names}', () => headline.processIds.map(id => translate(labels[id])).join(', '));
   }
-  let detail = '';
+  let detail = '', storageDetails = '';
+  if (headline?.storageWarnings?.length) {
+    const locale = window.NexoWattI18n?.language?.() || 'de';
+    const format = item => {
+      const rounded = Number(item.differenceW.toFixed(1));
+      const watts = (Number.isInteger(rounded) && item.differenceW > rounded ? '>' : '') + rounded.toLocaleString(locale);
+      return message.replace(/\{name\}|\{watts\}/g, token => token === '{name}' ? item.name || translate('Speicher') : watts);
+    };
+    const lines = headline.storageWarnings.map(format);
+    storageDetails = lines.join(' · ');
+    detail = storageDetails;
+    message = lines[0] + (lines.length > 1 ? ' (+' + (lines.length - 1) + ')' : '');
+  }
   if (headline?.deviceNames?.length) {
     const names = headline.deviceNames;
     const line = translate('Geräte offline · {names}');
@@ -1894,12 +1917,12 @@ function nwRenderDashboardStatus(connection, health = null, chargeModel = null, 
   if (label.title !== detail) label.title = detail;
   const details = document.getElementById('sideStatusDevices');
   if (details) {
-    const show = headline?.totalOffline > 2;
+    const show = headline?.totalOffline > 2 || headline?.storageWarnings?.length > 1;
     if (details.hidden === show) details.hidden = !show;
     if (!show && details.open) details.open = false;
     const names = document.getElementById('sideStatusDeviceNames');
-    const text = show ? headline.deviceNames.join(', ') : '';
-    const remaining = show ? headline.totalOffline - headline.deviceNames.length : 0;
+    const text = show ? storageDetails || headline.deviceNames.join(', ') : '';
+    const remaining = show && headline.deviceNames ? headline.totalOffline - headline.deviceNames.length : 0;
     const list = remaining > 0 ? text + ' (+' + remaining + ')' : text;
     if (names && names.textContent !== list) names.textContent = list;
   }
@@ -1922,16 +1945,25 @@ function nwRefreshDashboardStatus() {
   if (!connected) { nwRenderDashboardStatus(connection); return; }
   const values = window.latestState || state || {};
   const read = key => values[key]?.value;
-  const health = window.NexoWattLiveDisplay?.status(values, true, Date.now(), getFlowFreshMaxAgeMs());
+  const now = Date.now();
+  const health = window.NexoWattLiveDisplay?.status(values, true, now, getFlowFreshMaxAgeMs());
   const lp = nwEvcsFeatureFromConfig() ? window.NexoWattLpStatusPresenter?.read(read) : null;
   nwRenderDashboardStatus(connection, health, lp, read('chargingManagement.audit.safetyStage') === 'EOS-SAFETY-STOP',
-    read('para14a.communicationFallbackActive') === true);
+    read('para14a.communicationFallbackActive') === true, read, now);
 }
 
 function nwDashboardAlarmChanged(patch, previous) {
   for (const key in patch) {
-    if (key !== 'ems.core.schedulerAlive' && key !== 'ems.gridMeasurementFresh' &&
-        key !== 'chargingManagement.audit.safetyStage' && key !== 'para14a.communicationFallbackActive' &&
+    if (key === 'storageFarm.storagesStatusJson') {
+      if (window.NexoWattLiveDisplay?.farmWarningChanged(previous[key], patch[key], Date.now())) return true;
+      continue;
+    }
+    if (key === 'ems.core.schedulerAlive' || key === 'ems.core.schedulerHeartbeatAt' || key === 'ems.gridMeasurementFresh') {
+      if (window.NexoWattLiveDisplay?.reportChanged(previous[key], patch[key], Date.now(), key === 'ems.core.schedulerHeartbeatAt')) return true;
+      continue;
+    }
+    if (key !== 'chargingManagement.audit.safetyStage' && key !== 'para14a.communicationFallbackActive' &&
+        key !== 'ems.core.para14aActive' && key !== 'para14a.active' && key !== 'peakShaving.control.status' &&
         !/^chargingManagement\.wallboxes\.[^.]+\.(?:online|mappingOk|operationalBlocked|hardwareCommandConfirmed|applyStatus)$/.test(key)) continue;
     const next = patch[key], before = previous[key];
     if (next?.value !== before?.value || next?.q !== before?.q || next?.ack !== before?.ack) return true;
@@ -1959,7 +1991,6 @@ function nwSetLiveOnline(isOnline) {
   if (!online) {
     for (const id of ['pvPower', 'gridBuyPower', 'gridSellPower', 'storagePower', 'consumptionTotal', 'sidePvPower', 'sideBuildingPower', 'sideBatteryPower', 'sideGridBuyPower', 'sideGridSellPower', 'pvVal', 'gridVal', 'restVal', 'centerPower']) setText(id, '--');
     setText('batteryFlowDirection', ''); setText('batterySocIn', '-- %'); setText('sideStorage', '-- %'); setText('sideBatterySoc', '-- %');
-    setText('sideEms', 'Verbindung unterbrochen'); setText('sideGridStatus', 'Messstatus unbekannt');
   }
 }
 /**
@@ -1995,14 +2026,13 @@ function updateDashboardShellUi(data) {
 
   setText('sideStorage', Number.isFinite(soc) ? `${Math.round(soc)} %` : '-- %');
   setText('sideBatterySoc', Number.isFinite(soc) ? `${Math.round(soc)} %` : '-- %');
-  const p14 = !!d('ems.core.para14aActive') || !!d('para14a.active'), peak = String(d('peakShaving.control.status') || '').trim(), safety = String(d('chargingManagement.audit.safetyStage') || '').trim(), p14Fallback = d('para14a.communicationFallbackActive') === true;
-  const health = window.NexoWattLiveDisplay?.status(window.latestState || state || {}, connected, window.__nwLiveFrameNow ?? Date.now(), getFlowFreshMaxAgeMs());
+  const safety = String(d('chargingManagement.audit.safetyStage') || '').trim(), p14Fallback = d('para14a.communicationFallbackActive') === true;
+  const now = window.__nwLiveFrameNow ?? Date.now();
+  const health = window.NexoWattLiveDisplay?.status(window.latestState || state || {}, connected, now, getFlowFreshMaxAgeMs());
   const safetyStop = connected && safety === 'EOS-SAFETY-STOP';
-  setText('sideEms', connection === 'connecting' ? 'Status unbekannt' : safetyStop ? 'Safety aktiv' : health?.ems || 'Status unbekannt');
-  setText('sideGridStatus', connected && p14Fallback ? '§14a Fallback' : (connected && p14 ? '§14a aktiv' : (connected && peak === 'active' ? 'Peak aktiv' : health?.grid || 'Messstatus unbekannt')));
   let chargeModel = null;
   try { chargeModel = window.NexoWattLpStatusPresenter?.render(d, evcsAvailable); } catch (_eChargingStatus) {}
-  nwRenderDashboardStatus(connection, health, chargeModel, safetyStop, p14Fallback);
+  nwRenderDashboardStatus(connection, health, chargeModel, safetyStop, p14Fallback, d, now);
 
   setText('sideConsumptionTotal', load === null ? '--' : formatFlowPower(Math.max(0, load)));
   setText('sideSelfConsumption', Number.isFinite(selfc) ? `${Math.round(selfc)} %` : '-- %');

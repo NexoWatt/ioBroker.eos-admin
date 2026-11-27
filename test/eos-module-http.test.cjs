@@ -54,7 +54,7 @@ async function fixture(t) {
         });
         req.on('error', reject); req.end(options.body);
     });
-    return { request, adapter, token, revoke: () => { active = false; }, role: value => { role = value; }, first: value => { first = value; }, writes: () => writes,
+    return { request, adapter, token, host, revoke: () => { active = false; }, role: value => { role = value; }, first: value => { first = value; }, writes: () => writes,
         downloads: () => downloads, archiveName: value => { archiveName = value; },
         holdDownloads: value => { holdDownloads = value; }, archiveSize: value => { archiveSize = value; }, streams,
         migration: value => { migration = value; },
@@ -133,7 +133,7 @@ test('read-only migration page and status require fresh administrator authentica
             { id: 'devices', source: '<img src=x onerror=DO_NOT_EXPOSE>' }] });
     const response = await f.request('/api/eos/migration'); assert.equal(response.status, 200);
     const value = await response.json();
-    assert.deepEqual(Object.keys(value).sort(), ['blockedProcesses', 'code', 'existingAdaptersUnchanged', 'issues', 'phase', 'sources', 'updatedAt']);
+    assert.deepEqual(Object.keys(value).sort(), ['blockedProcesses', 'canActivateDevices','canStart','code','csrfToken', 'existingAdaptersUnchanged', 'issues','operation', 'phase','revision', 'sources', 'updatedAt']);
     assert.deepEqual(value.issues, [{ id: 'eebus', source: 'eebus.0', code: 'EOS_MIGRATION_PROTECTED_FIELDS_UNAVAILABLE' }]);
     assert.equal(value.blockedProcesses, null);
     assert.deepEqual(value.sources, [{ id: 'eebus', source: 'eebus.0', namespacePreserved: false }]);
@@ -182,4 +182,41 @@ test('invalid and oversized module JSON and internal exceptions are contained wi
     const response = await f.request('/api/eos/modules/devices/command', { method: 'POST', headers, body: '{"command":"error"}' });
     assert.equal(response.status, 400); assert.doesNotMatch(await response.text(), /PRIVATE/);
     assert.equal((await f.request('/api/eos/modules/devices')).status, 200);
+});
+
+test('migration preview requires admin; the separate action rechecks origin, CSRF and the exact revision before acceptance', async t => {
+    const f = await fixture(t);
+    const revision = '12345678-1234-4321-9876-123456789abc';
+    let starts=0;
+    f.host.owner = { eosMigration:{
+        manualView:() => ({canStart:true,canActivateDevices:true,revision,operation:{state:starts?'running':'idle',code:''}}),
+        manualReview: async () => ({phase:'BLOCKED',sources:[{id:'devices',source:'nexowatt-devices.0',enabled:false,sourceVersion:'0.5.172'}]}),
+        status:() => ({phase:'BLOCKED',sources:[]}),
+        requestManual(enable,received) {
+            if (received!==revision) throw Object.assign(new Error(),{code:'EOS_MIGRATION_REVISION_CONFLICT'});
+            if (starts) throw Object.assign(new Error(),{code:'EOS_MIGRATION_BUSY'});
+            assert.equal(enable,true); starts++;
+        },
+    }};
+    const route='/api/eos/migration/start';
+    const checked=await (await f.request('/api/eos/migration')).json();
+    assert.equal(checked.sources[0].sourceVersion,'0.5.172');
+    assert.equal(starts,0);
+    const headers={origin:'https://nexowatt','content-type':'application/json','x-nw-csrf':checked.csrfToken};
+    const body={expectedRevision:checked.revision,activateDevices:true};
+    const post=(values=body,hs=headers) => f.request(route,{method:'POST',headers:hs,body:JSON.stringify(values)});
+    assert.equal((await f.request(route)).status,405);
+    assert.equal((await post(body,{...headers,'x-nw-csrf':'bad'})).status,403);
+    assert.equal((await post(body,{...headers,origin:'https://other.invalid'})).status,403);
+    assert.equal((await post({...body,force:true})).status,400);
+    assert.equal((await post({...body,expectedRevision:'00000000-0000-4000-8000-000000000001'})).status,409);
+    f.role('installer'); assert.equal((await post()).status,403);
+    f.role('admin'); f.first(true); assert.equal((await post()).status,403);
+    f.first(false);
+    assert.equal(starts,0);
+    const accepted=await post(); assert.equal(accepted.status,202);
+    assert.equal((await accepted.json()).operation.state,'running');
+    assert.equal((await post()).status,409);
+    f.revoke(); assert.equal((await post()).status,401);
+    assert.equal(starts,1);
 });

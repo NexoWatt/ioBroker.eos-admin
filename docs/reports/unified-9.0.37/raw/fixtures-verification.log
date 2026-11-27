@@ -1,0 +1,39 @@
+✔ real InfluxDB2: actual export, active bucket proof, isolated restore, empty and missing buckets (1389.321548ms)
+ℹ InfluxDB v2.7.12 (git: ec9dcde5d6) build_date: 2025-05-20T22:48:39Z
+ℹ Actual source/target services, real CLI, exact six typed field rows after isolated restore; existing empty bucket accepted, nonexistent rejected before backup; full-server inventory checked.
+✔ OCPP power commands go through the real consumer and registry: 5700W, stop, keepalive, resume (5.210966ms)
+✔ explicit EVCS stop bypasses a configured minimum in W and A, retaining positive minimum and maximum (1.2077ms)
+✔ EVCS zero transitions are not swallowed by deadband in either direction (1.111508ms)
+✔ a failed stop is retried, and W-to-kW conversion preserves zero (0.871397ms)
+▶ provided OCPP21 source receives zero unchanged; RPC acceptance remains separate from local ack
+  ✔ ocpp1.6: Accepted (9.954593ms)
+  ✔ ocpp1.6: Rejected (1.801166ms)
+  ✔ ocpp2.0.1: Accepted (1.684546ms)
+  ✔ ocpp2.0.1: Rejected (1.730845ms)
+  ✔ ocpp2.1: Accepted (1.782611ms)
+  ✔ ocpp2.1: Rejected (1.780517ms)
+✔ provided OCPP21 source receives zero unchanged; RPC acceptance remains separate from local ack (29.796678ms)
+✔ registered stations persist complete native mappings; unknown electrical limits never enable a writer (99.841596ms)
+✔ partial contract registration is explicit and completes; invalid directions, units and metadata stay untrusted (1.021289ms)
+✔ an auto-created row explicitly retained as an active monitor never regains its first writer (1.336383ms)
+✔ real configuration pipeline retains validated contract failure metadata and never enables an uncommissioned row (32.561182ms)
+✔ existing aliases deduplicate to one station and manual limits/mappings survive; duplicate control groups are reported (1.187723ms)
+✔ multi EVSE topology remains one station aggregate writer; connector controls are never invented (0.877893ms)
+✔ an existing active manual monitor does not gain its first writer from discovery, including later rescans (1.059951ms)
+✔ existing manual monitor crosses real normalization, engine and CM tick without inferred hardware commands (93.320078ms)
+✔ license capacity exposes pending stations, retains existing mappings and fills a newly available slot (1.173531ms)
+✔ registration bursts, offline and restart are idempotent; concurrent manual saves share the mutation fence (47.270256ms)
+✔ persist failures keep prior configuration; failed runtime apply is retried without creating a second row (19.554855ms)
+✔ stop during discovery cannot commit a late scan (7.011917ms)
+✔ ownership loss after a database read prevents reconciliation and leaves existing configuration untouched (0.546797ms)
+✔ actual supplied OCPP adapter registration and station telemetry map through the real EOS persistence path (537.035821ms)
+✔ embedded OCPP station registration persists hosted mappings and retains them across bursts and runtime restart (769.963951ms)
+✔ discovery scopes hosted trees to the owning EOS and retains legacy migration identities (12.965672ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2163.875801

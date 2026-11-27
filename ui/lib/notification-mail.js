@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/lib/notification-mail.ts
- * Quell-Hash: sha256:289e8a310154f01dcdada49e2e11b9a9ddfb27b89c9240af64afcb2eece56795
+ * Quell-Hash: sha256:9ca4a9c1841097cdba03a1ad87463905dfdc437c016d514de2af5cfee4253177
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -371,7 +371,10 @@ class NotificationMail {
       const recoveries = a._notifyGetSettingBool('notifyRecovery', true);
       // No device reads while holding the delivery lock; a stopped collector cannot monopolize delivery.
       await this.reloadLedger();
-      const observed = this.options.supervision ? await this.options.observations() : await this.collect(categories);
+      let farmObservation;
+      const storageAliases = new Map();
+      const observed = this.options.supervision ? await this.options.observations()
+        : await this.collect(categories, value => { farmObservation = value; }, storageAliases);
       const legacyRefs = new Map();
       if (this.options.supervision) {
         const rows = observed?.chargingManagement?.wallboxes;
@@ -415,7 +418,19 @@ class NotificationMail {
             if (confirmed.has(canonical)) migrateIncident(this.policy.records, id, canonical);
           }
         } else {
-          events = [];
+          // Revalidate the existing farm observation after any lock wait. A lease
+          // or meter sample may have expired since the collector read the state.
+          events = categories.has('system') ? this.farmPowerEvents(farmObservation, this.now()) : [];
+          for (const [oldId, current] of storageAliases) {
+            const previous = this.policy.records.get(oldId);
+            // A normalized collision has no single previous physical identity.
+            if (!previous || current.has(oldId)) continue;
+            if (current.size === 1) {
+              const [id] = current;
+              if (!this.policy.records.has(id)) this.policy.records.set(id, { ...previous, meta:{ ...previous.meta, id } });
+            }
+            this.policy.records.delete(oldId);
+          }
           for (const event of observed) {
             const refs = this.overlapRefs?.get(event.id) || [];
             const canonical = supervisedId(this.policy.supervisedNamespaces, refs);
@@ -455,7 +470,7 @@ class NotificationMail {
   /**
    * Ablauf und Zusammenhang: Übersetzt EMS-, Modul-, Geräte- und Ladepunkt-Diagnosen in Ereignisse mit stabilen IDs. Reguläre Ladepausen sollen keine Störung werden; bei einer ausgefallenen übergeordneten Quelle werden Folgeereignisse unterdrückt statt falsche Entwarnungen erzeugt.
    */
-  async collect(categories) {
+  async collect(categories, observeFarm, storageAliases) {
     const a = this.adapter, now = this.now(), events = [];
     this.overlapRefs = new Map();
     const read = async id => { const s = await a.getStateAsync(id); return s?.val; };
@@ -525,11 +540,25 @@ class NotificationMail {
     if (!engineStalled && (categories.has('system') || categories.has('communications'))) {
       const state = await a.getStateAsync('storageFarm.storagesStatusJson');
       if (state && now - Number(state.ts) < 120000) {
-        let rows = [];
-        try { rows = JSON.parse(String(state.val || '[]')); } catch (_error) { retain('storage:'); }
+        let rows;
+        try { rows = JSON.parse(String(state.val || '')); } catch (_error) {}
+        if (!Array.isArray(rows)) retain('storage:');
+        if (observeFarm && categories.has('system') && state.ack === true && (state.q === undefined || state.q === 0)
+          && typeof state.val === 'string' && state.val.length <= 262144 && Array.isArray(rows) && rows.length <= 128) observeFarm({ ts:state.ts, rows, sourceDown });
         for (const row of (Array.isArray(rows) ? rows : []).slice(0, 128)) {
-          const id = `storage:${safeId(row.dispatchKey || row.name)}`;
-          if (sourceDown(row.signedPowerId || row.chargePowerId || row.socId)) { retain(id); continue; }
+          if (!row || typeof row !== 'object') continue;
+          const raw = String(row.dispatchKey || row.name || '');
+          const oldId = 'storage:' + safeId(raw);
+          const id = raw === safeId(raw) ? oldId : 'storage:device:' + crypto.createHash('sha256').update(raw).digest('hex');
+          if (storageAliases && this.policy.records.has(oldId)) {
+            if (!storageAliases.has(oldId)) storageAliases.set(oldId, new Set());
+            storageAliases.get(oldId).add(id);
+          }
+          if (sourceDown(row.signedPowerId || row.chargePowerId || row.socId)) {
+            const previous = this.policy.records.get(id) || this.policy.records.get(oldId);
+            if (previous) events.push({ id, category:previous.meta.category, hold:true });
+            continue;
+          }
           if (categories.has('system') && row.dispatchBlockedReasons?.includes('fault_active')) {
             add(id, 'system', `Speicher meldet eine Störung: ${row.name}`, 'Der konfigurierte Speicher meldet einen aktiven Gerätefehler.', 0, 'critical');
           } else if (categories.has('communications') && (row.state === 'offline' || row.degradedReason === 'stale')) {
@@ -581,6 +610,64 @@ class NotificationMail {
       const action = String(await read('gridConstraints.zeroExport.action') || '');
       if (/failsafe/i.test(action)) add('grid:failsafe', 'grid', 'Netzregelung im Sicherheitsbetrieb', 'Die Netzregelung meldet einen Kommunikations- oder Sicherheitszustand. Bitte die EOS-Diagnose prüfen.', 0, 'critical');
     }
+    return events;
+  }
+  // Runs inside the existing delivery lock. A complete configuration can retire
+  // a removed member; missing evidence never confirms a physical recovery.
+  farmPowerEvents(observation, now) {
+    const prefix = 'farm-power:';
+    const prior = new Set();
+    for (const id of this.policy.records.keys()) if (id.startsWith(prefix)) prior.add(id);
+    if (!prior.size && !observation?.rows.some(row => row?.powerComparison)) return [];
+    const events = [];
+    const farm = this.adapter._nwGetStorageFarmRuntimeInfo?.();
+    const ready = this.adapter._hostedStartup?.state === 'ready' && Array.isArray(farm?.rows);
+    const identifiable = key => typeof key === 'string' && key.length <= 512 && !!key && key === key.trim();
+    const idOf = key => prefix + crypto.createHash('sha256').update(key).digest('hex');
+    const configured = new Set(), ambiguous = new Set();
+    if (ready && farm.active === true) {
+      for (const [index, row] of farm.rows.entries()) {
+        if (!row || row.enabled === false) continue;
+        const key = this.adapter._sfGetStorageDispatchKey(row, index);
+        if (!identifiable(key)) continue;
+        if (configured.has(key)) ambiguous.add(key);
+        configured.add(key);
+      }
+    }
+    if (ready) {
+      const memberIds = new Set([...configured].map(idOf));
+      for (const id of prior) if (!memberIds.has(id)) {
+        // Disabling/removing a configured member ends monitoring silently.
+        prior.delete(id);
+        this.policy.records.delete(id);
+      }
+    }
+    if (ready && Number.isSafeInteger(observation?.ts) && observation.ts > 0 && observation.ts <= now
+      && now - observation.ts <= 30000) {
+      const unique = new Set();
+      for (const row of observation.rows) {
+        const key = row?.dispatchKey;
+        if (unique.has(key)) ambiguous.add(key);
+        unique.add(key);
+      }
+      const { farmPowerComparison } = require('../www/live-display');
+      for (const row of observation.rows) {
+        const key = row?.dispatchKey;
+        if (!configured.has(key) || ambiguous.has(key) || row.enabled === false || row.licenseBlocked === true
+          || row.state === 'offline' || row.degradedReason === 'stale' || row.dispatchBlockedReasons?.includes('fault_active')
+          || [row.signedPowerId, row.chargePowerId, row.dischargePowerId, row.socId].some(observation.sourceDown)) continue;
+        const comparison = farmPowerComparison(row, now);
+        if (!comparison) continue;
+        const id = idOf(key);
+        prior.delete(id); // confirmed <= 200 W enters normal steady recovery
+        if (!comparison.warning) continue;
+        const label = String(row.name || 'Speicher').replace(/[\r\n]/g, ' ').slice(0, 96);
+        const watts = value => String(value).replace('.', ',') + ' W';
+        events.push({ id, category:'system', severity:'warning', title:'Leistungsabweichung bei ' + label,
+          message:`Soll ${watts(comparison.targetW)}, Ist ${watts(comparison.measuredW)}, Abweichung ${watts(comparison.differenceW)}.` });
+      }
+    }
+    for (const id of prior) events.push({ id, category:'system', hold:true });
     return events;
   }
   /**

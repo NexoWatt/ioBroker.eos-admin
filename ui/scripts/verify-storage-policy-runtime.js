@@ -209,6 +209,9 @@ async function testMultiUseDoesNotActivateHardwareWriter() {
     },
   });
   assert.strictEqual(adapter.states.get('speicher.regelung.aktiv').val, false, 'MultiUse darf keinen Hardwarewriter heimlich aktivieren');
+  const decision = JSON.parse(adapter.states.get('speicher.regelung.dispatcherJson').val);
+  assert.strictEqual(decision.active, false);
+  assert.strictEqual(decision.src, 'aus');
   assert.strictEqual(adapter.states.get('speicher.regelung.aktivAutoMultiUse').val, true, 'MultiUse-Policy muss diagnostisch aktiv bleiben');
   assert.strictEqual(dp.writes.length, 0, 'Ohne Single-/Farm-Writer darf MultiUse keinen Speicher-DP schreiben');
 }
@@ -297,6 +300,10 @@ async function testStorageFarmStartsAndDispatchesPolicy() {
     entries,
   });
   assert.strictEqual(adapter.states.get('speicher.regelung.aktiv').val, true, 'Aktive Farm muss die Basis-Eigenverbrauchsregelung starten');
+  const decision = JSON.parse(adapter.states.get('speicher.regelung.dispatcherJson').val);
+  assert.strictEqual(decision.active, true);
+  assert.strictEqual(decision.src, 'eigenverbrauch');
+  assert.strictEqual(decision.finalW, adapter.farmWrites[0].w);
   assert.strictEqual(adapter.states.get('speicher.regelung.aktivAutoSpeicherfarm').val, true, 'Farm-Autostart Diagnose fehlt');
   assert.strictEqual(dp.writes.length, 0, 'Aktive Farm darf keinen Einzel-Sollwertpfad verwenden');
   assert.strictEqual(adapter.farmWrites.length, 1, 'Aktive Farm muss den zentralen Sollwert verteilen');
